@@ -9,15 +9,18 @@ import { Environment } from './Environment.tsx'
 import { SceneObject } from './SceneObject.tsx'
 import { ZonePlatform } from './ZonePlatform.tsx'
 import { Scatter } from './Scatter.tsx'
+import { FlyThrough } from './FlyThrough.tsx'
 import { CAMERA } from './presets.ts'
 import { frameScene } from './camera-math.ts'
 
 export type WorldProps = {
   scene: Scene
   onSelect?: (title: string, note: string) => void
+  fly?: boolean // auto fly-through of the zones
+  onUserOrbit?: () => void // the user grabbed the camera — a good moment to set fly=false
 }
 
-export function World({ scene, onSelect }: WorldProps) {
+export function World({ scene, onSelect, fly, onUserOrbit }: WorldProps) {
   // Framed once from the first scene; later scenes must not yank the camera away from the user.
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const framing = useMemo(() => frameScene(scene), [])
@@ -44,7 +47,8 @@ export function World({ scene, onSelect }: WorldProps) {
             <Scatter scatter={s} scene={scene} />
           </Suspense>
         ))}
-        <OrbitControls makeDefault target={framing.target} />
+        <OrbitControls makeDefault target={framing.target} onStart={onUserOrbit} />
+        <FlyThrough zones={scene.zones} enabled={!!fly} />
         <Effects />
       </Suspense>
     </Canvas>

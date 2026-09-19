@@ -59,7 +59,15 @@ export const ATMOSPHERE = {
   shadow: { mapSize: 2048, bias: -0.0005, radius: 6, near: 1, farFactor: 3 },
   skyDome: { scaleFactor: 9, stops: [0, 0.47, 0.53, 1] }, // radius must stay under CAMERA.far
   sunDisc: { distanceFactor: 1.8, radiusFactor: 0.09, brightness: 3.5 }, // bloom does the rest
+  skybox: { backgroundBlurriness: 0.05, environmentIntensity: 0.6, backgroundIntensity: 0.8 }, // equirect image when skybox.status === 'ready'
   sparkles: { count: 300, height: 60, y: 30, size: 3, speed: 0.3 },
+}
+
+export const FLY = {
+  dwellSeconds: 6, // per zone
+  smooth: 1.2, // MathUtils.damp lambda: higher = snappier
+  target: { lift: 0.15 }, // aim this × radius above the zone's floor
+  eye: { back: 1.6, height: 0.9 }, // camera offset from the zone centre, × radius
 }
 
 export const ZONE = {

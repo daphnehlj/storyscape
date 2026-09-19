@@ -1,4 +1,5 @@
-import { GradientTexture, Sparkles } from '@react-three/drei'
+import { Environment as SkyboxEnv, GradientTexture, Sparkles } from '@react-three/drei'
+import { Suspense } from 'react'
 import { BackSide, Color } from 'three'
 import type { Scene } from '@app/shared'
 import { ATMOSPHERE, SUN } from './presets.ts'
@@ -35,14 +36,14 @@ export function Environment({ scene }: { scene: Scene }) {
   const env = scene.environment
   const size = scene.bounds.size
   const a = atmosphere(env)
-  const { shadow, skyDome, sunDisc, sparkles } = ATMOSPHERE
+  const { shadow, skyDome, sunDisc, skybox, sparkles } = ATMOSPHERE
+  const sky = env.skybox?.status === 'ready' && env.skybox.url ? env.skybox.url : null
   const sunPos = a.sun.dir.map((v) => v * size) as [number, number, number]
   const discPos = a.sun.dir.map((v) => v * size * sunDisc.distanceFactor) as [number, number, number]
   const disc = new Color(a.sun.color).multiplyScalar(sunDisc.brightness)
   return (
     <>
       <fogExp2 attach="fog" args={[a.horizon, a.fog]} />
-      <color attach="background" args={[a.horizon]} />
       <directionalLight
         position={sunPos}
         color={a.sun.color}
@@ -59,13 +60,22 @@ export function Environment({ scene }: { scene: Scene }) {
         shadow-camera-far={size * shadow.farFactor}
       />
       <hemisphereLight args={[a.zenith, a.ground, a.sun.ambient]} />
-      {/* gradient sky dome; replaced by the skybox when it's ready (Task 13) */}
-      <mesh scale={size * skyDome.scaleFactor}>
-        <sphereGeometry args={[1, 24, 16]} />
-        <meshBasicMaterial side={BackSide} fog={false}>
-          <GradientTexture stops={skyDome.stops} colors={[a.zenith, a.horizon, a.horizon, a.zenith]} />
-        </meshBasicMaterial>
-      </mesh>
+      {sky ? (
+        // generated panorama: background + image-based lighting so models pick up its colours
+        <Suspense fallback={null}>
+          <SkyboxEnv files={sky} background backgroundBlurriness={skybox.backgroundBlurriness} backgroundIntensity={skybox.backgroundIntensity} environmentIntensity={skybox.environmentIntensity} />
+        </Suspense>
+      ) : (
+        <>
+          <color attach="background" args={[a.horizon]} />
+          <mesh scale={size * skyDome.scaleFactor}>
+            <sphereGeometry args={[1, 24, 16]} />
+            <meshBasicMaterial side={BackSide} fog={false}>
+              <GradientTexture stops={skyDome.stops} colors={[a.zenith, a.horizon, a.horizon, a.zenith]} />
+            </meshBasicMaterial>
+          </mesh>
+        </>
+      )}
       {/* the sun itself: over-bright so bloom gives it a halo */}
       <mesh position={discPos}>
         <sphereGeometry args={[size * sunDisc.radiusFactor, 16, 12]} />

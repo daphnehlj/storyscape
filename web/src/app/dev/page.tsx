@@ -37,6 +37,7 @@ function Dev() {
   const steps = useMemo(() => (full ? replaySteps(full) : []), [full])
   const [scene, setScene] = useState<Scene | null>(null)
   const [note, setNote] = useState<string | null>(null)
+  const [fly, setFly] = useState(false)
   const timer = useRef<number | null>(null)
 
   useEffect(() => { fetch('/dev/fixtures/index').then((r) => r.json()).then(setNames) }, [])
@@ -59,13 +60,14 @@ function Dev() {
 
   return (
     <div style={{ position: 'fixed', inset: 0 }}>
-      {scene && <World key={scene.id} scene={scene} onSelect={(title, n) => setNote(`${title}: ${n}`)} />}
+      {scene && <World key={scene.id} scene={scene} onSelect={(title, n) => setNote(`${title}: ${n}`)} fly={fly} onUserOrbit={() => setFly(false)} />}
       <div style={{ position: 'absolute', top: 12, left: 12, display: 'flex', gap: 8, font: '13px system-ui', color: '#eee' }}>
         <select value={name} onChange={(e) => { window.location.search = `?scene=${e.target.value}` }}>
           {(names.length ? names : [name]).map((n) => <option key={n} value={n}>{n}</option>)}
         </select>
         <button onClick={replay}>Replay</button>
         <button onClick={() => full && setScene(full)}>Full</button>
+        <button onClick={() => setFly((f) => !f)}>{fly ? 'Stop' : 'Fly'}</button>
         {note && <span style={{ background: '#0008', padding: '4px 8px', borderRadius: 6 }}>{note}</span>}
       </div>
     </div>
