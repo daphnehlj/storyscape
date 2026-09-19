@@ -35,8 +35,9 @@ function RockPlatform({ zone, onClick: click }: PlatformProps) {
   const [cx, cz] = zone.center
   const r = zone.radius
   const { rock } = ZONE
+  // no shadows: a platform 40 m up would stamp a black shape on the ground (VSM also draws receivers into the map)
   return (
-      <mesh position={[cx, zone.elevation - rock.thickness / 2, cz]} onClick={click} castShadow receiveShadow>
+      <mesh position={[cx, zone.elevation - rock.thickness / 2, cz]} onClick={click}>
         <cylinderGeometry args={[r, r * rock.taper, rock.thickness, rock.segments]} />
         <meshStandardMaterial color={rock.color} flatShading />
       </mesh>
