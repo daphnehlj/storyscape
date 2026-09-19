@@ -1,0 +1,12 @@
+[
+  { "id": "oak_tree",   "file": "oak_tree.glb",   "tags": ["tree", "forest", "nature"],        "defaultSize": 8,   "description": "large leafy oak tree" },
+  { "id": "pine_tree",  "file": "pine_tree.glb",  "tags": ["tree", "forest", "nature"],        "defaultSize": 10,  "description": "tall conifer pine tree" },
+  { "id": "bush",       "file": "bush.glb",       "tags": ["bush", "nature"],                  "defaultSize": 1.5, "description": "round green bush" },
+  { "id": "rock",       "file": "rock.glb",       "tags": ["rock", "nature"],                  "defaultSize": 1,   "description": "grey boulder" },
+  { "id": "cottage",    "file": "cottage.glb",    "tags": ["building", "house", "farm"],       "defaultSize": 6,   "description": "small thatched cottage" },
+  { "id": "fence",      "file": "fence.glb",      "tags": ["farm", "prop"],                    "defaultSize": 1.2, "description": "wooden fence segment" },
+  { "id": "cow",        "file": "cow.glb",        "tags": ["animal", "farm"],                  "defaultSize": 1.5, "description": "farm cow" },
+  { "id": "hay_bale",   "file": "hay_bale.glb",   "tags": ["farm", "prop"],                    "defaultSize": 1.2, "description": "round hay bale" },
+  { "id": "castle",     "file": "castle.glb",     "tags": ["building", "castle", "fantasy"],   "defaultSize": 25,  "description": "stone castle with towers" },
+  { "id": "cloud_puff", "file": "cloud_puff.glb", "tags": ["sky", "cloud", "nature"],          "defaultSize": 5,   "description": "fluffy low-poly cloud" }
+]
