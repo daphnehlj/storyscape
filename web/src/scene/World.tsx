@@ -8,6 +8,7 @@ import { CAMERA } from './presets.ts'
 import { SceneObject } from './SceneObject.tsx'
 import { Terrain } from './Terrain.tsx'
 import { Water } from './Water.tsx'
+import { ZonePlatform } from './ZonePlatform.tsx'
 
 export type WorldProps = {
   scene: Scene
@@ -22,6 +23,11 @@ export function World({ scene, onSelect }: WorldProps) {
         <Terrain scene={scene} />
         <Water scene={scene} />
         <Environment scene={scene} />
+        {scene.zones.map((z) => (
+          <Suspense key={z.id} fallback={null}>
+            <ZonePlatform zone={z} scene={scene} onSelect={onSelect && ((x) => x.storyNote && onSelect(x.name, x.storyNote))} />
+          </Suspense>
+        ))}
         {scene.objects.map((o) => (
           <Suspense key={o.id} fallback={null}>
             <SceneObject obj={o} scene={scene} onSelect={onSelect && ((x) => x.storyNote && onSelect(x.label ?? x.assetId, x.storyNote))} />

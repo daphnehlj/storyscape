@@ -50,3 +50,9 @@ export const ATMOSPHERE = {
   skyDome: { scaleFactor: 4, stops: [0, 0.45, 0.55, 1] },
   sparkles: { count: 300, height: 60, y: 30, size: 3, speed: 0.3 },
 }
+
+export const ZONE = {
+  ring: { lift: 0.3, width: 0.6, segments: 48, color: '#ffffff', opacity: 0.15 },
+  rock: { thickness: 6, taper: 0.6, segments: 12, color: '#6b6f7a' },
+  cloud: { sink: 4, height: 6, segments: 60, volumeFactor: 0.6, fadeFactor: 8, limit: 400, color: '#ffffff' },
+}
