@@ -19,7 +19,7 @@ export type WorldProps = {
 export function World({ scene, onSelect }: WorldProps) {
   return (
     // `flat` = no renderer tone mapping; the ToneMapping effect owns it.
-    <Canvas flat shadows camera={CAMERA}>
+    <Canvas flat shadows="variance" camera={CAMERA}>
       <Suspense fallback={null}>
         <Environment scene={scene} />
         <Terrain scene={scene} />
@@ -40,7 +40,7 @@ export function World({ scene, onSelect }: WorldProps) {
             <Scatter scatter={s} scene={scene} />
           </Suspense>
         ))}
-        <OrbitControls makeDefault />
+        <OrbitControls makeDefault target={CAMERA.target} />
         <Effects />
       </Suspense>
     </Canvas>

@@ -1,4 +1,4 @@
-import { Bloom, EffectComposer, ToneMapping, Vignette } from '@react-three/postprocessing'
+import { Bloom, EffectComposer, HueSaturation, ToneMapping, Vignette } from '@react-three/postprocessing'
 import { ToneMappingMode } from 'postprocessing'
 import { POST } from './presets.ts'
 
@@ -8,6 +8,7 @@ export function Effects() {
     <EffectComposer resolutionScale={POST.resolutionScale} multisampling={0}>
       <Bloom {...POST.bloom} mipmapBlur />
       <ToneMapping mode={ToneMappingMode.ACES_FILMIC} />
+      <HueSaturation saturation={POST.saturation} />
       <Vignette {...POST.vignette} />
     </EffectComposer>
   )
