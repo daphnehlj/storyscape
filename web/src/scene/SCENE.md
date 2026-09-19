@@ -130,7 +130,7 @@ The id must exist in `web/public/assets/library/library.json`. Current library:
 | `hay_bale` | 1.2 | 0.97 × 1.43 | bundle of hay | farm, prop |
 | `castle` | 25 | 1.09 × 0.55 | stone castle with towers and a keep | building, castle, fantasy |
 
-Footprint = bounding-box width (x) × depth (z) at `rotationY: 0`, as a multiple of __TEXT	__DATA	__OBJC	others	dec	hex. A 1.2 m fence is ≈ 3.5 m long, so segments laid end to end along x go 3.5 m apart.
+Footprint = bounding-box width (x) × depth (z) at `rotationY: 0`, as a multiple of `size`. A 1.2 m fence is ≈ 3.5 m long, so segments laid end to end along x go 3.5 m apart.
 
 **Generated asset** — a hero model made by text-to-3D on the server:
 
