@@ -10,3 +10,9 @@ export const POST = {
   bloom: { luminanceThreshold: 0.85, luminanceSmoothing: 0.2, intensity: 0.6 },
   vignette: { offset: 0.3, darkness: 0.5 },
 }
+
+export const TERRAIN = {
+  maxHeight: 25, // meters at heightVariation = 1
+  baseFrequency: 1 / 40,
+  octaves: 4,
+}
