@@ -53,6 +53,17 @@
     "file": "cloud_puff.glb"
   },
   {
+    "id": "beanstalk",
+    "file": "beanstalk.glb",
+    "tags": [
+      "plant",
+      "fantasy",
+      "giant"
+    ],
+    "defaultSize": 60,
+    "description": "enormous twisting green beanstalk with big leaves, reaching the sky"
+  },
+  {
     "id": "cottage",
     "file": "cottage.glb",
     "tags": [

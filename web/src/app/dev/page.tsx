@@ -15,7 +15,7 @@ function replaySteps(full: Scene): Scene[] {
   for (const o of full.objects) steps.push((s = { ...s, objects: [...s.objects, o] }))
   for (const sc of full.scatters) steps.push((s = { ...s, scatters: [...s.scatters, sc] }))
   // "Generated" assets become ready — pointed at library files that differ from their fallback so the swap is visible.
-  const swap: Record<string, string> = { beanstalk: 'oak_tree.glb', giant_castle: 'cottage.glb' }
+  const swap: Record<string, string> = { giant_castle: 'cottage.glb' }
   const assets = { ...s.assets }
   for (const a of Object.values(assets)) {
     if (a.source === 'generated' && swap[a.id]) assets[a.id] = { ...a, status: 'ready', url: `/assets/library/${swap[a.id]}` }

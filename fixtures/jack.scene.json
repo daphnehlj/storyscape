@@ -459,10 +459,7 @@
     },
     "beanstalk": {
       "id": "beanstalk",
-      "source": "generated",
-      "prompt": "enormous twisting green beanstalk with huge leaves, stylized low-poly",
-      "status": "pending",
-      "fallbackAssetId": "pine_tree"
+      "source": "library"
     }
   }
 }
