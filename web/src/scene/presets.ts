@@ -56,3 +56,9 @@ export const ZONE = {
   rock: { thickness: 6, taper: 0.6, segments: 12, color: '#6b6f7a' },
   cloud: { sink: 4, height: 6, segments: 60, volumeFactor: 0.6, fadeFactor: 8, limit: 400, color: '#ffffff' },
 }
+
+export const SCATTER = {
+  centerClearance: 3, // metres kept free at the zone center
+  objectClearance: 1.5, // extra metres around each placed object (added to size/2)
+  maxTriesFactor: 10, // give up after count * this attempts
+}
