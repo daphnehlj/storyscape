@@ -4,9 +4,10 @@
  */
 
 export const CAMERA = {
-  position: [0, 60, 160] as [number, number, number],
-  target: [0, 25, 0] as [number, number, number], // look slightly up so an elevated zone fits in frame
   fov: 50, near: 0.5, far: 2000,
+  // Initial framing is computed from the zones (see frameScene): sit this far back per unit of scene radius,
+  // this high per unit, and aim a little above the ground so elevated zones fit.
+  frame: { distance: 1.6, height: 0.65, pitchUp: 0.35, minRadius: 40 },
 }
 
 export const POST = {
@@ -38,7 +39,7 @@ export const TERRAIN_MESH = {
 
 export const WATER = {
   fallbackColor: '#5aa0c8',
-  sizeFactor: 20, // past the far plane, so the sea ends in fog: must exceed TERRAIN_MESH.skirtFactor or the sunken skirt shows past the sea
+  sizeFactor: 16, // ends in fog, inside the sky dome (ATMOSPHERE.skyDome.scaleFactor) and the far plane: must exceed TERRAIN_MESH.skirtFactor or the sunken skirt shows past the sea
   opacity: 0.75, roughness: 0.12, metalness: 0.05,
 }
 
@@ -51,12 +52,20 @@ export const SUN = {
 } as const
 
 export const ATMOSPHERE = {
-  defaultPalette: ['#ffc7a0', '#8ccf66', '#9db8ea'],
+  // [sky/horizon, ground, accent/zenith] used when the agent sends no palette
+  defaultPalette: {
+    dawn:  ['#ffc7a0', '#8ccf66', '#9db8ea'],
+    day:   ['#d6ecff', '#8ed072', '#6ea8f5'],
+    dusk:  ['#ffab7a', '#86bd66', '#7d6fb8'],
+    night: ['#5a6a9a', '#4f7a55', '#2b3a6b'],
+  },
+  // agent palettes are clamped into this HSL range so a bad pick can't make the world mud or neon
+  paletteClamp: { minLightness: 0.35, maxLightness: 0.9, maxSaturation: 0.75 },
   horizon: { whiten: 0.3, nightDim: 0.3 },
   zenith: { deep: '#1a2540', dayMix: 0.2, nightMix: 0.85 },
   fog: { base: 0.0004, perDensity: 0.004, weatherFog: 0.004 }, // exp2: ~10% haze at 150m, ~50% at 500m for density 0.25
   shadow: { mapSize: 2048, bias: -0.0005, radius: 6, near: 1, farFactor: 3 },
-  skyDome: { scaleFactor: 4, stops: [0, 0.47, 0.53, 1] },
+  skyDome: { scaleFactor: 9, stops: [0, 0.47, 0.53, 1] }, // radius must stay under CAMERA.far
   sunDisc: { distanceFactor: 1.8, radiusFactor: 0.09, brightness: 3.5 }, // bloom does the rest
   sparkles: { count: 300, height: 60, y: 30, size: 3, speed: 0.3 },
 }

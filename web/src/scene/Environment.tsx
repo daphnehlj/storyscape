@@ -9,11 +9,19 @@ type Env = Scene['environment']
 const mix = (a: string, b: string, t: number, mul = 1) =>
   '#' + new Color(a).lerp(new Color(b), t).multiplyScalar(mul).getHexString()
 
-/** palette: [0] sky/horizon, [1] ground, [2] accent/zenith. Falls back to the preset default. */
+const HSL = { h: 0, s: 0, l: 0 }
+/** Keep an agent-picked colour inside a range that lights well. */
+function tame(hex: string): string {
+  const { minLightness, maxLightness, maxSaturation } = ATMOSPHERE.paletteClamp
+  const c = new Color(hex).getHSL(HSL)
+  return '#' + new Color().setHSL(c.h, Math.min(c.s, maxSaturation), Math.min(maxLightness, Math.max(minLightness, c.l))).getHexString()
+}
+
+/** palette: [0] sky/horizon, [1] ground, [2] accent/zenith. Falls back to the time-of-day default. */
 export function paletteOf(env: Env): Palette {
-  const d = ATMOSPHERE.defaultPalette
+  const d = ATMOSPHERE.defaultPalette[env.timeOfDay]
   const p = env.palette ?? d
-  return { sky: p[0] ?? d[0], ground: p[1] ?? p[0] ?? d[1], accent: p[2] ?? p[0] ?? d[2] }
+  return { sky: tame(p[0] ?? d[0]), ground: tame(p[1] ?? p[0] ?? d[1]), accent: tame(p[2] ?? p[0] ?? d[2]) }
 }
 
 /** Every atmospheric color comes from the palette. */

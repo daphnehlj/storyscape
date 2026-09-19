@@ -1,6 +1,6 @@
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
-import { Suspense } from 'react'
+import { Suspense, useMemo } from 'react'
 import type { Scene } from '@app/shared'
 import { Effects } from './Effects.tsx'
 import { Terrain } from './Terrain.tsx'
@@ -10,6 +10,7 @@ import { SceneObject } from './SceneObject.tsx'
 import { ZonePlatform } from './ZonePlatform.tsx'
 import { Scatter } from './Scatter.tsx'
 import { CAMERA } from './presets.ts'
+import { frameScene } from './camera-math.ts'
 
 export type WorldProps = {
   scene: Scene
@@ -17,9 +18,12 @@ export type WorldProps = {
 }
 
 export function World({ scene, onSelect }: WorldProps) {
+  // Framed once from the first scene; later scenes must not yank the camera away from the user.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const framing = useMemo(() => frameScene(scene), [])
   return (
     // `flat` = no renderer tone mapping; the ToneMapping effect owns it.
-    <Canvas flat shadows="variance" camera={CAMERA}>
+    <Canvas flat shadows="variance" camera={{ position: framing.position, fov: CAMERA.fov, near: CAMERA.near, far: CAMERA.far }}>
       <Suspense fallback={null}>
         <Environment scene={scene} />
         <Terrain scene={scene} />
@@ -40,7 +44,7 @@ export function World({ scene, onSelect }: WorldProps) {
             <Scatter scatter={s} scene={scene} />
           </Suspense>
         ))}
-        <OrbitControls makeDefault target={CAMERA.target} />
+        <OrbitControls makeDefault target={framing.target} />
         <Effects />
       </Suspense>
     </Canvas>
