@@ -1,0 +1,70 @@
+{
+  "title": "Sparkel the Unicorn",
+  "mood": "sparkly, adventurous",
+  "world": {
+    "world.setting": {
+      "evidence": "vague",
+      "candidates": ["seaside", "meadow"],
+      "quote": "she flyed to the see",
+      "guess": "seaside",
+      "guessConfidence": "low"
+    },
+    "world.timeOfDay": { "evidence": "absent", "guess": "dawn", "guessConfidence": "low" },
+    "world.weather": { "evidence": "absent", "guess": "clear", "guessConfidence": "low" },
+    "world.flowers": { "evidence": "absent", "guess": "pink", "guessConfidence": "low" },
+    "world.critters": { "evidence": "absent", "guess": "butterflies", "guessConfidence": "low" }
+  },
+  "zones": [
+    {
+      "id": "mountain",
+      "name": "the mountain",
+      "aliases": ["mountin", "castel"],
+      "elevation": "ground",
+      "owner": "Sparkel",
+      "description": "a mountain with the unicorn's castle on top",
+      "readings": {
+        "zone.trees": { "evidence": "absent", "guess": "pine_tree", "guessConfidence": "low" }
+      }
+    },
+    {
+      "id": "sea",
+      "name": "the sea",
+      "aliases": ["see", "tresure chest", "crab"],
+      "elevation": "ground",
+      "description": "the sea where the treasure chest was found",
+      "readings": {
+        "zone.trees": { "evidence": "absent", "guessConfidence": "low" }
+      }
+    }
+  ],
+  "heroObjects": [
+    {
+      "id": "unicorn",
+      "name": "Sparkel",
+      "aliases": ["sparkel", "unicorn", "she"],
+      "kind": "creature",
+      "zone": "mountain",
+      "description": "a unicorn who can fly",
+      "readings": {
+        "hero.color": { "evidence": "absent", "guess": "white", "guessConfidence": "low" },
+        "hero.size": { "evidence": "absent", "guess": "horse", "guessConfidence": "high" },
+        "hero.feel": { "evidence": "absent", "guess": "friendly", "guessConfidence": "high" }
+      }
+    },
+    {
+      "id": "castle",
+      "name": "the castle",
+      "aliases": ["castel"],
+      "kind": "building",
+      "zone": "mountain",
+      "description": "the castle where the unicorn lives",
+      "readings": {
+        "hero.color": { "evidence": "absent", "guessConfidence": "low" },
+        "hero.material": { "evidence": "absent", "guess": "stone", "guessConfidence": "low" },
+        "hero.size": { "evidence": "absent", "guess": "house", "guessConfidence": "low" },
+        "hero.feel": { "evidence": "absent", "guess": "friendly", "guessConfidence": "low" }
+      }
+    }
+  ],
+  "ambientObjects": ["treasure chest", "crab", "waves"]
+}

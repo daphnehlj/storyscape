@@ -1,0 +1,109 @@
+{
+  "title": "Me and My Cat at the Beach",
+  "mood": "playful, muddled",
+  "world": {
+    "world.setting": {
+      "evidence": "explicit",
+      "value": "seaside",
+      "quote": "Me and my cat went to the beach",
+      "guess": "seaside",
+      "guessConfidence": "high"
+    },
+    "world.timeOfDay": {
+      "evidence": "conflict",
+      "candidates": ["night", "day"],
+      "quote": "It was the middle of the night and the sun was shining really bright",
+      "guess": "night",
+      "guessConfidence": "low"
+    },
+    "world.weather": {
+      "evidence": "conflict",
+      "candidates": ["snow", "clear"],
+      "quote": "It was snowing and we built a sandcastle and a snowman",
+      "guess": "snow",
+      "guessConfidence": "low"
+    },
+    "world.flowers": { "evidence": "absent", "guess": "none", "guessConfidence": "high" },
+    "world.critters": { "evidence": "absent", "guess": "none", "guessConfidence": "low" }
+  },
+  "zones": [
+    {
+      "id": "beach",
+      "name": "the beach",
+      "aliases": ["beach", "water"],
+      "elevation": "ground",
+      "description": "a beach with the sea beside it",
+      "readings": {
+        "zone.trees": { "evidence": "absent", "guessConfidence": "low" }
+      }
+    }
+  ],
+  "heroObjects": [
+    {
+      "id": "octopus",
+      "name": "the giant octopus",
+      "aliases": ["octopus"],
+      "kind": "creature",
+      "zone": "beach",
+      "description": "a giant octopus that comes out of the water and says hello",
+      "readings": {
+        "hero.color": { "evidence": "absent", "guessConfidence": "low" },
+        "hero.size": {
+          "evidence": "vague",
+          "candidates": ["horse", "house"],
+          "quote": "a giant octopus came out of the water",
+          "guess": "house",
+          "guessConfidence": "low"
+        },
+        "hero.feel": {
+          "evidence": "vague",
+          "candidates": ["friendly", "silly"],
+          "quote": "came out of the water and said hello",
+          "guess": "friendly",
+          "guessConfidence": "high"
+        }
+      }
+    },
+    {
+      "id": "sandcastle",
+      "name": "the sandcastle",
+      "aliases": ["sandcastle"],
+      "kind": "building",
+      "zone": "beach",
+      "description": "a sandcastle built on the beach",
+      "readings": {
+        "hero.material": { "evidence": "absent", "guess": "sand", "guessConfidence": "high" },
+        "hero.color": { "evidence": "absent", "guess": "yellow", "guessConfidence": "high" },
+        "hero.size": { "evidence": "absent", "guess": "dog", "guessConfidence": "low" },
+        "hero.feel": { "evidence": "absent", "guess": "friendly", "guessConfidence": "low" }
+      }
+    },
+    {
+      "id": "snowman",
+      "name": "the snowman",
+      "aliases": ["snowman"],
+      "kind": "object",
+      "zone": "beach",
+      "description": "a snowman built next to the sandcastle",
+      "readings": {
+        "hero.color": { "evidence": "absent", "guess": "white", "guessConfidence": "high" },
+        "hero.size": { "evidence": "absent", "guess": "dog", "guessConfidence": "low" },
+        "hero.feel": { "evidence": "absent", "guess": "silly", "guessConfidence": "low" }
+      }
+    },
+    {
+      "id": "cat",
+      "name": "my cat",
+      "aliases": ["cat"],
+      "kind": "creature",
+      "zone": "beach",
+      "description": "the narrator's cat, along for the trip",
+      "readings": {
+        "hero.color": { "evidence": "absent", "guessConfidence": "low" },
+        "hero.size": { "evidence": "absent", "guess": "dog", "guessConfidence": "high" },
+        "hero.feel": { "evidence": "absent", "guess": "friendly", "guessConfidence": "high" }
+      }
+    }
+  ],
+  "ambientObjects": ["waves", "bucket and spade", "seaweed"]
+}

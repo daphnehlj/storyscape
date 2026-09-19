@@ -1,0 +1,111 @@
+{
+  "title": "The Three Little Pigs",
+  "mood": "bouncy, cartoonish",
+  "world": {
+    "world.setting": {
+      "evidence": "vague",
+      "candidates": ["village", "meadow"],
+      "quote": "Three little pigs left home to build houses of their own",
+      "guess": "village",
+      "guessConfidence": "low"
+    },
+    "world.timeOfDay": { "evidence": "absent", "guess": "dusk", "guessConfidence": "low" },
+    "world.weather": { "evidence": "absent", "guess": "clear", "guessConfidence": "high" },
+    "world.flowers": { "evidence": "absent", "guess": "yellow", "guessConfidence": "low" },
+    "world.critters": { "evidence": "absent", "guess": "none", "guessConfidence": "low" }
+  },
+  "zones": [
+    {
+      "id": "pig_land",
+      "name": "where the pigs built",
+      "aliases": ["little pigs", "pigs", "house"],
+      "elevation": "ground",
+      "description": "open ground with the three houses spaced along it",
+      "readings": {
+        "zone.trees": { "evidence": "absent", "guess": "oak_tree", "guessConfidence": "low" }
+      }
+    }
+  ],
+  "heroObjects": [
+    {
+      "id": "straw_house",
+      "name": "the house of straw",
+      "aliases": ["house of straw", "straw house"],
+      "kind": "building",
+      "zone": "pig_land",
+      "description": "loose bundled straw hut, blown down easily",
+      "readings": {
+        "hero.material": {
+          "evidence": "explicit",
+          "value": "straw",
+          "quote": "built a house of straw",
+          "guess": "straw",
+          "guessConfidence": "high"
+        },
+        "hero.color": { "evidence": "absent", "guess": "yellow", "guessConfidence": "high" },
+        "hero.size": { "evidence": "absent", "guess": "house", "guessConfidence": "high" },
+        "hero.feel": { "evidence": "absent", "guess": "silly", "guessConfidence": "low" }
+      }
+    },
+    {
+      "id": "stick_house",
+      "name": "the house of sticks",
+      "aliases": ["house of sticks", "sticks"],
+      "kind": "building",
+      "zone": "pig_land",
+      "description": "hut of leaning sticks",
+      "readings": {
+        "hero.material": {
+          "evidence": "explicit",
+          "value": "wood",
+          "quote": "built a house of sticks",
+          "guess": "wood",
+          "guessConfidence": "high"
+        },
+        "hero.color": { "evidence": "absent", "guess": "brown", "guessConfidence": "high" },
+        "hero.size": { "evidence": "absent", "guess": "house", "guessConfidence": "high" },
+        "hero.feel": { "evidence": "absent", "guess": "silly", "guessConfidence": "low" }
+      }
+    },
+    {
+      "id": "brick_house",
+      "name": "the house of bricks",
+      "aliases": ["house of bricks", "brick house"],
+      "kind": "building",
+      "zone": "pig_land",
+      "description": "solid brick cottage with a chimney",
+      "readings": {
+        "hero.material": {
+          "evidence": "explicit",
+          "value": "brick",
+          "quote": "built a strong house of bricks",
+          "guess": "brick",
+          "guessConfidence": "high"
+        },
+        "hero.color": { "evidence": "absent", "guess": "red", "guessConfidence": "low" },
+        "hero.size": { "evidence": "absent", "guess": "house", "guessConfidence": "high" },
+        "hero.feel": { "evidence": "absent", "guess": "friendly", "guessConfidence": "low" }
+      }
+    },
+    {
+      "id": "wolf",
+      "name": "the big bad wolf",
+      "aliases": ["wolf"],
+      "kind": "creature",
+      "zone": "pig_land",
+      "description": "wolf who huffs and puffs at each house",
+      "readings": {
+        "hero.color": { "evidence": "absent", "guess": "grey", "guessConfidence": "low" },
+        "hero.size": { "evidence": "absent", "guess": "horse", "guessConfidence": "low" },
+        "hero.feel": {
+          "evidence": "explicit",
+          "value": "spooky",
+          "quote": "A big bad wolf came to the straw house",
+          "guess": "spooky",
+          "guessConfidence": "high"
+        }
+      }
+    }
+  ],
+  "ambientObjects": ["chimney", "cooking pot", "fence"]
+}

@@ -12,7 +12,7 @@ import {
 // actually act on. A thing the story leaves unsaid is only a gap if it maps to
 // a slot here — "how tall is the wall" isn't missing, it's irrelevant.
 
-export const MaterialSchema = z.enum(['stone', 'wood', 'brick', 'straw', 'ice', 'candy']);
+export const MaterialSchema = z.enum(['stone', 'wood', 'brick', 'straw', 'sand', 'ice', 'candy']);
 export type Material = z.infer<typeof MaterialSchema>;
 
 // Rungs, not meters: the size ladder that turns a rung into a height lives

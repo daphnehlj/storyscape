@@ -1,0 +1,122 @@
+{
+  "title": "Little Red Riding Hood",
+  "mood": "gentle, a little tense",
+  "world": {
+    "world.setting": {
+      "evidence": "explicit",
+      "value": "deep_forest",
+      "quote": "a small house on the other side of the forest",
+      "guess": "deep_forest",
+      "guessConfidence": "high"
+    },
+    "world.timeOfDay": {
+      "evidence": "absent",
+      "guess": "day",
+      "guessConfidence": "high"
+    },
+    "world.weather": {
+      "evidence": "absent",
+      "guess": "clear",
+      "guessConfidence": "high"
+    },
+    "world.flowers": {
+      "evidence": "absent",
+      "guess": "none",
+      "guessConfidence": "low"
+    },
+    "world.critters": {
+      "evidence": "absent",
+      "guess": "butterflies",
+      "guessConfidence": "low"
+    }
+  },
+  "zones": [
+    {
+      "id": "forest",
+      "name": "the forest",
+      "aliases": [
+        "forest",
+        "path"
+      ],
+      "elevation": "ground",
+      "description": "thick forest with a path winding through it",
+      "readings": {
+        "zone.trees": {
+          "evidence": "absent",
+          "guess": "pine_tree",
+          "guessConfidence": "low"
+        }
+      }
+    },
+    {
+      "id": "grandmother_house",
+      "name": "Grandmother's house",
+      "aliases": [
+        "her house",
+        "the cupboard"
+      ],
+      "elevation": "ground",
+      "owner": "Grandmother",
+      "description": "small house on the far side of the forest",
+      "readings": {
+        "zone.trees": {
+          "evidence": "absent",
+          "guessConfidence": "low"
+        },
+        "zone.home": {
+          "evidence": "explicit",
+          "value": "cottage",
+          "quote": "a small house on the other side of the forest",
+          "guess": "cottage",
+          "guessConfidence": "high"
+        }
+      }
+    }
+  ],
+  "heroObjects": [
+    {
+      "id": "wolf",
+      "name": "the wolf",
+      "aliases": [
+        "wolf"
+      ],
+      "kind": "creature",
+      "zone": "forest",
+      "description": "a wolf who talks his way ahead of the girl",
+      "readings": {
+        "hero.color": {
+          "evidence": "absent",
+          "guess": "grey",
+          "guessConfidence": "low"
+        },
+        "hero.size": {
+          "evidence": "vague",
+          "candidates": [
+            "dog",
+            "horse"
+          ],
+          "quote": "what big teeth you have",
+          "guess": "horse",
+          "guessConfidence": "low"
+        },
+        "hero.feel": {
+          "evidence": "vague",
+          "candidates": [
+            "spooky",
+            "grumpy"
+          ],
+          "quote": "The wolf jumped out of bed",
+          "guess": "spooky",
+          "guessConfidence": "high"
+        }
+      }
+    }
+  ],
+  "ambientObjects": [
+    "basket of cakes",
+    "red hood",
+    "bed",
+    "cupboard",
+    "axe"
+  ]
+}

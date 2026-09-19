@@ -1,0 +1,57 @@
+{
+  "title": "My Dragon Friend",
+  "mood": "warm, simple, happy",
+  "world": {
+    "world.setting": {
+      "evidence": "explicit",
+      "value": "deep_forest",
+      "quote": "we went to the forest",
+      "guess": "deep_forest",
+      "guessConfidence": "high"
+    },
+    "world.timeOfDay": { "evidence": "absent", "guess": "dusk", "guessConfidence": "low" },
+    "world.weather": { "evidence": "absent", "guess": "clear", "guessConfidence": "low" },
+    "world.flowers": { "evidence": "absent", "guess": "yellow", "guessConfidence": "low" },
+    "world.critters": { "evidence": "absent", "guess": "butterflies", "guessConfidence": "low" }
+  },
+  "zones": [
+    {
+      "id": "forest",
+      "name": "the forest",
+      "aliases": ["forest"],
+      "elevation": "ground",
+      "description": "the forest where the picnic happened",
+      "readings": {
+        "zone.trees": { "evidence": "absent", "guessConfidence": "low" }
+      }
+    }
+  ],
+  "heroObjects": [
+    {
+      "id": "dragon",
+      "name": "the dragon",
+      "aliases": ["dragon", "he"],
+      "kind": "creature",
+      "zone": "forest",
+      "description": "a friendly dragon who can carry a child",
+      "readings": {
+        "hero.color": { "evidence": "absent", "guessConfidence": "low" },
+        "hero.size": {
+          "evidence": "vague",
+          "candidates": ["horse", "house"],
+          "quote": "he flew me home",
+          "guess": "horse",
+          "guessConfidence": "low"
+        },
+        "hero.feel": {
+          "evidence": "explicit",
+          "value": "friendly",
+          "quote": "he was my friend",
+          "guess": "friendly",
+          "guessConfidence": "high"
+        }
+      }
+    }
+  ],
+  "ambientObjects": ["picnic blanket", "basket"]
+}

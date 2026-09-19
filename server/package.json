@@ -7,7 +7,8 @@
     "dev": "tsx watch src/api.ts",
     "build": "tsc",
     "start": "node dist/api.js",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit && tsc --noEmit -p tsconfig.scripts.json",
+    "gaps": "tsx scripts/gaps-report.ts"
   },
   "dependencies": {
     "@app/shared": "^0.0.0",
