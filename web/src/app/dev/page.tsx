@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { SceneSchema, type Scene } from '@app/shared'
 import jack from '../../../../fixtures/jack.scene.json'
+import library from '../../../../web/public/assets/library/library.json'
 
 const World = dynamic(() => import('@/scene/World').then((m) => m.World), { ssr: false })
 
@@ -14,11 +15,12 @@ function replaySteps(full: Scene): Scene[] {
   for (const z of full.zones) steps.push((s = { ...s, zones: [...s.zones, z] }))
   for (const o of full.objects) steps.push((s = { ...s, objects: [...s.objects, o] }))
   for (const sc of full.scatters) steps.push((s = { ...s, scatters: [...s.scatters, sc] }))
-  // "Generated" assets become ready — pointed at library files that differ from their fallback so the swap is visible.
-  const swap: Record<string, string> = { beanstalk: 'oak_tree.glb', giant_castle: 'cottage.glb' }
+  // Every "generated" asset becomes ready — pointed at a library file other than its own fallback so the swap is visible.
   const assets = { ...s.assets }
   for (const a of Object.values(assets)) {
-    if (a.source === 'generated' && swap[a.id]) assets[a.id] = { ...a, status: 'ready', url: `/assets/library/${swap[a.id]}` }
+    if (a.source !== 'generated') continue
+    const standIn = library.find((e) => e.id !== a.fallbackAssetId)
+    if (standIn) assets[a.id] = { ...a, status: 'ready', url: `/assets/library/${standIn.file}` }
   }
   steps.push({ ...s, assets, environment: { ...s.environment, skybox: { status: 'ready', url: '/assets/sky-test.jpg' } } })
   return steps
