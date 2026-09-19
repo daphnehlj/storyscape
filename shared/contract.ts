@@ -61,7 +61,7 @@ export const SceneSchema = z.object({
     timeOfDay: z.enum(['dawn', 'day', 'dusk', 'night']),
     weather: z.enum(['clear', 'cloudy', 'rain', 'snow', 'fog']),
     fogDensity: z.number().min(0).max(1),
-    palette: z.array(z.string()).optional(),
+    palette: z.tuple([z.string(), z.string(), z.string()]), // hex: [sky/horizon, ground, accent/zenith] — the renderer never invents colours
     skybox: z.object({ status: z.enum(['pending', 'ready', 'failed']), url: z.string().optional() }).optional(),
   }),
   zones: z.array(ZoneSchema),

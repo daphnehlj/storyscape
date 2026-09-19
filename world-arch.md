@@ -99,14 +99,14 @@ A user pastes in a story, for example *Jack and the Beanstalk*, and gets a 3D wo
     "ambientObjects": ["hay bales", "cow", "wooden fence", "cloud puffs"]
   }
   ```
-  `palette` is load-bearing: B derives sky, fog and light color from it. Prompt for 3–5 hex colors that match the story's mood (warm golds for a fairy tale, cold blue-greys for something ominous), and prefer `dawn`/`dusk` for `timeOfDay` when the story allows — they're the best-looking states.
+  `palette` is load-bearing and required: B derives sky, fog, light and terrain color from it and never invents colors. Prompt for exactly 3 hex colors — [sky/horizon, ground, accent] — that match the story's mood (warm golds for a fairy tale, cold blue-greys for something ominous), and prefer `dawn`/`dusk` for `timeOfDay` when the story allows — they're the best-looking states.
 - **Asset jobs.** Once the brief is ready, start text-to-3D jobs for the `heroObjects` and a skybox job, all in parallel. Cache results by prompt hash. Each hero is added to `Scene.assets` right away with `status: 'pending'` and a `fallbackAssetId`, then updated to `ready` + `url` (or `failed`).
 - **Agent loop.** A tool-calling model builds the scene with the tools below. After every tool call: apply it to the Scene, validate against the zod schema, and send a `scene` event. An invalid call goes back to the agent as a tool error so it can fix it.
 
   | Tool | Effect on `Scene` |
   |---|---|
   | `set_terrain(biome, heightVariation, water?)` | sets `terrain` |
-  | `set_environment(timeOfDay, weather, fogDensity, palette?)` | sets `environment`; agent should always pass the brief's `palette` |
+  | `set_environment(timeOfDay, weather, fogDensity, palette)` | sets `environment`; `palette` is required — the brief's [sky, ground, accent] |
   | `create_zone(name, description, center, radius, elevation, platform?, storyNote?)` | appends to `zones` |
   | `place_object(assetId, zoneId?, position, size, rotationY, snapToGround, label?, storyNote?)` | appends to `objects` |
   | `scatter(assetIds, zoneId, count, sizeRange)` | appends to `scatters` |
@@ -167,7 +167,7 @@ export interface Scene {
     timeOfDay: 'dawn' | 'day' | 'dusk' | 'night';
     weather: 'clear' | 'cloudy' | 'rain' | 'snow' | 'fog';
     fogDensity: number;               // 0–1
-    palette?: string[];               // hex colors; tints lighting and terrain
+    palette: [string, string, string]; // hex: [sky/horizon, ground, accent]; every colour in the world derives from it
     skybox?: { status: 'pending' | 'ready' | 'failed'; url?: string };
   };
   zones: Zone[];

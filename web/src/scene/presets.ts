@@ -53,13 +53,6 @@ export const SUN = {
 } as const
 
 export const ATMOSPHERE = {
-  // [sky/horizon, ground, accent/zenith] used when the agent sends no palette
-  defaultPalette: {
-    dawn:  ['#ffc7a0', '#8ccf66', '#9db8ea'],
-    day:   ['#d6ecff', '#8ed072', '#6ea8f5'],
-    dusk:  ['#ffab7a', '#86bd66', '#7d6fb8'],
-    night: ['#6f80b0', '#5c8a62', '#33427a'],
-  },
   horizon: { whiten: 0.3, nightDim: 0.3 },
   zenith: { deep: '#1a2540', dayMix: 0.2, nightMix: 0.85 },
   fog: { base: 0.0004, perDensity: 0.004, weatherFog: 0.004 }, // exp2: ~10% haze at 150m, ~50% at 500m for density 0.25

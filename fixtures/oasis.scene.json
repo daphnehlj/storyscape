@@ -2,39 +2,223 @@
   "version": 1,
   "id": "oasis",
   "title": "The Night Caravan",
-  "bounds": { "size": 320, "skyHeight": 90 },
-  "terrain": { "biome": "desert", "heightVariation": 0.6, "seed": 41 },
+  "bounds": {
+    "size": 320,
+    "skyHeight": 90
+  },
+  "terrain": {
+    "biome": "desert",
+    "heightVariation": 0.6,
+    "seed": 41
+  },
   "environment": {
     "timeOfDay": "night",
     "weather": "clear",
     "fogDensity": 0.15,
-    "skybox": { "status": "failed" }
+    "skybox": {
+      "status": "failed"
+    },
+    "palette": [
+      "#5b6a9c",
+      "#d9b984",
+      "#2d3a6b"
+    ]
   },
   "zones": [
-    { "id": "zone-1", "name": "Caravan camp", "description": "tents and hay around a fire under the stars", "center": [60, 70], "radius": 30, "elevation": 0, "storyNote": "The caravan stops for the night. The merchant's daughter counts the stars." },
-    { "id": "zone-2", "name": "Rock temple", "description": "an old temple carved on top of a high rock", "center": [-70, -60], "radius": 45, "elevation": 38, "platform": "rock", "storyNote": "Nobody remembers who built the temple, or why the wind sings up here." }
+    {
+      "id": "zone-1",
+      "name": "Caravan camp",
+      "description": "tents and hay around a fire under the stars",
+      "center": [
+        60,
+        70
+      ],
+      "radius": 30,
+      "elevation": 0,
+      "storyNote": "The caravan stops for the night. The merchant's daughter counts the stars."
+    },
+    {
+      "id": "zone-2",
+      "name": "Rock temple",
+      "description": "an old temple carved on top of a high rock",
+      "center": [
+        -70,
+        -60
+      ],
+      "radius": 45,
+      "elevation": 38,
+      "platform": "rock",
+      "storyNote": "Nobody remembers who built the temple, or why the wind sings up here."
+    }
   ],
   "objects": [
-    { "id": "obj-1", "assetId": "hut", "zoneId": "zone-1", "position": [52, 0, 64], "snapToGround": true, "rotationY": 140, "size": 5, "label": "Merchant's tent", "storyNote": "Warm light, the smell of tea." },
-    { "id": "obj-2", "assetId": "hut", "zoneId": "zone-1", "position": [70, 0, 80], "snapToGround": true, "rotationY": -20, "size": 4.5 },
-    { "id": "obj-3", "assetId": "hay_bale", "zoneId": "zone-1", "position": [62, 0, 58], "snapToGround": true, "rotationY": 0, "size": 1.2 },
-    { "id": "obj-4", "assetId": "cow", "zoneId": "zone-1", "position": [75, 0, 62], "snapToGround": true, "rotationY": 250, "size": 1.6, "label": "The pack ox" },
-    { "id": "obj-5", "assetId": "temple", "zoneId": "zone-2", "position": [-70, 0, -60], "snapToGround": true, "rotationY": 30, "size": 30, "label": "Rock temple", "storyNote": "The wind sings through its towers." },
-    { "id": "obj-6", "assetId": "rock", "position": [0, 12, 0], "snapToGround": false, "rotationY": 0, "size": 9, "label": "Floating stone", "storyNote": "It has hung there for a thousand years." }
+    {
+      "id": "obj-1",
+      "assetId": "hut",
+      "zoneId": "zone-1",
+      "position": [
+        52,
+        0,
+        64
+      ],
+      "snapToGround": true,
+      "rotationY": 140,
+      "size": 5,
+      "label": "Merchant's tent",
+      "storyNote": "Warm light, the smell of tea."
+    },
+    {
+      "id": "obj-2",
+      "assetId": "hut",
+      "zoneId": "zone-1",
+      "position": [
+        70,
+        0,
+        80
+      ],
+      "snapToGround": true,
+      "rotationY": -20,
+      "size": 4.5
+    },
+    {
+      "id": "obj-3",
+      "assetId": "hay_bale",
+      "zoneId": "zone-1",
+      "position": [
+        62,
+        0,
+        58
+      ],
+      "snapToGround": true,
+      "rotationY": 0,
+      "size": 1.2
+    },
+    {
+      "id": "obj-4",
+      "assetId": "cow",
+      "zoneId": "zone-1",
+      "position": [
+        75,
+        0,
+        62
+      ],
+      "snapToGround": true,
+      "rotationY": 250,
+      "size": 1.6,
+      "label": "The pack ox"
+    },
+    {
+      "id": "obj-5",
+      "assetId": "temple",
+      "zoneId": "zone-2",
+      "position": [
+        -70,
+        0,
+        -60
+      ],
+      "snapToGround": true,
+      "rotationY": 30,
+      "size": 30,
+      "label": "Rock temple",
+      "storyNote": "The wind sings through its towers."
+    },
+    {
+      "id": "obj-6",
+      "assetId": "rock",
+      "position": [
+        0,
+        12,
+        0
+      ],
+      "snapToGround": false,
+      "rotationY": 0,
+      "size": 9,
+      "label": "Floating stone",
+      "storyNote": "It has hung there for a thousand years."
+    }
   ],
   "scatters": [
-    { "id": "sc-1", "assetIds": ["rock"], "zoneId": "zone-1", "count": 30, "seed": 5, "sizeRange": [0.8, 3] },
-    { "id": "sc-2", "assetIds": ["bush"], "zoneId": "zone-1", "count": 12, "seed": 6, "sizeRange": [0.8, 1.6] },
-    { "id": "sc-3", "assetIds": ["rock", "rock", "bush"], "zoneId": "zone-2", "count": 40, "seed": 7, "sizeRange": [1, 4] }
+    {
+      "id": "sc-1",
+      "assetIds": [
+        "rock"
+      ],
+      "zoneId": "zone-1",
+      "count": 30,
+      "seed": 5,
+      "sizeRange": [
+        0.8,
+        3
+      ]
+    },
+    {
+      "id": "sc-2",
+      "assetIds": [
+        "bush"
+      ],
+      "zoneId": "zone-1",
+      "count": 12,
+      "seed": 6,
+      "sizeRange": [
+        0.8,
+        1.6
+      ]
+    },
+    {
+      "id": "sc-3",
+      "assetIds": [
+        "rock",
+        "rock",
+        "bush"
+      ],
+      "zoneId": "zone-2",
+      "count": 40,
+      "seed": 7,
+      "sizeRange": [
+        1,
+        4
+      ]
+    }
   ],
   "assets": {
-    "hut": { "id": "hut", "source": "generated", "prompt": "round desert tent, stylized low-poly", "status": "failed", "fallbackAssetId": "cottage" },
-    "temple": { "id": "temple", "source": "generated", "prompt": "ancient sandstone temple with towers, stylized low-poly", "status": "ready", "url": "/generated/temple.glb", "fallbackAssetId": "castle" },
-    "cottage": { "id": "cottage", "source": "library" },
-    "castle": { "id": "castle", "source": "library" },
-    "hay_bale": { "id": "hay_bale", "source": "library" },
-    "cow": { "id": "cow", "source": "library" },
-    "rock": { "id": "rock", "source": "library" },
-    "bush": { "id": "bush", "source": "library" }
+    "hut": {
+      "id": "hut",
+      "source": "generated",
+      "prompt": "round desert tent, stylized low-poly",
+      "status": "failed",
+      "fallbackAssetId": "cottage"
+    },
+    "temple": {
+      "id": "temple",
+      "source": "generated",
+      "prompt": "ancient sandstone temple with towers, stylized low-poly",
+      "status": "ready",
+      "url": "/generated/temple.glb",
+      "fallbackAssetId": "castle"
+    },
+    "cottage": {
+      "id": "cottage",
+      "source": "library"
+    },
+    "castle": {
+      "id": "castle",
+      "source": "library"
+    },
+    "hay_bale": {
+      "id": "hay_bale",
+      "source": "library"
+    },
+    "cow": {
+      "id": "cow",
+      "source": "library"
+    },
+    "rock": {
+      "id": "rock",
+      "source": "library"
+    },
+    "bush": {
+      "id": "bush",
+      "source": "library"
+    }
   }
 }

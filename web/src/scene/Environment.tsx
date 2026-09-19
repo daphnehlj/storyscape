@@ -11,11 +11,10 @@ export type Palette = { sky: string; ground: string; accent: string }
 const mix = (a: string, b: string, t: number, mul = 1) =>
   '#' + new Color(a).lerp(new Color(b), t).multiplyScalar(mul).getHexString()
 
-/** palette: [0] sky/horizon, [1] ground, [2] accent/zenith. Falls back to the time-of-day default. */
+/** palette: [0] sky/horizon, [1] ground, [2] accent/zenith — as sent by the agent. */
 export function paletteOf(env: Env): Palette {
-  const d = ATMOSPHERE.defaultPalette[env.timeOfDay]
-  const p = env.palette ?? d
-  return { sky: p[0] ?? d[0], ground: p[1] ?? p[0] ?? d[1], accent: p[2] ?? p[0] ?? d[2] }
+  const [sky, ground, accent] = env.palette
+  return { sky, ground, accent }
 }
 
 /** Every atmospheric color comes from the palette. */
