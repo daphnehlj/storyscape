@@ -331,7 +331,7 @@ Rules: at most 5 questions per world, `options` is 2–4 entries, and A must be 
 
 `POST /answers` with an empty array means "skip" and unblocks the agent immediately. A also unblocks on a timeout so a closed tab never strands a world.
 
-The web app talks to the server through a Vite dev proxy (`/api`, `/generated` → server port), so there are no cross-origin (CORS) problems.
+The web app talks to the server through Next.js rewrites in `next.config.ts` (`/api`, `/generated` → `API_URL`, default `http://localhost:8787`), so there are no cross-origin (CORS) problems.
 
 ### 4.6 Events
 
@@ -373,12 +373,13 @@ server/                Person A
   src/api.ts           HTTP + event stream
 web/                   Person B
   public/assets/library/   *.glb + library.json
+  src/app/             Next.js App Router entry (layout, page)
   src/scene/           Terrain, Environment, Effects, ZonePlatform, SceneObject, Scatter
   src/ui/              StoryInput, StageBar, AgentLog, StoryNote
-ARCHITECTURE.md        this file
+story-arch.md          this file
 ```
 
-Suggested stack: **server:** Node + TypeScript (Hono or Express), **web:** Vite + React + React Three Fiber + drei + @react-three/postprocessing, **shared:** zod. Use a pnpm workspace so `server` and `web` both import `shared`.
+Stack: **server:** Node + TypeScript + Hono, **web:** Next.js (App Router) + React Three Fiber + drei + @react-three/postprocessing, **shared:** zod. npm workspaces; `server` and `web` both import `@app/shared`.
 
 ## 6. Working in parallel
 
@@ -386,7 +387,7 @@ The key is `fixtures/jack.scene.json`. Once it exists, neither of us waits on th
 
 **Person B works against the fixture:**
 - `mock-server.ts` serves the same API as the real server and sends the fixture **piece by piece**: terrain, then environment, then questions (waits for the answer POST), then each zone, then objects, ground cover, life and scatters one at a time, about 300ms apart. The hero asset starts `pending` and flips to `ready` after ~5s. This covers the question loop, smooth incremental updates, placeholders and asset swaps before the real backend exists.
-- Switching from mock to real server is a single env var: `VITE_API_URL`.
+- Switching from mock to real server is a single env var: `API_URL` in `web/.env.local` (mock on `:3001`, real server on `:8787`).
 
 **Person A works against the schema:**
 - "Done" for any pipeline change = the output passes `SceneSchema` + `validateSceneRefs`.
