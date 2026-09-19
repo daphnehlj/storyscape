@@ -1,7 +1,8 @@
-import { useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 import type { Scene, Zone } from '@app/shared'
-import { paletteOf } from './Environment.tsx'
-import { cloudBank } from './procedural.ts'
+import { useLibrary } from './assets.ts'
+import { InstancedModel } from './Scatter.tsx'
+import { mulberry32, type Placement } from './scatter-math.ts'
 import { heightAt } from './terrain-math.ts'
 import { ZONE } from './presets.ts'
 
@@ -35,17 +36,32 @@ export function ZonePlatform({ zone, scene, onSelect }: Props) {
     )
   }
 
-  return <CloudPlatform zone={zone} scene={scene} onClick={click} />
+  return <CloudPlatform zone={zone} onClick={click} />
 }
 
-/** 'cloud': top of the bank sits at zone.elevation so snapped objects rest on it. */
-function CloudPlatform({ zone, scene, onClick }: { zone: Zone; scene: Scene; onClick?: (e: { stopPropagation: () => void }) => void }) {
-  const p = paletteOf(scene.environment)
-  const mesh = useMemo(() => cloudBank(zone.radius, seedOf(zone.id), p), [zone.radius, zone.id, p.sky, p.ground, p.accent])
-  useEffect(() => () => mesh.geometry.dispose(), [mesh])
+/** 'cloud': a bank of `cloud_puff` library models filling the zone disc, tops just above zone.elevation so snapped objects nestle in. */
+function CloudPlatform({ zone, onClick }: { zone: Zone; onClick?: (e: { stopPropagation: () => void }) => void }) {
+  const lib = useLibrary()
+  const points = useMemo(() => cloudPuffs(zone), [zone.id, zone.radius, zone.elevation, zone.center[0], zone.center[1]]) // eslint-disable-line react-hooks/exhaustive-deps
+  const entry = lib[ZONE.cloud.asset]
+  if (!entry) return null
   return (
-    <group position={[zone.center[0], zone.elevation, zone.center[1]]} onClick={onClick}>
-      <primitive object={mesh} receiveShadow />
+    <group onClick={onClick}>
+      <InstancedModel url={`/assets/library/${entry.file}`} points={points} shadows={false} />
     </group>
   )
+}
+
+function cloudPuffs(zone: Zone): Placement[] {
+  const { puffsPerMeter, minRadius, maxRadius, top, spread, asset } = ZONE.cloud
+  const rand = mulberry32(seedOf(zone.id))
+  const n = Math.max(6, Math.round(zone.radius * puffsPerMeter))
+  const out: Placement[] = []
+  const puff = (d: number, a: number, size: number) =>
+    out.push({ assetId: asset, position: [zone.center[0] + d * Math.cos(a), zone.elevation + top - size, zone.center[1] + d * Math.sin(a)], rotationY: rand() * Math.PI * 2, scale: size })
+  for (let i = 0; i < n; i++) {
+    puff(zone.radius * spread * Math.sqrt(rand()), rand() * Math.PI * 2, zone.radius * (minRadius + rand() * (maxRadius - minRadius)) * 2)
+  }
+  puff(0, 0, zone.radius * maxRadius * 2) // guarantee the centre is covered
+  return out
 }

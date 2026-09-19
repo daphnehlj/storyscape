@@ -59,8 +59,6 @@ export const ATMOSPHERE = {
     dusk:  ['#ffab7a', '#86bd66', '#7d6fb8'],
     night: ['#5a6a9a', '#4f7a55', '#2b3a6b'],
   },
-  // agent palettes are clamped into this HSL range so a bad pick can't make the world mud or neon
-  paletteClamp: { minLightness: 0.35, maxLightness: 0.9, maxSaturation: 0.75 },
   horizon: { whiten: 0.3, nightDim: 0.3 },
   zenith: { deep: '#1a2540', dayMix: 0.2, nightMix: 0.85 },
   fog: { base: 0.0004, perDensity: 0.004, weatherFog: 0.004 }, // exp2: ~10% haze at 150m, ~50% at 500m for density 0.25
@@ -73,7 +71,7 @@ export const ATMOSPHERE = {
 export const ZONE = {
   ring: { lift: 0.3, width: 0.6, segments: 48, color: '#ffffff', opacity: 0.15 },
   rock: { thickness: 6, taper: 0.6, segments: 12, color: '#6b6f7a' },
-  cloud: { puffsPerMeter: 0.8, minRadius: 0.16, maxRadius: 0.32, top: 3, spread: 0.85 }, // radii as fraction of zone radius
+  cloud: { asset: 'cloud_puff', puffsPerMeter: 0.8, minRadius: 0.16, maxRadius: 0.32, top: 3, spread: 0.85 }, // library id; radii as fraction of zone radius
 }
 
 export const SCATTER = {
@@ -82,13 +80,3 @@ export const SCATTER = {
   maxTriesFactor: 10, // give up after count * this attempts
 }
 
-// Procedural models: colours derive from the palette so every model in a world agrees.
-export const PROC = {
-  roughness: 0.85,
-  bark: '#6b4a34',
-  foliage: { hue: 0, sat: 0.08, light: -0.06, topLight: 0.18 }, // offsetHSL from palette ground; gradient toward light at the top
-  pine: { hue: -0.03, sat: 0.02, light: -0.16, topLight: 0.14 },
-  rock: { base: '#8f8d96', skyMix: 0.25, darkBottom: 0.7, jitter: 0.22 },
-  cloud: { bottomSkyMix: 0.45, glow: 0.35, flatten: 0.3 },
-  beanstalk: { turns: 4, radius: 0.05, tube: 0.035, leaves: 11, light: -0.1 },
-}

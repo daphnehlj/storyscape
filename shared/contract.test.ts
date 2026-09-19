@@ -10,11 +10,8 @@ const load = (file: string) => SceneSchema.parse(JSON.parse(readFileSync(new URL
 const jack = () => load('jack.scene.json')
 
 test('library.json files exist', () => {
-  const lib = JSON.parse(readFileSync(new URL('library.json', libraryDir), 'utf8')) as { id: string; file?: string; procedural?: boolean }[]
-  for (const e of lib) {
-    if (e.procedural) continue
-    assert.ok(e.file && existsSync(new URL(e.file, libraryDir)), `missing ${e.file}`)
-  }
+  const lib = JSON.parse(readFileSync(new URL('library.json', libraryDir), 'utf8')) as { id: string; file: string }[]
+  for (const e of lib) assert.ok(existsSync(new URL(e.file, libraryDir)), `missing ${e.file}`)
 })
 
 test('every fixture is a valid Scene, refs consistent, only known library ids', () => {
