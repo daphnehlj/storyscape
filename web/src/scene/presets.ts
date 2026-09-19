@@ -32,3 +32,21 @@ export const WATER = {
   sizeFactor: 1.2, // plane overhangs the terrain so edges never show
   opacity: 0.8, roughness: 0.15, metalness: 0.1,
 }
+
+// dir = direction the sun sits in (scaled by world size). Dawn/dusk = low warm sun = the showcase look.
+export const SUN = {
+  dawn:  { dir: [1, 0.25, -0.6],  color: '#ffb070', intensity: 2.2, ambient: 0.6 },
+  day:   { dir: [0.5, 1, 0.3],    color: '#fff4e0', intensity: 2.6, ambient: 0.8 },
+  dusk:  { dir: [-1, 0.2, 0.5],   color: '#ff8a5a', intensity: 2.0, ambient: 0.5 },
+  night: { dir: [0.3, 0.6, -0.4], color: '#8fa3e0', intensity: 0.35, ambient: 0.15 },
+} as const
+
+export const ATMOSPHERE = {
+  defaultPalette: ['#e8b86d', '#7a9a4a', '#c9d6e8'],
+  horizon: { whiten: 0.35, nightDim: 0.3 },
+  zenith: { deep: '#1a2540', dayMix: 0.25, nightMix: 0.85 },
+  fog: { base: 0.0005, perDensity: 0.005, weatherFog: 0.004 }, // exp2: ~13% haze at 150m for density 0.4
+  shadow: { mapSize: 2048, bias: -0.0005, near: 1, farFactor: 3 },
+  skyDome: { scaleFactor: 4, stops: [0, 0.45, 0.55, 1] },
+  sparkles: { count: 300, height: 60, y: 30, size: 3, speed: 0.3 },
+}

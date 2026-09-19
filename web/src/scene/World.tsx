@@ -3,6 +3,7 @@ import { OrbitControls } from '@react-three/drei'
 import { Suspense } from 'react'
 import type { Scene } from '@app/shared'
 import { Effects } from './Effects.tsx'
+import { Environment } from './Environment.tsx'
 import { CAMERA } from './presets.ts'
 import { Terrain } from './Terrain.tsx'
 import { Water } from './Water.tsx'
@@ -17,11 +18,9 @@ export function World({ scene }: WorldProps) {
     // `flat` = no renderer tone mapping; the ToneMapping effect owns it.
     <Canvas flat shadows camera={CAMERA}>
       <Suspense fallback={null}>
-        {/* temporary stand-ins, replaced task by task */}
         <Terrain scene={scene} />
         <Water scene={scene} />
-        <directionalLight position={[50, 80, 30]} intensity={2} castShadow />
-        <hemisphereLight args={['#cfd8ff', '#3a4a2a', 0.6]} />
+        <Environment scene={scene} />
         <OrbitControls makeDefault />
         <Effects />
       </Suspense>
