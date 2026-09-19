@@ -370,17 +370,18 @@ export function templateFor(slot: SlotKey, isConflict: boolean): TemplateId {
   return isConflict ? 'conflict_pick' : TEMPLATE_FOR_SLOT[slot];
 }
 
-// An answer becomes a typed decision for the gap's own slot — conflict_pick
-// included, since it only ever stood in for that slot.
-export function toDecision(gap: Gap, value: string): Decision | null {
+// A value becomes a typed decision. Used for answers, for what the story stated
+// outright, and for inferred guesses — same shapes whatever the source, so
+// nothing downstream can tell them apart by accident.
+export function toDecision(slot: SlotKey, entityId: string | undefined, value: string): Decision | null {
   const inVocab = <T>(schema: z.ZodType<T>): T | null => {
     const r = schema.safeParse(value);
     return r.success ? r.data : null;
   };
-  const zoneId = gap.entityId ?? '';
-  const heroId = gap.entityId ?? '';
+  const zoneId = entityId ?? '';
+  const heroId = entityId ?? '';
 
-  switch (gap.slot) {
+  switch (slot) {
     case 'world.setting': {
       const preset = inVocab(EnvironmentPresetSchema);
       return preset && { slot: 'world.setting', preset };

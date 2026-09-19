@@ -12,6 +12,7 @@ import { loadLibrary } from './assets/library.js';
 import { detectGaps } from './clarify/gaps.js';
 import { buildQuestions } from './clarify/questions.js';
 import { toGapReports } from './clarify/report.js';
+import { provenanceSummary, resolveBrief } from './clarify/resolve.js';
 import { AnswerValidationError, openClarify } from './clarify/session.js';
 import { getBrief } from './pipeline/briefProvider.js';
 import { filterStory } from './safety/filter.js';
@@ -38,7 +39,9 @@ async function runPipeline(world: WorldRecord): Promise<void> {
     log(world, `brief: ${world.brief.title}`, { tool: 'brief' });
     for (const issue of world.brief.issues) log(world, `brief repair: ${issue}`, { tool: 'brief' });
 
-    const { questions, ranked } = buildQuestions(detectGaps(world.brief), world.brief, world.story, loadLibrary());
+    const gaps = detectGaps(world.brief);
+    const { questions, ranked } = buildQuestions(gaps, world.brief, world.story, loadLibrary());
+    world.gaps = gaps;
     world.ranked = ranked;
     world.gapReports = toGapReports(ranked);
     emit(world, { type: 'gaps', gaps: world.gapReports });
@@ -50,9 +53,23 @@ async function runPipeline(world: WorldRecord): Promise<void> {
         .join(', '),
     });
 
-    world.clarifyOutcome = await openClarify(world, questions);
+    const outcome = await openClarify(world, questions);
+    world.clarifyOutcome = outcome;
 
-    // Stage 3 picks up from here: resolveBrief, asset jobs, the agent loop.
+    world.resolved = resolveBrief({
+      brief: world.brief,
+      gaps,
+      questions,
+      answers: world.answers,
+      outcome,
+    });
+    const counts = provenanceSummary(world.resolved);
+    log(world, `resolved: ${counts.stated} stated, ${counts.asked} asked, ${counts.inferred} inferred`, {
+      tool: 'resolve',
+    });
+
+    // Stage 3 picks up from here: asset jobs and the agent loop, both of which
+    // take world.resolved as their input.
     setStage(world, 'build');
   } catch (error) {
     const message = error instanceof Error ? error.message : 'pipeline failed';
@@ -111,6 +128,16 @@ app.get('/api/worlds/:id/answers', (c) => {
   return c.json({ answers });
 });
 
+// Debug view of the handoff object, so the resolved brief can be inspected
+// before Stage 3 exists. Not part of the contract.
+app.get('/api/worlds/:id/resolved', (c) => {
+  if (process.env.NODE_ENV === 'production') return c.json({ error: 'not available' }, 404);
+  const world = getWorld(c.req.param('id'));
+  if (!world) return c.json({ error: 'no such world' }, 404);
+  if (!world.resolved) return c.json({ error: 'not resolved yet', stage: world.stage }, 404);
+  return c.json({ resolved: world.resolved, provenance: provenanceSummary(world.resolved), gaps: world.gapReports ?? [] });
+});
+
 app.get('/api/worlds/:id', (c) => {
   const world = getWorld(c.req.param('id'));
   if (!world) return c.json({ error: 'no such world' }, 404);
@@ -121,6 +148,11 @@ app.get('/api/worlds/:id', (c) => {
 app.get('/api/worlds/:id/events', (c) => {
   const world = getWorld(c.req.param('id'));
   if (!world) return c.json({ error: 'no such world' }, 404);
+
+  // Next's dev proxy will gzip and buffer this stream unless it's told not to
+  // transform it, which silently breaks the event stream in the browser.
+  c.header('Cache-Control', 'no-cache, no-transform');
+  c.header('Content-Encoding', 'identity');
 
   return streamSSE(c, async (stream) => {
     const queue: WorldEvent[] = [];

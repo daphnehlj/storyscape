@@ -2,7 +2,8 @@ import { randomUUID } from 'node:crypto';
 import type { GapReport, Question, Scene, Stage, WorldEvent } from '@app/shared';
 import type { ClarifyOutcome, ClarifySession } from '../clarify/session.js';
 import type { Brief } from '../clarify/normalizeBrief.js';
-import type { RankedGap } from '../clarify/types.js';
+import type { Gap, RankedGap } from '../clarify/types.js';
+import type { ResolvedBrief } from '../clarify/resolve.js';
 
 // Worlds live in memory. A restart loses them, which is the right trade for a
 // hackathon: the alternative is a database nobody has time to debug at 4am.
@@ -25,12 +26,14 @@ export interface WorldRecord {
   story: string;
   stage: Stage;
   brief?: Brief;
+  gaps?: Gap[];
   ranked?: RankedGap[];
   gapReports?: GapReport[];
   questions?: Question[];
   answers: Map<string, StoredAnswer>;
   clarify?: ClarifySession;
   clarifyOutcome?: ClarifyOutcome;
+  resolved?: ResolvedBrief;
   scene?: Scene;
   subscribers: Set<EventSink>;
   createdAt: number;
