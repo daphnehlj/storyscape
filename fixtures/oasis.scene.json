@@ -193,8 +193,8 @@
       "source": "generated",
       "prompt": "ancient sandstone temple with towers, stylized low-poly",
       "status": "ready",
-      "url": "/generated/temple.glb",
-      "fallbackAssetId": "castle"
+      "url": "/assets/library/castle.glb",
+      "fallbackAssetId": "cottage"
     },
     "cottage": {
       "id": "cottage",
