@@ -1,4 +1,4 @@
-import { isSafeSlotValue } from '../safety/filter.js';
+import { isSafeSlotValue, sharesWordWithStory } from '../safety/filter.js';
 import type { HeroKind } from './slots.js';
 
 // Filling a template's slots is the one place model text reaches a child, so the
@@ -31,6 +31,8 @@ export function displayName(
   // bare noun too and put our own article on it.
   const bare = name?.replace(DETERMINER, '').trim();
   if (bare && isSafeSlotValue(bare, story)) return withArticle(bare);
+  // "Jack's farm" is the model's phrasing of the child's own words.
+  if (name && sharesWordWithStory(name, story)) return withArticle(name);
   if (fallback.scope === 'zone') return 'this place';
   return GENERIC_BY_KIND[fallback.kind ?? 'object'];
 }

@@ -7,24 +7,24 @@
     "kind": "color",
     "options": [
       {
-        "id": "red",
-        "label": "Red",
-        "swatch": "#e0443c"
-      },
-      {
-        "id": "blue",
-        "label": "Blue",
-        "swatch": "#3b82e0"
-      },
-      {
-        "id": "yellow",
-        "label": "Yellow",
-        "swatch": "#f5d33b"
-      },
-      {
         "id": "brown",
         "label": "Brown",
         "swatch": "#8b5a2b"
+      },
+      {
+        "id": "green",
+        "label": "Green",
+        "swatch": "#4caf50"
+      },
+      {
+        "id": "grey",
+        "label": "Grey",
+        "swatch": "#8f98a0"
+      },
+      {
+        "id": "red",
+        "label": "Red",
+        "swatch": "#e0443c"
       }
     ],
     "allowFreeText": true
@@ -57,6 +57,32 @@
   },
   {
     "id": "q3",
+    "gapId": "gap-beanstalk-hero.feel",
+    "templateId": "hero_feel",
+    "prompt": "Is the beanstalk friendly or scary?",
+    "kind": "choice",
+    "options": [
+      {
+        "id": "friendly",
+        "label": "Friendly"
+      },
+      {
+        "id": "grumpy",
+        "label": "Grumpy"
+      },
+      {
+        "id": "spooky",
+        "label": "Spooky"
+      },
+      {
+        "id": "silly",
+        "label": "Silly"
+      }
+    ],
+    "allowFreeText": true
+  },
+  {
+    "id": "q4",
     "gapId": "gap-world-world.timeOfDay",
     "templateId": "world_time",
     "prompt": "When does the story happen?",
@@ -82,21 +108,21 @@
     "allowFreeText": false
   },
   {
-    "id": "q4",
-    "gapId": "gap-forest-zone.trees",
+    "id": "q5",
+    "gapId": "gap-farm-zone.trees",
     "templateId": "zone_trees",
-    "prompt": "What trees grow near the forest?",
+    "prompt": "What trees grow near Jack's farm?",
     "kind": "choice",
     "options": [
-      {
-        "id": "pine_tree",
-        "label": "Tall pointy pine tree",
-        "previewAssetId": "pine_tree"
-      },
       {
         "id": "oak_tree",
         "label": "Big leafy oak tree",
         "previewAssetId": "oak_tree"
+      },
+      {
+        "id": "pine_tree",
+        "label": "Tall pointy pine tree",
+        "previewAssetId": "pine_tree"
       },
       {
         "id": "birch_tree",

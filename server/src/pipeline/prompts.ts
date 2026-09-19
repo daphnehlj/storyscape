@@ -60,6 +60,7 @@ Each reading is:
   "evidence": "explicit" | "vague" | "absent" | "conflict",
   "value": <allowed value>,          // only when explicit
   "candidates": [<allowed value>, …], // vague: 2–3 plausible readings; conflict: the values the story contradicts itself between
+  "plausible": [<allowed value>, …],  // 3–5 values that would genuinely suit this thing, best first
   "quote": "<the exact words from the story that justify this>",
   "guess": <allowed value>,          // always: your best choice if nobody tells us
   "guessConfidence": "high" | "low"
@@ -70,6 +71,9 @@ EVIDENCE
 - vague: the story hints but doesn't settle it ("a dark forest" could be night, or just dense trees).
 - absent: the story never mentions it. Set guessConfidence "high" only when the story still strongly implies it (a kingdom in the clouds implies cloud_kingdom).
 - conflict: the story says two incompatible things ("in the middle of the night the sun was shining"). Children's stories do this often; report it, don't smooth it over.
+
+PLAUSIBLE
+- For colours especially, list what this thing could believably be, best first: a cat is orange, white, brown, black or grey — not red or blue. A dragon is green, red, black, purple or gold. Order matters; the first few become the choices we offer.
 
 GUESSES
 - Guess what would look best in this story's world, not just what is most literal.

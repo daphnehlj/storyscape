@@ -12,7 +12,7 @@ import {
   type QuestionOption,
 } from '@app/shared';
 import { byTags } from '../assets/library.js';
-import { FeelSchema, MaterialSchema, SizeRungSchema, type SlotKey } from './slots.js';
+import { FeelSchema, MaterialSchema, SizeRungSchema, type HeroKind, type SlotKey } from './slots.js';
 import type { Decision, Gap } from './types.js';
 
 // The fixed question template set. A question is always a template with its
@@ -37,6 +37,7 @@ export type TemplateId =
 export interface GapContext {
   gap: Gap;
   library: LibraryEntry[];
+  entityKind?: HeroKind;
   // The name to drop into the prompt, already checked by the safety guard.
   displayName?: string;
 }
@@ -199,9 +200,86 @@ function presetOptions(ctx: GapContext): QuestionOption[] {
 
 // ── Templates ─────────────────────────────────────────────────────────────
 
-// Spread across the wheel rather than four neighbouring hues, so the four
-// swatches on the card look like four different choices.
+// Last resort when we know nothing about the thing: spread across the wheel so
+// the four swatches at least look like four different choices.
 const COLOR_ORDER = ['red', 'blue', 'yellow', 'green', 'purple', 'pink', 'orange', 'white', 'brown', 'gold', 'grey', 'black'] as const satisfies readonly ColorToken[];
+
+// Fallback palettes for when Stage 2 hasn't supplied `plausible`. "What colour
+// is the cat?" should offer orange, white, black and grey — offering red, blue,
+// yellow and green makes the question feel like it wasn't about the cat at all.
+// Matched against the entity's name, longest key first.
+const PLAUSIBLE_BY_KEYWORD: Record<string, readonly ColorToken[]> = {
+  cat: ['orange', 'black', 'white', 'grey', 'brown'],
+  kitten: ['orange', 'black', 'white', 'grey'],
+  dog: ['brown', 'black', 'white', 'gold'],
+  puppy: ['brown', 'black', 'white', 'gold'],
+  wolf: ['grey', 'white', 'black', 'brown'],
+  fox: ['orange', 'red', 'white', 'brown'],
+  bear: ['brown', 'black', 'white'],
+  rabbit: ['white', 'brown', 'grey', 'black'],
+  mouse: ['grey', 'brown', 'white'],
+  horse: ['brown', 'black', 'white', 'grey'],
+  pony: ['brown', 'white', 'grey', 'gold'],
+  cow: ['brown', 'white', 'black'],
+  pig: ['pink', 'brown', 'black'],
+  dragon: ['green', 'red', 'black', 'purple', 'gold'],
+  unicorn: ['white', 'pink', 'purple', 'gold'],
+  giant: ['brown', 'green', 'grey', 'red'],
+  troll: ['green', 'grey', 'brown'],
+  monster: ['green', 'purple', 'blue', 'orange'],
+  bird: ['blue', 'red', 'yellow', 'white'],
+  fish: ['orange', 'blue', 'gold', 'yellow'],
+  octopus: ['purple', 'pink', 'orange', 'red'],
+  crab: ['red', 'orange', 'pink'],
+  snake: ['green', 'brown', 'black', 'yellow'],
+  snowman: ['white', 'blue'],
+  sandcastle: ['yellow', 'gold', 'brown'],
+  castle: ['grey', 'white', 'brown', 'gold'],
+  tower: ['grey', 'white', 'brown'],
+  cottage: ['brown', 'white', 'red', 'yellow'],
+  house: ['red', 'brown', 'white', 'yellow'],
+  hut: ['brown', 'yellow', 'grey'],
+  boat: ['brown', 'white', 'red', 'blue'],
+  beanstalk: ['green', 'brown'],
+  tree: ['green', 'brown'],
+  flower: ['pink', 'yellow', 'red', 'purple'],
+};
+
+const PLAUSIBLE_BY_KIND: Record<HeroKind, readonly ColorToken[]> = {
+  creature: ['brown', 'grey', 'white', 'black', 'orange'],
+  building: ['grey', 'brown', 'white', 'red'],
+  plant: ['green', 'brown', 'pink', 'yellow'],
+  object: ['brown', 'grey', 'white', 'gold'],
+};
+
+function plausibleColors(ctx: GapContext): readonly ColorToken[] {
+  const fromModel = (ctx.gap.reading.plausible ?? []).filter((v): v is ColorToken => typeof v === 'string');
+  if (fromModel.length >= MIN_OPTIONS) return fromModel;
+
+  const name = (ctx.gap.entityName ?? '').toLowerCase();
+  const key = Object.keys(PLAUSIBLE_BY_KEYWORD)
+    .filter((k) => name.includes(k))
+    .sort((a, b) => b.length - a.length)[0];
+  if (key) return PLAUSIBLE_BY_KEYWORD[key]!;
+
+  return ctx.entityKind ? PLAUSIBLE_BY_KIND[ctx.entityKind] : COLOR_ORDER;
+}
+
+// Unlike the enum templates, colour options keep their plausibility order: the
+// most likely colour for this thing reads first.
+function colorOptionsFor(ctx: GapContext, tail: readonly ColorToken[], limit = MAX_OPTIONS): QuestionOption[] {
+  const ordered: ColorToken[] = [];
+  const push = (v: unknown) => {
+    if (typeof v === 'string' && ColorTokenSchema.safeParse(v).success && !ordered.includes(v as ColorToken)) {
+      ordered.push(v as ColorToken);
+    }
+  };
+  for (const c of ctx.gap.reading.candidates ?? []) push(c);
+  push(ctx.gap.reading.guess);
+  for (const c of plausibleColors(ctx)) push(c);
+  for (const c of tail) push(c);
+  return swatches(ordered.slice(0, limit));
+}
 
 export const TEMPLATES: Record<TemplateId, Template> = {
   hero_color: {
@@ -212,7 +290,7 @@ export const TEMPLATES: Record<TemplateId, Template> = {
     D: 1.0,
     C: 1.0,
     affectsHeroPrompt: true,
-    buildOptions: (ctx) => swatches(preferred(ctx.gap, COLOR_ORDER)),
+    buildOptions: (ctx) => colorOptionsFor(ctx, COLOR_ORDER),
   },
   hero_material: {
     id: 'hero_material',
@@ -282,10 +360,10 @@ export const TEMPLATES: Record<TemplateId, Template> = {
     D: 0.5,
     C: 0.7,
     affectsHeroPrompt: false,
-    buildOptions: (ctx) => {
-      const colors = preferred(ctx.gap, COLOR_ORDER).slice(0, 3);
-      return [...swatches(colors), { id: 'none', label: 'No flowers' }];
-    },
+    buildOptions: (ctx) => [
+      ...colorOptionsFor(ctx, ['pink', 'yellow', 'purple', 'white'], MAX_OPTIONS - 1),
+      { id: 'none', label: 'No flowers' },
+    ],
   },
   world_critters: {
     id: 'world_critters',

@@ -178,7 +178,7 @@ export const COLOR_HEX: Record<ColorToken, string> = {
 
 // ── Questions and answers (§4.3) ──────────────────────────────────────────
 
-export const MAX_QUESTIONS = 5;
+export const MAX_QUESTIONS = 8;
 
 export const QuestionOptionSchema = z.object({
   id: z.string(),

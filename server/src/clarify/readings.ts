@@ -11,6 +11,9 @@ export interface SlotReading<V> {
   evidence: Evidence;
   value?: V;
   candidates?: V[];
+  // Values that would suit this thing, whatever the story says — a cat is
+  // orange or black long before it's blue. Used to order the options offered.
+  plausible?: V[];
   quote?: string;
   guess?: V;
   guessConfidence: 'high' | 'low';
@@ -19,6 +22,7 @@ export interface SlotReading<V> {
 export type Readings<K extends SlotKey> = { [P in K]?: SlotReading<SlotValue<P>> };
 
 const MAX_CANDIDATES = 3;
+const MAX_PLAUSIBLE = 6;
 const MAX_QUOTE_LENGTH = 200;
 
 const RawReadingSchema = z
@@ -26,6 +30,7 @@ const RawReadingSchema = z
     evidence: z.unknown(),
     value: z.unknown(),
     candidates: z.unknown(),
+    plausible: z.unknown(),
     quote: z.unknown(),
     guess: z.unknown(),
     guessConfidence: z.unknown(),
@@ -92,12 +97,20 @@ export function normalizeReading<K extends SlotKey>(
     if (value === undefined) guessConfidence = 'low';
   }
 
+  const plausible: V[] = [];
+  for (const p of Array.isArray(r.plausible) ? r.plausible : []) {
+    const v = parseIn(vocab, p);
+    if (v !== undefined && !plausible.includes(v)) plausible.push(v);
+  }
+  plausible.splice(MAX_PLAUSIBLE);
+
   const quote = typeof r.quote === 'string' && r.quote.trim() ? r.quote.trim().slice(0, MAX_QUOTE_LENGTH) : undefined;
 
   return {
     evidence,
     ...(evidence === 'explicit' && { value }),
     ...(candidates.length > 0 && evidence !== 'explicit' && { candidates }),
+    ...(plausible.length > 0 && { plausible }),
     ...(quote !== undefined && { quote }),
     guess,
     guessConfidence,

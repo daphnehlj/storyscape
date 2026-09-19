@@ -32,7 +32,7 @@ The thing that makes this a product rather than a prompt is the middle: the laye
 │     – gaps: what the story doesn't say, ranked by visual impact     │
 │                          │                                          │
 │                          ▼                                          │
-│  Stage 2.5: CLARIFY — 3–5 questions to the child                    │
+│  Stage 2.5: CLARIFY — up to 8 questions to the child                │
 │     – template + slot fill, never free-generated                    │
 │     – answers merge back into the brief                             │
 │     – skippable; unanswered gaps fall through to inference          │
@@ -299,7 +299,7 @@ export interface Answer {
 }
 ```
 
-Rules: at most 5 questions per world, `options` is 2–4 entries, and A must be able to build a world from zero answers.
+Rules: at most 8 questions per world (aim for 5), `options` is 2–4 entries, and A must be able to build a world from zero answers.
 
 - An `Answer` carries `optionId` or `text` (free text ≤ 60 chars). Skipping one question means not posting an answer for it.
 - `swatch` is always filled by server code from `COLOR_HEX` in `shared/contract.ts`, keyed by a `ColorToken` name. The model only ever sees token names, never hex.
@@ -438,7 +438,7 @@ Times are hackathon hours from kickoff. Adjust as needed.
 | Agent sends invalid tool calls | zod validation after each call; errors returned as tool results; call cap |
 | Agent too slow for a live demo | Tool-call cap; stream progress so the wait is part of the show; cached demo worlds |
 | **Framerate dies on the demo laptop** | Quality tiers wired in from H2, not retrofitted; bloom, grass and creatures are the first things scaled down; test on the team's worst machine |
-| **A child abandons the question loop** | Hard cap of 5, target 3; thumbnails and swatches not text; visible skip; A builds fine from zero answers |
+| **A child abandons the question loop** | Hard cap of 8, target 5; thumbnails and swatches not text; visible skip; A builds fine from zero answers |
 | **Unsafe text reaching a child** | Questions are template + slot fill, never free-generated; story and free-text answers filtered before any prompt |
 | **"This is just a wrapper"** | Take an unseen story live at the demo; lead with the question loop rather than a beauty shot; run a deliberately three-sentence story to show gap detection working; debug overlay on request |
 | Contract drift between halves | Shared zod types, fixture-driven dev, merge checkpoints |

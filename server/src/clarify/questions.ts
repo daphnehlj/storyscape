@@ -25,7 +25,7 @@ function allowsFreeText(templateId: string): boolean {
 function buildQuestion(gap: Gap, brief: Brief, story: string, library: LibraryEntry[], index: number): Question | null {
   const template = TEMPLATES[gap.templateId];
   const hero = brief.heroObjects.find((h) => h.id === gap.entityId);
-  const options = template.buildOptions({ gap, library });
+  const options = template.buildOptions({ gap, library, ...(hero && { entityKind: hero.kind }) });
   if (!options || options.length < 2) return null;
 
   const name = displayName(gap.entityName, story, {

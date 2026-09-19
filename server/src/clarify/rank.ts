@@ -17,10 +17,10 @@ import type { Gap, RankedGap, ScoreFactors } from './types.js';
 // A formula rather than a model call: it's deterministic, it calibrates in one
 // table, and every score can be shown with its factors in the debug overlay.
 
-export const TARGET_QUESTIONS = 3;
+export const TARGET_QUESTIONS = 5;
 export const MIN_QUESTIONS = 2;
-const ASK_THRESHOLD = 0.15; // below this, guessing is better than spending a question
-const EXTRA_THRESHOLD = 0.5; // a 4th or 5th question has to earn its place
+const ASK_THRESHOLD = 0.1; // below this, guessing is better than spending a question
+const EXTRA_THRESHOLD = 0.2; // past the target, a question has to earn its place
 const SAME_ENTITY_PENALTY = 0.5; // two questions about one thing starts to feel like a form
 const SAME_TEMPLATE_PENALTY = 0.35; // a second "what colour is…" reads as a form, whatever it scores
 
@@ -141,8 +141,6 @@ export function selectGaps(
       continue;
     }
 
-    // Always ask a couple: the point of the loop is the child authoring their
-    // world, so a well-specified story still gets its authorship moment.
     const beyondTarget = chosen.length >= TARGET_QUESTIONS;
     if (beyondTarget && next.effective < EXTRA_THRESHOLD) {
       next.reason = `cut: question ${chosen.length + 1} needs ${EXTRA_THRESHOLD}, had ${next.effective.toFixed(2)}`;
