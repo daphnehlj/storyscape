@@ -43,7 +43,7 @@ A user pastes in a story, for example *Jack and the Beanstalk*, and gets a 3D wo
                            ▼
 ┌───────────────────────── WEB (Person B) ────────────────────────────┐
 │  React Three Fiber renderer                                         │
-│   – terrain, water, zones/platforms, lighting, fog, sky             │
+│   – terrain, water, zones/platforms, lighting, fog, sky, post-fx    │
 │   – library models + generated models (normalized, snapped)         │
 │   – placeholders for pending assets                                 │
 │   – camera fly-through, story-note popups, progress/log panel       │
@@ -56,7 +56,7 @@ A user pastes in a story, for example *Jack and the Beanstalk*, and gets a 3D wo
 2. **The brief is light JSON with free-text descriptions.** It isn't a rigid schema. Its main job is to let us start the slow 3D generation jobs *before* the agent runs.
 3. **Most models come from a pre-made library; only 2–4 "hero" objects are generated.** Text-to-3D takes 30s–2min per model. Generating everything would make one world take 10+ minutes.
 4. **The server sends the full Scene every time, not partial updates.** Scenes are a few KB. Resending everything rules out bugs where updates arrive out of order or get applied to stale state.
-5. **Same art style everywhere (stylized low-poly).** Library models are low-poly, and every generation prompt asks for that style.
+5. **Same art style everywhere: low-poly geometry, lighting does the work** (think *Sky: Children of the Light*). Library models are low-poly, every generation prompt asks for that style, and B's renderer sells it with atmosphere and post-processing. Because all atmospheric color derives from `environment.palette`, the palette is the main lever A has over how a world *feels*.
 6. **TypeScript on both sides**, with shared zod schemas in `shared/`. A contract change breaks both builds right away instead of failing quietly at demo time.
 
 ## 3. The split
@@ -71,7 +71,7 @@ A user pastes in a story, for example *Jack and the Beanstalk*, and gets a 3D wo
 | Core job | Story → brief → agent → valid `Scene` | Render any valid `Scene` well |
 | LLM work | Stage 1 & 2 prompts, agent loop, tool definitions and error handling | — |
 | External APIs | Text-to-3D, skybox generation, caching, serving `.glb` files | — |
-| 3D / visuals | — | Terrain, water, platforms, lighting, fog, sky, scatter, loading and normalizing models, camera |
+| 3D / visuals | — | Terrain, water, platforms, lighting, fog, sky, post-processing, scatter, loading and normalizing models, camera |
 | Asset library | Reads `library.json` and gives the list to the agent | Picks and curates ~40–60 low-poly models, **writes `library.json`** |
 | Server | HTTP API, event stream, storing worlds | — |
 | UI | — | Story input, stage progress, agent log panel, story-note popups |
@@ -99,13 +99,14 @@ A user pastes in a story, for example *Jack and the Beanstalk*, and gets a 3D wo
     "ambientObjects": ["hay bales", "cow", "wooden fence", "cloud puffs"]
   }
   ```
+  `palette` is load-bearing: B derives sky, fog and light color from it. Prompt for 3–5 hex colors that match the story's mood (warm golds for a fairy tale, cold blue-greys for something ominous), and prefer `dawn`/`dusk` for `timeOfDay` when the story allows — they're the best-looking states.
 - **Asset jobs.** Once the brief is ready, start text-to-3D jobs for the `heroObjects` and a skybox job, all in parallel. Cache results by prompt hash. Each hero is added to `Scene.assets` right away with `status: 'pending'` and a `fallbackAssetId`, then updated to `ready` + `url` (or `failed`).
 - **Agent loop.** A tool-calling model builds the scene with the tools below. After every tool call: apply it to the Scene, validate against the zod schema, and send a `scene` event. An invalid call goes back to the agent as a tool error so it can fix it.
 
   | Tool | Effect on `Scene` |
   |---|---|
   | `set_terrain(biome, heightVariation, water?)` | sets `terrain` |
-  | `set_environment(timeOfDay, weather, fogDensity, palette?)` | sets `environment` |
+  | `set_environment(timeOfDay, weather, fogDensity, palette?)` | sets `environment`; agent should always pass the brief's `palette` |
   | `create_zone(name, description, center, radius, elevation, platform?, storyNote?)` | appends to `zones` |
   | `place_object(assetId, zoneId?, position, size, rotationY, snapToGround, label?, storyNote?)` | appends to `objects` |
   | `scatter(assetIds, zoneId, count, sizeRange)` | appends to `scatters` |
@@ -118,8 +119,12 @@ A user pastes in a story, for example *Jack and the Beanstalk*, and gets a 3D wo
 
 ### Person B: detailed scope
 
-- **Renderer** for every field in `Scene`, with each piece a component: `<Terrain>`, `<Water>`, `<Environment>` (lights, fog, sky), `<ZonePlatform>`, `<SceneObject>`, `<Scatter>`.
+- **Visual direction: low-poly geometry, lighting does the work.** Think *Sky: Children of the Light*: soft bloom, filmic tone mapping, thick colored haze, low warm sun, big soft clouds, floating light motes. Every atmospheric color (sky, fog, light tint) derives from `environment.palette`, so a palette change alone makes a world feel different.
+- **Renderer** for every field in `Scene`, with each piece a component: `<Terrain>`, `<Water>`, `<Environment>`, `<ZonePlatform>`, `<SceneObject>`, `<Scatter>`, plus `<Effects>` (post-processing) wrapping the canvas.
 - **Terrain:** noise heightmap from `seed` and `heightVariation`, colored by biome and tinted by `palette`. Zones should read clearly: flatten the terrain a bit near zone centers so buildings sit well.
+- **Environment:** one directional sun (angle and warmth from `timeOfDay`; dawn/dusk are the showcase states) with soft shadows, a hemisphere fill and drei's `Environment` for IBL so models pick up sky color (alias the import; it shares a name with your component). `fogExp2` colored to the sky horizon, density from `fogDensity`. `weather` adds drei `<Cloud>` cover and rain/snow particles. drei `<Sparkles>` for light motes. Sky is a 2-stop gradient from `palette` until `skybox.status === 'ready'`, then the equirectangular `skybox.url` as background + IBL.
+- **Effects:** `@react-three/postprocessing` with `<Bloom>` (high luminance threshold: sun, sky and emissive bits glow, not the whole scene), ACES `<ToneMapping>`, light `<Vignette>`. Composer at half resolution. Turn it on early with tame settings so the fixture is judged under the real look; tune at H22.
+- **Zone platforms:** `'cloud'` → drei `<Cloud>` volume at `elevation`; `'rock'` → flat low-poly disc. Both are the snap target for objects in that zone.
 - **Model normalization (B owns this, A never deals with it):** after loading a `.glb`, compute its bounding box, scale it so its **height = `size`**, and move its origin to bottom-center. If `snapToGround`, raycast down to the terrain (or to the zone platform when the zone's `elevation > 0`).
 - **Scatter:** deterministic random placement inside the zone circle using `seed`, avoiding objects and zone centers. Use instanced meshes.
 - **Pending assets:** render `fallbackAssetId` (or a pulsing placeholder) until `status: 'ready'`, then swap in the real model. On `failed`, keep the fallback.
@@ -281,12 +286,12 @@ server/                Person A
   src/api.ts           HTTP + event stream
 web/                   Person B
   public/assets/library/   *.glb + library.json
-  src/scene/           Terrain, Environment, ZonePlatform, SceneObject, Scatter
+  src/scene/           Terrain, Environment, Effects, ZonePlatform, SceneObject, Scatter
   src/ui/              StoryInput, StageBar, AgentLog, StoryNote
 ARCHITECTURE.md        this file
 ```
 
-Suggested stack: **server:** Node + TypeScript (Hono or Express), **web:** Vite + React + React Three Fiber + drei, **shared:** zod. Use a pnpm workspace so `server` and `web` both import `shared`.
+Suggested stack: **server:** Node + TypeScript (Hono or Express), **web:** Vite + React + React Three Fiber + drei + @react-three/postprocessing, **shared:** zod. Use a pnpm workspace so `server` and `web` both import `shared`.
 
 ## 6. Working in parallel
 
@@ -308,10 +313,10 @@ Times are hackathon hours from kickoff. Adjust as needed.
 | When | Person A | Person B | Merge checkpoint |
 |---|---|---|---|
 | **H0–2** | **Together:** agree on `shared/contract.ts`, hand-write `jack.scene.json`, set up the workspace | | Contract frozen at `version: 1` |
-| H2–8 | Stage 2 brief + agent loop with tools; outputs valid Scenes to files | Renderer draws the fixture: terrain, environment, zones, library objects, scatter | **CP1 (~H8):** A's output files render correctly in B's renderer |
+| H2–8 | Stage 2 brief + agent loop with tools; outputs valid Scenes to files | Renderer draws the fixture: terrain, environment, zones, library objects, scatter; post-processing on at tame settings | **CP1 (~H8):** A's output files render correctly in B's renderer |
 | H8–14 | HTTP API + event stream; stage 1; prompt tuning on test stories | Mock-server streaming, updating by ID, UI (input, stage bar, log) | **CP2 (~H14):** real end-to-end: type story → watch world build live |
 | H14–22 | Text-to-3D + skybox jobs, caching, fallbacks | Pending → ready swaps, skybox, camera fly-through, story notes | **CP3 (~H22):** generated hero models + sky appear live |
-| H22–30 | Prompt quality across all test stories, speed, error handling | Visual polish: lighting, fog, water, platforms, performance | **CP4:** full run on all test stories, bugs listed and assigned |
+| H22–30 | Prompt quality across all test stories, speed, error handling | Visual polish: tune bloom, lighting, fog, clouds, water, platforms; performance | **CP4:** full run on all test stories, bugs listed and assigned |
 | H30–end | **Together:** fix bugs, warm the asset cache for demo stories, rehearse demo, record a backup video | | Demo-ready |
 
 **At each checkpoint:** both merge to `main`, run the full flow on at least two stories, then write down anything that doesn't fit the contract. Fix it by changing the contract (with review), not by working around it in one half.
@@ -330,6 +335,7 @@ Times are hackathon hours from kickoff. Adjust as needed.
 | Text-to-3D is slow or fails | Only 2–4 hero objects; library fallbacks; cache by prompt; pre-generate assets for demo stories |
 | Generated models are wrong size or orientation | B normalizes by bounding box; `size` is always target height |
 | Mixed art styles look bad | Low-poly library only; style keywords in every generation prompt |
+| Post-processing and shadows tank the framerate | Half-res effect composer, shadow map ≤ 2048, instanced scatter; check 60fps on a full fixture before H22 |
 | LLM places things badly | Agent works in zones + relative positions; `snapToGround`; `describe_scene` for self-checking |
 | Agent sends invalid tool calls | zod validation after each call; errors returned as tool results; call cap |
 | Agent too slow for a live demo | Tool-call cap; stream progress so the wait is part of the show; cached demo worlds |
