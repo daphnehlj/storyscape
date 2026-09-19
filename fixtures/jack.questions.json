@@ -6,10 +6,26 @@
     "prompt": "What colour is the giant?",
     "kind": "color",
     "options": [
-      { "id": "brown", "label": "Brown", "swatch": "#8b5a2b" },
-      { "id": "green", "label": "Green", "swatch": "#4caf50" },
-      { "id": "blue", "label": "Blue", "swatch": "#3b82e0" },
-      { "id": "purple", "label": "Purple", "swatch": "#8e5bd6" }
+      {
+        "id": "red",
+        "label": "Red",
+        "swatch": "#e0443c"
+      },
+      {
+        "id": "blue",
+        "label": "Blue",
+        "swatch": "#3b82e0"
+      },
+      {
+        "id": "yellow",
+        "label": "Yellow",
+        "swatch": "#f5d33b"
+      },
+      {
+        "id": "brown",
+        "label": "Brown",
+        "swatch": "#8b5a2b"
+      }
     ],
     "allowFreeText": true
   },
@@ -20,10 +36,22 @@
     "prompt": "What is the castle made of?",
     "kind": "choice",
     "options": [
-      { "id": "stone", "label": "Stone" },
-      { "id": "wood", "label": "Wood" },
-      { "id": "ice", "label": "Ice" },
-      { "id": "candy", "label": "Candy" }
+      {
+        "id": "stone",
+        "label": "Stone"
+      },
+      {
+        "id": "wood",
+        "label": "Wood"
+      },
+      {
+        "id": "brick",
+        "label": "Bricks"
+      },
+      {
+        "id": "straw",
+        "label": "Straw"
+      }
     ],
     "allowFreeText": true
   },
@@ -34,23 +62,52 @@
     "prompt": "When does the story happen?",
     "kind": "choice",
     "options": [
-      { "id": "dawn", "label": "Early morning" },
-      { "id": "day", "label": "Daytime" },
-      { "id": "dusk", "label": "Sunset" },
-      { "id": "night", "label": "Night-time" }
+      {
+        "id": "dawn",
+        "label": "Early morning"
+      },
+      {
+        "id": "day",
+        "label": "Daytime"
+      },
+      {
+        "id": "dusk",
+        "label": "Sunset"
+      },
+      {
+        "id": "night",
+        "label": "Night-time"
+      }
     ],
     "allowFreeText": false
   },
   {
     "id": "q4",
-    "gapId": "gap-farm-zone.trees",
+    "gapId": "gap-forest-zone.trees",
     "templateId": "zone_trees",
-    "prompt": "What trees grow on Jack's farm?",
+    "prompt": "What trees grow near the forest?",
     "kind": "choice",
     "options": [
-      { "id": "oak_tree", "label": "Big leafy oak", "previewAssetId": "oak_tree" },
-      { "id": "pine_tree", "label": "Tall pointy pine", "previewAssetId": "pine_tree" },
-      { "id": "birch_tree", "label": "Thin white birch", "previewAssetId": "birch_tree" }
+      {
+        "id": "pine_tree",
+        "label": "Tall pointy pine tree",
+        "previewAssetId": "pine_tree"
+      },
+      {
+        "id": "oak_tree",
+        "label": "Big leafy oak tree",
+        "previewAssetId": "oak_tree"
+      },
+      {
+        "id": "birch_tree",
+        "label": "Thin white birch tree",
+        "previewAssetId": "birch_tree"
+      },
+      {
+        "id": "palm_tree",
+        "label": "Curved palm tree",
+        "previewAssetId": "palm_tree"
+      }
     ],
     "allowFreeText": false
   }

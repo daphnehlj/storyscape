@@ -1,5 +1,13 @@
-import type { Evidence } from '@app/shared';
-import type { SlotKey, SlotScope, SlotValue } from './slots.js';
+import type {
+  ColorToken,
+  EnvironmentPreset,
+  Evidence,
+  LifeType,
+  Platform,
+  TimeOfDay,
+  Weather,
+} from '@app/shared';
+import type { Feel, Material, SizeRung, SlotKey, SlotScope, SlotValue } from './slots.js';
 import type { SlotReading } from './readings.js';
 import type { TemplateId } from './templates.js';
 
@@ -31,3 +39,19 @@ export interface RankedGap extends Gap {
   selected: boolean;
   reason: string; // why it was asked, or why it wasn't
 }
+
+// What an answer becomes: enums, library ids and colour tokens only. No hex and
+// no numbers — the preset table owns colour, and the size ladder owns meters.
+export type Decision =
+  | { slot: 'world.setting'; preset: EnvironmentPreset }
+  | { slot: 'world.timeOfDay'; value: TimeOfDay }
+  | { slot: 'world.weather'; value: Weather }
+  | { slot: 'world.flowers'; color: ColorToken | 'none' }
+  | { slot: 'world.critters'; value: LifeType | 'none' }
+  | { slot: 'zone.platform'; zoneId: string; value: Platform }
+  | { slot: 'zone.trees'; zoneId: string; assetId: string }
+  | { slot: 'zone.home'; zoneId: string; assetId: string }
+  | { slot: 'hero.color'; heroId: string; color: ColorToken }
+  | { slot: 'hero.material'; heroId: string; value: Material }
+  | { slot: 'hero.size'; heroId: string; rung: SizeRung }
+  | { slot: 'hero.feel'; heroId: string; value: Feel };

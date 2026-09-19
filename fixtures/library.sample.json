@@ -1,0 +1,18 @@
+[
+  { "id": "oak_tree", "file": "oak_tree.glb", "tags": ["tree", "forest", "nature"], "defaultSize": 8, "description": "big leafy oak tree" },
+  { "id": "pine_tree", "file": "pine_tree.glb", "tags": ["tree", "forest", "nature"], "defaultSize": 10, "description": "tall pointy pine tree" },
+  { "id": "birch_tree", "file": "birch_tree.glb", "tags": ["tree", "forest", "nature"], "defaultSize": 7, "description": "thin white birch tree" },
+  { "id": "palm_tree", "file": "palm_tree.glb", "tags": ["tree", "beach", "nature"], "defaultSize": 9, "description": "curved palm tree" },
+  { "id": "cottage", "file": "cottage.glb", "tags": ["house", "building", "village"], "defaultSize": 5, "description": "small thatched cottage" },
+  { "id": "farmhouse", "file": "farmhouse.glb", "tags": ["house", "building", "farm"], "defaultSize": 7, "description": "wooden farmhouse with a red roof" },
+  { "id": "stone_hut", "file": "stone_hut.glb", "tags": ["house", "building"], "defaultSize": 4, "description": "round stone hut" },
+  { "id": "castle", "file": "castle.glb", "tags": ["castle", "building"], "defaultSize": 20, "description": "grey stone castle with towers" },
+  { "id": "tower", "file": "tower.glb", "tags": ["tower", "building"], "defaultSize": 14, "description": "tall round stone tower" },
+  { "id": "rock_large", "file": "rock_large.glb", "tags": ["rock", "nature", "cave"], "defaultSize": 3, "description": "large grey boulder" },
+  { "id": "bush", "file": "bush.glb", "tags": ["bush", "nature"], "defaultSize": 1, "description": "round leafy bush" },
+  { "id": "cloud_puff", "file": "cloud_puff.glb", "tags": ["cloud", "sky"], "defaultSize": 12, "description": "fluffy cloud puff" },
+  { "id": "rowboat", "file": "rowboat.glb", "tags": ["boat", "beach", "water"], "defaultSize": 3, "description": "small wooden rowboat" },
+  { "id": "cow", "file": "cow.glb", "tags": ["animal", "farm"], "defaultSize": 2, "description": "black and white cow" },
+  { "id": "wooden_fence", "file": "wooden_fence.glb", "tags": ["fence", "farm"], "defaultSize": 1, "description": "wooden fence section" },
+  { "id": "well", "file": "well.glb", "tags": ["well", "village"], "defaultSize": 2, "description": "stone wishing well" }
+]

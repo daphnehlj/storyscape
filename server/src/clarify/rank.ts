@@ -108,7 +108,15 @@ function exclusionKey(gap: Gap): string | undefined {
 // Greedy with diminishing returns: the best gap wins, then anything about the
 // same thing or asking the same way is worth less, and a slot in the same
 // exclusion group is out entirely (one appearance question per hero).
-export function selectGaps(gaps: Gap[], brief: Brief, story: string): RankedGap[] {
+export function selectGaps(
+  gaps: Gap[],
+  brief: Brief,
+  story: string,
+  // Asked before a gap is chosen: a gap we can't build a question for (no
+  // library models to show, an unfillable name) shouldn't take up one of the
+  // few slots we have.
+  canAsk: (gap: Gap) => boolean = () => true,
+): RankedGap[] {
   const ranked: RankedGap[] = gaps.map((gap) => {
     const { factors, score } = scoreGap(gap, brief, story);
     return { ...gap, factors, score, effective: score, selected: false, reason: '' };
@@ -126,6 +134,12 @@ export function selectGaps(gaps: Gap[], brief: Brief, story: string): RankedGap[
       .filter((g) => !g.selected && g.effective > 0)
       .sort((a, b) => b.effective - a.effective)[0];
     if (!next) break;
+
+    if (!canAsk(next)) {
+      next.reason = 'cut: no question could be built for it';
+      next.effective = 0;
+      continue;
+    }
 
     // Always ask a couple: the point of the loop is the child authoring their
     // world, so a well-specified story still gets its authorship moment.
@@ -163,7 +177,13 @@ export function selectGaps(gaps: Gap[], brief: Brief, story: string): RankedGap[
   // real choice to make (U > 0) and it isn't excluded by something we did ask.
   while (chosen.length < MIN_QUESTIONS) {
     const next = ranked
-      .filter((g) => !g.selected && g.factors.U > 0 && !chosen.some((c) => exclusionKey(c) && exclusionKey(c) === exclusionKey(g)))
+      .filter(
+        (g) =>
+          !g.selected &&
+          g.factors.U > 0 &&
+          !chosen.some((c) => exclusionKey(c) && exclusionKey(c) === exclusionKey(g)) &&
+          canAsk(g),
+      )
       .sort((a, b) => b.score - a.score)[0];
     if (!next) break;
     next.selected = true;

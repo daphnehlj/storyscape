@@ -4,12 +4,16 @@
 //   npm run gaps -w server            all stories
 //   npm run gaps -w server jack       one story
 import { readFileSync, readdirSync } from 'node:fs';
+import { MAX_QUESTIONS } from '@app/shared';
 import { join } from 'node:path';
+import { loadLibrary } from '../src/assets/library.js';
 import { detectGaps } from '../src/clarify/gaps.js';
 import { normalizeBrief } from '../src/clarify/normalizeBrief.js';
-import { selectGaps } from '../src/clarify/rank.js';
+import { buildQuestions } from '../src/clarify/questions.js';
 import { formatGapTable } from '../src/clarify/report.js';
 import { RawBriefSchema } from '../src/pipeline/briefSchema.js';
+
+const library = loadLibrary();
 
 const FIXTURES = new URL('../../fixtures/', import.meta.url).pathname;
 
@@ -28,12 +32,17 @@ if (names.length === 0) {
 for (const name of names) {
   const story = readFileSync(join(FIXTURES, 'stories', `${name}.txt`), 'utf8');
   const brief = normalizeBrief(RawBriefSchema.parse(JSON.parse(readFileSync(join(FIXTURES, `${name}.brief.json`), 'utf8'))));
-  const ranked = selectGaps(detectGaps(brief), brief, story);
+  const { questions, ranked } = buildQuestions(detectGaps(brief), brief, story, library);
   const asked = ranked.filter((g) => g.selected);
 
   console.log(`\n═══ ${name} — ${brief.title} — ${asked.length} of ${ranked.length} gaps asked`);
   if (brief.issues.length > 0) console.log(`    repairs: ${brief.issues.join('; ')}`);
   console.log(formatGapTable(ranked));
-  console.log('    questions in order:');
-  for (const g of asked) console.log(`      ${g.templateId} (${g.entityName ?? 'world'})`);
+  if (questions.length > MAX_QUESTIONS) throw new Error(`${name}: ${questions.length} questions exceeds the cap`);
+  for (const q of questions) {
+    if (q.options.length < 2 || q.options.length > 4) throw new Error(`${name}/${q.id}: ${q.options.length} options`);
+    const opts = q.options.map((o) => `${o.label}${o.swatch ? ` ${o.swatch}` : ''}${o.previewAssetId ? ` [${o.previewAssetId}]` : ''}`);
+    console.log(`\n    ${q.id} ${q.prompt}   (${q.templateId}${q.allowFreeText ? ', free text' : ''})`);
+    for (const o of opts) console.log(`        · ${o}`);
+  }
 }
