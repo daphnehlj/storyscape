@@ -1,0 +1,57 @@
+[
+  {
+    "id": "q1",
+    "gapId": "gap-giant-hero.color",
+    "templateId": "hero_color",
+    "prompt": "What colour is the giant?",
+    "kind": "color",
+    "options": [
+      { "id": "brown", "label": "Brown", "swatch": "#8b5a2b" },
+      { "id": "green", "label": "Green", "swatch": "#4caf50" },
+      { "id": "blue", "label": "Blue", "swatch": "#3b82e0" },
+      { "id": "purple", "label": "Purple", "swatch": "#8e5bd6" }
+    ],
+    "allowFreeText": true
+  },
+  {
+    "id": "q2",
+    "gapId": "gap-castle-hero.material",
+    "templateId": "hero_material",
+    "prompt": "What is the castle made of?",
+    "kind": "choice",
+    "options": [
+      { "id": "stone", "label": "Stone" },
+      { "id": "wood", "label": "Wood" },
+      { "id": "ice", "label": "Ice" },
+      { "id": "candy", "label": "Candy" }
+    ],
+    "allowFreeText": true
+  },
+  {
+    "id": "q3",
+    "gapId": "gap-world-world.timeOfDay",
+    "templateId": "world_time",
+    "prompt": "When does the story happen?",
+    "kind": "choice",
+    "options": [
+      { "id": "dawn", "label": "Early morning" },
+      { "id": "day", "label": "Daytime" },
+      { "id": "dusk", "label": "Sunset" },
+      { "id": "night", "label": "Night-time" }
+    ],
+    "allowFreeText": false
+  },
+  {
+    "id": "q4",
+    "gapId": "gap-farm-zone.trees",
+    "templateId": "zone_trees",
+    "prompt": "What trees grow on Jack's farm?",
+    "kind": "choice",
+    "options": [
+      { "id": "oak_tree", "label": "Big leafy oak", "previewAssetId": "oak_tree" },
+      { "id": "pine_tree", "label": "Tall pointy pine", "previewAssetId": "pine_tree" },
+      { "id": "birch_tree", "label": "Thin white birch", "previewAssetId": "birch_tree" }
+    ],
+    "allowFreeText": false
+  }
+]

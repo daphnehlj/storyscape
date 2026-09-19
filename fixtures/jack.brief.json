@@ -1,0 +1,167 @@
+{
+  "title": "Jack and the Beanstalk",
+  "mood": "whimsical, slightly ominous",
+  "world": {
+    "world.setting": {
+      "evidence": "explicit",
+      "value": "meadow",
+      "quote": "a little cottage at the edge of a dry, dusty field",
+      "guess": "meadow",
+      "guessConfidence": "high"
+    },
+    "world.timeOfDay": {
+      "evidence": "vague",
+      "candidates": ["dawn", "day"],
+      "quote": "The next morning Jack looked out",
+      "guess": "dawn",
+      "guessConfidence": "high"
+    },
+    "world.weather": {
+      "evidence": "absent",
+      "guess": "clear",
+      "guessConfidence": "high"
+    },
+    "world.flowers": {
+      "evidence": "absent",
+      "guess": "none",
+      "guessConfidence": "high"
+    },
+    "world.critters": {
+      "evidence": "absent",
+      "guess": "butterflies",
+      "guessConfidence": "low"
+    }
+  },
+  "zones": [
+    {
+      "id": "farm",
+      "name": "Jack's farm",
+      "aliases": ["cottage", "field", "farm"],
+      "elevation": "ground",
+      "owner": "Jack",
+      "description": "poor little cottage at the edge of a dry, dusty field",
+      "readings": {
+        "zone.trees": {
+          "evidence": "absent",
+          "guess": "oak_tree",
+          "guessConfidence": "low"
+        },
+        "zone.home": {
+          "evidence": "explicit",
+          "value": "cottage",
+          "quote": "a little cottage",
+          "guess": "cottage",
+          "guessConfidence": "high"
+        }
+      }
+    },
+    {
+      "id": "cloud_land",
+      "name": "land above the clouds",
+      "aliases": ["clouds", "land above the clouds"],
+      "elevation": "sky",
+      "owner": "the giant",
+      "description": "a land above the clouds where the giant's castle stands",
+      "readings": {
+        "zone.platform": {
+          "evidence": "explicit",
+          "value": "cloud",
+          "quote": "a land above the clouds",
+          "guess": "cloud",
+          "guessConfidence": "high"
+        }
+      }
+    }
+  ],
+  "heroObjects": [
+    {
+      "id": "beanstalk",
+      "name": "beanstalk",
+      "aliases": ["beanstalk"],
+      "kind": "plant",
+      "zone": "farm",
+      "description": "enormous beanstalk growing into the clouds",
+      "readings": {
+        "hero.color": {
+          "evidence": "absent",
+          "guess": "green",
+          "guessConfidence": "high"
+        },
+        "hero.size": {
+          "evidence": "explicit",
+          "value": "mountain",
+          "quote": "so tall that it disappeared into the clouds",
+          "guess": "mountain",
+          "guessConfidence": "high"
+        },
+        "hero.feel": {
+          "evidence": "absent",
+          "guess": "friendly",
+          "guessConfidence": "low"
+        }
+      }
+    },
+    {
+      "id": "castle",
+      "name": "castle",
+      "aliases": ["castle"],
+      "kind": "building",
+      "zone": "cloud_land",
+      "description": "huge castle standing in the land above the clouds",
+      "readings": {
+        "hero.color": {
+          "evidence": "absent",
+          "guess": "grey",
+          "guessConfidence": "low"
+        },
+        "hero.material": {
+          "evidence": "absent",
+          "guess": "stone",
+          "guessConfidence": "low"
+        },
+        "hero.size": {
+          "evidence": "vague",
+          "candidates": ["house", "mountain"],
+          "quote": "a huge castle",
+          "guess": "mountain",
+          "guessConfidence": "low"
+        },
+        "hero.feel": {
+          "evidence": "absent",
+          "guess": "spooky",
+          "guessConfidence": "low"
+        }
+      }
+    },
+    {
+      "id": "giant",
+      "name": "giant",
+      "aliases": ["giant"],
+      "kind": "creature",
+      "zone": "cloud_land",
+      "description": "a giant who roars Fee-fi-fo-fum",
+      "readings": {
+        "hero.color": {
+          "evidence": "absent",
+          "guess": "brown",
+          "guessConfidence": "low"
+        },
+        "hero.size": {
+          "evidence": "explicit",
+          "value": "house",
+          "quote": "a giant",
+          "guess": "house",
+          "guessConfidence": "high"
+        },
+        "hero.feel": {
+          "evidence": "vague",
+          "candidates": ["grumpy", "spooky"],
+          "quote": "\"Fee-fi-fo-fum!\" he roared",
+          "guess": "grumpy",
+          "guessConfidence": "low"
+        }
+      }
+    }
+  ],
+  "ambientObjects": ["cow", "wooden fence", "hen", "axe", "cloud puffs"]
+}

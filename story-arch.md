@@ -106,12 +106,12 @@ The thing that makes this a product rather than a prompt is the middle: the laye
       { "name": "giant's castle", "description": "huge grey stone castle", "size": 40 }
     ],
     "ambientObjects": ["hay bales", "cow", "wooden fence", "cloud puffs"],
-    "gaps": [
-      { "id": "g1", "field": "castle.mood", "impact": 9, "question": "castle_feel" },
-      { "id": "g2", "field": "farm.season", "impact": 4, "question": "time_of_year" }
-    ]
+    "world": {
+      "world.timeOfDay": { "evidence": "vague", "candidates": ["dawn", "day"], "quote": "The next morning…", "guess": "dawn", "guessConfidence": "high" }
+    }
   }
   ```
+  Each world, zone and hero entry also carries `readings`: for every slot in `server/src/clarify/slots.ts`, what the story says about it (`explicit | vague | absent | conflict`), plus candidates and a best guess. The model only extracts; gap detection and ranking are code (see `fixtures/jack.brief.json` for a full example).
   `palette` is load-bearing: B derives sky, fog and light color from it. Prompt for 3–5 hex colors that match the story's mood (warm golds for a fairy tale, cold blue-greys for something ominous), and prefer `dawn`/`dusk` for `timeOfDay` when the story allows — they're the best-looking states.
 - **Asset jobs.** Once the brief is ready, start text-to-3D jobs for the `heroObjects` and a skybox job, all in parallel. Cache results by prompt hash. Each hero is added to `Scene.assets` right away with `status: 'pending'` and a `fallbackAssetId`, then updated to `ready` + `url` (or `failed`).
 - **Agent loop.** A tool-calling model builds the scene with the tools below. After every tool call: apply it to the Scene, validate against the zod schema, and send a `scene` event. An invalid call goes back to the agent as a tool error so it can fix it.
@@ -301,6 +301,10 @@ export interface Answer {
 
 Rules: at most 5 questions per world, `options` is 2–4 entries, and A must be able to build a world from zero answers.
 
+- An `Answer` carries `optionId` or `text` (free text ≤ 60 chars). Skipping one question means not posting an answer for it.
+- `swatch` is always filled by server code from `COLOR_HEX` in `shared/contract.ts`, keyed by a `ColorToken` name. The model only ever sees token names, never hex.
+- For fixed-vocabulary templates (time of day, weather, platform, …), `option.id` is the enum value itself (`dusk`, `cloud`), so B can key icons on `templateId:optionId`.
+
 ### 4.4 Asset library list
 
 `web/public/assets/library/library.json`, written by B and read by A:
@@ -324,12 +328,13 @@ Rules: at most 5 questions per world, `options` is 2–4 entries, and A must be 
 | Method & path | Request | Response |
 |---|---|---|
 | `POST /api/worlds` | `{ story: string }` | `{ worldId: string }` |
-| `POST /api/worlds/:id/answers` | `{ answers: Answer[] }` | `{ ok: true }` |
+| `POST /api/worlds/:id/answers` | `{ answers: Answer[] }` | `{ ok: true, rejected?: string[] }` |
+| `GET /api/worlds/:id/answers` | — | `{ answers: Answer[] }` — answers given so far, for resuming after a refresh |
 | `GET /api/worlds/:id` | — | latest `Scene` |
 | `GET /api/worlds/:id/events` | — | server-sent event stream of `WorldEvent` |
 | `GET /generated/:file` | — | generated `.glb` / skybox image (served by A) |
 
-`POST /answers` with an empty array means "skip" and unblocks the agent immediately. A also unblocks on a timeout so a closed tab never strands a world.
+`POST /answers` accumulates: B posts each answer as the child gives it, and re-posting a `questionId` overwrites the earlier answer (that's how "go back" works). An empty array means "skip the rest" and unblocks immediately. `rejected` lists questionIds whose free text the safety filter refused; those stay unanswered and B keeps the card up. A also unblocks on its own after 60s with no new answer, 180s total, or 20s with no event-stream subscriber, so a closed tab never strands a world. B keeps the `worldId` in the page URL so a refresh can reconnect.
 
 The web app talks to the server through Next.js rewrites in `next.config.ts` (`/api`, `/generated` → `API_URL`, default `http://localhost:8787`), so there are no cross-origin (CORS) problems.
 
@@ -339,6 +344,7 @@ The web app talks to the server through Next.js rewrites in `next.config.ts` (`/
 export type WorldEvent =
   | { type: 'stage'; stage: 'compress' | 'brief' | 'clarify' | 'build' | 'assets' | 'done' }
   | { type: 'questions'; questions: Question[] }
+  | { type: 'gaps'; gaps: GapReport[] }  // debug overlay: every detected gap, its score, and whether it was asked
   | { type: 'scene'; scene: Scene }   // always the FULL scene
   | { type: 'log'; text: string; tool?: string; rationale?: string }
   | { type: 'error'; message: string };
@@ -347,7 +353,7 @@ export type WorldEvent =
 - A sends a `scene` event after every successful tool call and every asset status change.
 - A sends `questions` once, then waits. B renders the cards and posts answers back.
 - `log.tool` and `log.rationale` are what the debug overlay reads. Filling `rationale` is optional but it's most of what makes the overlay worth showing.
-- When the event stream connects, A first sends the current stage, any outstanding questions, and the latest `scene`, so reconnecting or refreshing the page works mid-question.
+- When the event stream connects, A first sends the current stage, the questions, the gaps, and the latest `scene`, so reconnecting or refreshing the page works mid-question. B fetches `GET /answers` to resume at the first unanswered question.
 - B treats the **latest** `scene` as the truth and just redraws from it.
 
 ### 4.7 Validation
