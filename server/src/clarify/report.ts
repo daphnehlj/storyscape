@@ -4,6 +4,8 @@ import type { RankedGap } from './types.js';
 // Turns ranked gaps into something a person can read: the `gaps` event for the
 // debug overlay, and a table for calibrating the constants from the terminal.
 
+const round = (n: number) => Number(n.toFixed(3));
+
 function inferredLabel(gap: RankedGap): string {
   const guess = gap.reading.guess;
   return guess === undefined ? 'agent picks' : String(guess);
@@ -16,8 +18,14 @@ export function toGapReports(ranked: RankedGap[]): GapReport[] {
     ...(g.entityName !== undefined && { entity: g.entityName }),
     evidence: g.evidence,
     templateId: g.templateId,
-    factors: g.factors,
-    score: Number(g.score.toFixed(3)),
+    factors: {
+      V: round(g.factors.V),
+      P: round(g.factors.P),
+      U: round(g.factors.U),
+      D: round(g.factors.D),
+      C: round(g.factors.C),
+    },
+    score: round(g.score),
     selected: g.selected,
     reason: g.reason,
     inferred: inferredLabel(g),
