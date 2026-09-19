@@ -15,15 +15,19 @@ export function SceneObject({ obj, scene, onSelect }: Props) {
   const zone = scene.zones.find((z) => z.id === obj.zoneId)
   const [x, y0, z] = obj.position
   const y = obj.snapToGround ? groundY(x, z, scene.terrain, scene.zones, zone) : y0
-  const shadows = !zone || zone.elevation === 0 // a castle 50 m up would stamp a black blob on the farm
+  const shadows = !zone || zone.elevation === 0 // an object high on a platform would stamp a black blob on the ground
+  // Shown while the real model loads, and kept if it fails (404, corrupt): a generated asset's library fallback.
+  const standIn = fallbackUrl && fallbackUrl !== url
+    ? <ModelBoundary><Suspense fallback={null}><Model url={fallbackUrl} size={obj.size} shadows={shadows} /></Suspense></ModelBoundary>
+    : null
   return (
     <group
       position={[x, y, z]}
       rotation-y={(obj.rotationY * Math.PI) / 180}
       onClick={onSelect && ((e) => { e.stopPropagation(); onSelect(obj) })}
     >
-      <ModelBoundary>
-        <Suspense fallback={fallbackUrl && fallbackUrl !== url ? <Model url={fallbackUrl} size={obj.size} shadows={shadows} /> : null}>
+      <ModelBoundary key={url} fallback={standIn}>
+        <Suspense fallback={standIn}>
           <Model url={url} size={obj.size} shadows={shadows} />
         </Suspense>
       </ModelBoundary>
@@ -35,10 +39,10 @@ function Model({ url, size, shadows }: { url: string; size: number; shadows: boo
   return <primitive object={useNormalizedModel(url, size, shadows)} />
 }
 
-/** One bad .glb (404, corrupt) must not blank the whole world. */
-class ModelBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
+/** One bad .glb (404, corrupt) must not blank the whole world: render the fallback (or nothing) instead. */
+class ModelBoundary extends Component<{ children: ReactNode; fallback?: ReactNode }, { failed: boolean }> {
   state = { failed: false }
   static getDerivedStateFromError() { return { failed: true } }
   componentDidCatch(err: unknown) { console.warn('model failed to load', err) }
-  render() { return this.state.failed ? null : this.props.children }
+  render() { return this.state.failed ? (this.props.fallback ?? null) : this.props.children }
 }

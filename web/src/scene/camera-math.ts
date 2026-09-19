@@ -8,7 +8,7 @@ export type Framing = { position: [number, number, number]; target: [number, num
  * Pure so it can be tested; the result is only applied on first mount (the user owns the camera after that).
  */
 export function frameScene(scene: Scene): Framing {
-  const { distance, height, pitchUp, minRadius } = CAMERA.frame
+  const { distance, height, elevationLift, pitchUp, minRadius } = CAMERA.frame
   const zones = scene.zones
   const cx = zones.length ? zones.reduce((a, z) => a + z.center[0], 0) / zones.length : 0
   const cz = zones.length ? zones.reduce((a, z) => a + z.center[1], 0) / zones.length : 0
@@ -16,6 +16,6 @@ export function frameScene(scene: Scene): Framing {
   const r = Math.max(minRadius, ...zones.map((z) => Math.hypot(z.center[0] - cx, z.center[1] - cz) + z.radius), top * 0.6)
   return {
     target: [cx, top * pitchUp, cz],
-    position: [cx, r * height + top * 0.3, cz + r * distance],
+    position: [cx, r * height + top * elevationLift, cz + r * distance],
   }
 }

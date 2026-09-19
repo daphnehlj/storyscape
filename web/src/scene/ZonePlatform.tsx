@@ -26,25 +26,29 @@ export function ZonePlatform({ zone, scene, onSelect }: Props) {
     )
   }
 
-  if (zone.platform === 'rock') {
-    const { rock } = ZONE
-    return (
+  return zone.platform === 'rock' ? <RockPlatform zone={zone} onClick={click} /> : <CloudPlatform zone={zone} onClick={click} />
+}
+
+type PlatformProps = { zone: Zone; onClick?: (e: { stopPropagation: () => void }) => void }
+
+function RockPlatform({ zone, onClick: click }: PlatformProps) {
+  const [cx, cz] = zone.center
+  const r = zone.radius
+  const { rock } = ZONE
+  return (
       <mesh position={[cx, zone.elevation - rock.thickness / 2, cz]} onClick={click} castShadow receiveShadow>
         <cylinderGeometry args={[r, r * rock.taper, rock.thickness, rock.segments]} />
         <meshStandardMaterial color={rock.color} flatShading />
       </mesh>
-    )
-  }
-
-  return <CloudPlatform zone={zone} onClick={click} />
+  )
 }
 
-/** 'cloud': a bank of `cloud_puff` library models filling the zone disc, tops just above zone.elevation so snapped objects nestle in. */
-function CloudPlatform({ zone, onClick }: { zone: Zone; onClick?: (e: { stopPropagation: () => void }) => void }) {
+/** 'cloud': a bank of the cloud library model filling the zone disc, tops just above zone.elevation so snapped objects nestle in. */
+function CloudPlatform({ zone, onClick }: PlatformProps) {
   const lib = useLibrary()
   const points = useMemo(() => cloudPuffs(zone), [zone.id, zone.radius, zone.elevation, zone.center[0], zone.center[1]]) // eslint-disable-line react-hooks/exhaustive-deps
   const entry = lib[ZONE.cloud.asset]
-  if (!entry) return null
+  if (!entry) return <RockPlatform zone={zone} onClick={onClick} /> // library without a cloud model: still give the zone a floor
   return (
     <group onClick={onClick}>
       <InstancedModel url={`/assets/library/${entry.file}`} points={points} shadows={false} />
@@ -53,9 +57,9 @@ function CloudPlatform({ zone, onClick }: { zone: Zone; onClick?: (e: { stopProp
 }
 
 function cloudPuffs(zone: Zone): Placement[] {
-  const { puffsPerMeter, minRadius, maxRadius, top, spread, asset } = ZONE.cloud
+  const { puffsPerMeter, minPuffs, minRadius, maxRadius, top, spread, asset } = ZONE.cloud
   const rand = mulberry32(seedOf(zone.id))
-  const n = Math.max(6, Math.round(zone.radius * puffsPerMeter))
+  const n = Math.max(minPuffs, Math.round(zone.radius * puffsPerMeter))
   const out: Placement[] = []
   const puff = (d: number, a: number, size: number) =>
     out.push({ assetId: asset, position: [zone.center[0] + d * Math.cos(a), zone.elevation + top - size, zone.center[1] + d * Math.sin(a)], rotationY: rand() * Math.PI * 2, scale: size })

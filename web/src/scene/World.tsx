@@ -23,7 +23,7 @@ export function World({ scene, onSelect }: WorldProps) {
   const framing = useMemo(() => frameScene(scene), [])
   return (
     // `flat` = no renderer tone mapping; the ToneMapping effect owns it.
-    <Canvas flat shadows="variance" camera={{ position: framing.position, fov: CAMERA.fov, near: CAMERA.near, far: CAMERA.far }}>
+    <Canvas flat shadows="variance" camera={{ position: framing.position, fov: CAMERA.fov, near: CAMERA.near, far: scene.bounds.size * CAMERA.farFactor }}>
       <Suspense fallback={null}>
         <Environment scene={scene} />
         <Terrain scene={scene} />

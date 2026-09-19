@@ -1,8 +1,8 @@
 'use client'
 import dynamic from 'next/dynamic'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
+import { Suspense, useEffect, useMemo, useRef, useState } from 'react'
 import { SceneSchema, type Scene } from '@app/shared'
-import jack from '../../../../fixtures/jack.scene.json'
 import library from '../../../../web/public/assets/library/library.json'
 
 const World = dynamic(() => import('@/scene/World').then((m) => m.World), { ssr: false })
@@ -27,11 +27,22 @@ function replaySteps(full: Scene): Scene[] {
 }
 
 export default function DevPage() {
-  const full = useMemo(() => SceneSchema.parse(jack), [])
-  const steps = useMemo(() => replaySteps(full), [full])
-  const [scene, setScene] = useState<Scene>(full)
+  return <Suspense fallback={null}><Dev /></Suspense> // useSearchParams needs a boundary
+}
+
+function Dev() {
+  const name = useSearchParams().get('scene') ?? 'jack'
+  const [names, setNames] = useState<string[]>([])
+  const [full, setFull] = useState<Scene | null>(null)
+  const steps = useMemo(() => (full ? replaySteps(full) : []), [full])
+  const [scene, setScene] = useState<Scene | null>(null)
   const [note, setNote] = useState<string | null>(null)
   const timer = useRef<number | null>(null)
+
+  useEffect(() => { fetch('/dev/fixtures/index').then((r) => r.json()).then(setNames) }, [])
+  useEffect(() => {
+    fetch(`/dev/fixtures/${name}`).then((r) => r.json()).then((j) => { const s = SceneSchema.parse(j); setFull(s); setScene(s) })
+  }, [name])
 
   function replay() {
     if (timer.current) window.clearTimeout(timer.current)
@@ -48,10 +59,13 @@ export default function DevPage() {
 
   return (
     <div style={{ position: 'fixed', inset: 0 }}>
-      <World scene={scene} onSelect={(title, n) => setNote(`${title}: ${n}`)} />
+      {scene && <World key={scene.id} scene={scene} onSelect={(title, n) => setNote(`${title}: ${n}`)} />}
       <div style={{ position: 'absolute', top: 12, left: 12, display: 'flex', gap: 8, font: '13px system-ui', color: '#eee' }}>
+        <select value={name} onChange={(e) => { window.location.search = `?scene=${e.target.value}` }}>
+          {(names.length ? names : [name]).map((n) => <option key={n} value={n}>{n}</option>)}
+        </select>
         <button onClick={replay}>Replay</button>
-        <button onClick={() => setScene(full)}>Full</button>
+        <button onClick={() => full && setScene(full)}>Full</button>
         {note && <span style={{ background: '#0008', padding: '4px 8px', borderRadius: 6 }}>{note}</span>}
       </div>
     </div>

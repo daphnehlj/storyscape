@@ -4,10 +4,11 @@
  */
 
 export const CAMERA = {
-  fov: 50, near: 0.5, far: 2000,
+  fov: 50, near: 0.5,
+  farFactor: 12, // × bounds.size — must clear the sky dome and the sea
   // Initial framing is computed from the zones (see frameScene): sit this far back per unit of scene radius,
-  // this high per unit, and aim a little above the ground so elevated zones fit.
-  frame: { distance: 1.6, height: 0.65, pitchUp: 0.35, minRadius: 40 },
+  // this high per unit (+ a share of the tallest elevation), and aim a little above the ground so elevated zones fit.
+  frame: { distance: 1.6, height: 0.65, elevationLift: 0.3, pitchUp: 0.35, minRadius: 40 },
 }
 
 export const POST = {
@@ -48,7 +49,7 @@ export const SUN = {
   dawn:  { dir: [1, 0.45, -0.5],  color: '#ffd9b0', intensity: 3.2, ambient: 1.1 },
   day:   { dir: [0.6, 0.8, 0.35], color: '#fff6e8', intensity: 2.6, ambient: 1.3 },
   dusk:  { dir: [-1, 0.35, 0.5],  color: '#ffb38a', intensity: 3.0, ambient: 1.0 },
-  night: { dir: [0.3, 0.6, -0.4], color: '#93a8e6', intensity: 0.6, ambient: 0.35 },
+  night: { dir: [0.3, 0.6, -0.4], color: '#9fb4ee', intensity: 1.1, ambient: 0.7 }, // moonlight: dim but readable
 } as const
 
 export const ATMOSPHERE = {
@@ -57,7 +58,7 @@ export const ATMOSPHERE = {
     dawn:  ['#ffc7a0', '#8ccf66', '#9db8ea'],
     day:   ['#d6ecff', '#8ed072', '#6ea8f5'],
     dusk:  ['#ffab7a', '#86bd66', '#7d6fb8'],
-    night: ['#5a6a9a', '#4f7a55', '#2b3a6b'],
+    night: ['#6f80b0', '#5c8a62', '#33427a'],
   },
   horizon: { whiten: 0.3, nightDim: 0.3 },
   zenith: { deep: '#1a2540', dayMix: 0.2, nightMix: 0.85 },
@@ -71,7 +72,7 @@ export const ATMOSPHERE = {
 export const ZONE = {
   ring: { lift: 0.3, width: 0.6, segments: 48, color: '#ffffff', opacity: 0.15 },
   rock: { thickness: 6, taper: 0.6, segments: 12, color: '#6b6f7a' },
-  cloud: { asset: 'cloud_puff', puffsPerMeter: 0.8, minRadius: 0.16, maxRadius: 0.32, top: 3, spread: 0.85 }, // library id; radii as fraction of zone radius
+  cloud: { asset: 'cloud_puff', puffsPerMeter: 0.8, minPuffs: 6, minRadius: 0.16, maxRadius: 0.32, top: 3, spread: 0.85 }, // library id (falls back to the rock disc if absent); radii as fraction of zone radius
 }
 
 export const SCATTER = {
