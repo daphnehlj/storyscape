@@ -70,6 +70,14 @@ export const FLY = {
   eye: { back: 1.6, height: 0.9 }, // camera offset from the zone centre, × radius
 }
 
+export const WEATHER = {
+  // cloudy / rain / snow: a ring of cloud_puff instances at bounds.skyHeight
+  clouds: { count: 10, ringFactor: 0.42, sizeFactor: [0.09, 0.16], jitter: 0.12, seed: 7 }, // sizes × bounds.size
+  snow: { count: 2000, height: 80, y: 40, size: 2, speed: 2, noise: 0.6, color: '#ffffff' },
+  // ponytail: rain = fast grey sparkles. Upgrade to a streak particle if it reads badly in the demo.
+  rain: { count: 3000, height: 80, y: 40, size: 1, speed: 12, noise: 0.1, color: '#9fb4c8', opacity: 0.5 },
+}
+
 export const ZONE = {
   ring: { lift: 0.3, width: 0.6, segments: 48, color: '#ffffff', opacity: 0.15 },
   rock: { thickness: 6, taper: 0.6, segments: 12, color: '#6b6f7a' },

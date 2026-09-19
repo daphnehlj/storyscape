@@ -10,6 +10,7 @@ import { SceneObject } from './SceneObject.tsx'
 import { ZonePlatform } from './ZonePlatform.tsx'
 import { Scatter } from './Scatter.tsx'
 import { FlyThrough } from './FlyThrough.tsx'
+import { Weather } from './Weather.tsx'
 import { CAMERA } from './presets.ts'
 import { frameScene } from './camera-math.ts'
 
@@ -29,6 +30,7 @@ export function World({ scene, onSelect, fly, onUserOrbit }: WorldProps) {
     <Canvas flat shadows="variance" camera={{ position: framing.position, fov: CAMERA.fov, near: CAMERA.near, far: scene.bounds.size * CAMERA.farFactor }}>
       <Suspense fallback={null}>
         <Environment scene={scene} />
+        <Suspense fallback={null}><Weather scene={scene} /></Suspense>
         <Terrain scene={scene} />
         <Water scene={scene} />
         {/* One Suspense per item: a newly arriving model must not blank the world while it loads. */}
