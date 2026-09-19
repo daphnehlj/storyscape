@@ -86,7 +86,7 @@ Individual placed models — the things the story is about.
 | `zoneId` | string optional | which zone it belongs to. Determines the platform it snaps to and which scatters avoid it. Omit for free-standing objects. |
 | `position` | `[x, y, z]` | metres. `y` is ignored when `snapToGround` is true. |
 | `snapToGround` | boolean | `true` = stand on the terrain (or on the zone's platform). `false` = use `y` exactly — floating things. |
-| `rotationY` | degrees | turn about the vertical axis |
+| `rotationY` | degrees | turn about the vertical axis. `0` = the model's front faces **+z** (toward the initial camera); positive turns counter-clockwise seen from above (`90` faces −x). Library models are authored front = +z. |
 | `size` | number > 0 | **height in metres**. Models are normalised so their bounding box is exactly this tall, origin at the bottom centre. Use the library's `defaultSize` unless the story says otherwise. |
 | `label` | string optional | shown on click |
 | `storyNote` | string optional | shown on click; objects without one aren't clickable |
@@ -116,19 +116,21 @@ A map from asset id to where its model comes from. Every `assetId` in `objects` 
 
 The id must exist in `web/public/assets/library/library.json`. Current library:
 
-| id | defaultSize (m) | description | tags |
-|---|---|---|---|
-| `oak_tree` | 8 | large leafy oak tree | tree, forest, nature |
-| `pine_tree` | 10 | tall conifer pine tree | tree, forest, nature |
-| `bush` | 1.5 | round green bush | bush, nature |
-| `rock` | 1 | grey boulder | rock, nature |
-| `cloud_puff` | 5 | fluffy low-poly cloud | sky, cloud, nature |
-| `beanstalk` | 60 | enormous twisting green beanstalk with big leaves | plant, fantasy, giant |
-| `cottage` | 6 | small cottage with a red tile roof | building, house, farm |
-| `fence` | 1.2 | wooden fence segment | farm, prop |
-| `cow` | 1.5 | black and white farm cow | animal, farm |
-| `hay_bale` | 1.2 | bundle of hay | farm, prop |
-| `castle` | 25 | stone castle with towers and a keep | building, castle, fantasy |
+| id | defaultSize (m) | footprint w × d per 1 m of height | description | tags |
+|---|---|---|---|---|
+| `oak_tree` | 8 | 0.97 × 0.86 | large leafy oak tree | tree, forest, nature |
+| `pine_tree` | 10 | 0.60 × 0.58 | tall conifer pine tree | tree, forest, nature |
+| `bush` | 1.5 | 1.55 × 1.11 | round green bush | bush, nature |
+| `rock` | 1 | 1.31 × 1.28 | grey boulder | rock, nature |
+| `cloud_puff` | 5 | 1.97 × 1.28 | fluffy low-poly cloud | sky, cloud, nature |
+| `beanstalk` | 60 | 0.46 × 0.39 | enormous twisting green beanstalk with big leaves | plant, fantasy, giant |
+| `cottage` | 6 | 1.03 × 0.89 | small cottage with a red tile roof | building, house, farm |
+| `fence` | 1.2 | 2.90 × 0.20 | wooden fence segment, runs along x | farm, prop |
+| `cow` | 1.5 | 0.25 × 0.56 | black and white farm cow | animal, farm |
+| `hay_bale` | 1.2 | 0.97 × 1.43 | bundle of hay | farm, prop |
+| `castle` | 25 | 1.09 × 0.55 | stone castle with towers and a keep | building, castle, fantasy |
+
+Footprint = bounding-box width (x) × depth (z) at `rotationY: 0`, as a multiple of __TEXT	__DATA	__OBJC	others	dec	hex. A 1.2 m fence is ≈ 3.5 m long, so segments laid end to end along x go 3.5 m apart.
 
 **Generated asset** — a hero model made by text-to-3D on the server:
 
@@ -146,10 +148,26 @@ The id must exist in `web/public/assets/library/library.json`. Current library:
 |---|---|
 | `prompt` | what was asked of the generator |
 | `status` | `pending` → the fallback is drawn. `ready` → `url` is loaded and swapped in place. `failed` → the fallback stays. |
-| `url` | required when `ready`; `/generated/...` served by the server |
+| `url` | required when `ready`. Any same-origin URL to a `.glb` works — the server serves generated ones at `/generated/...`; for a hand-made scene you can point at `/assets/library/<file>.glb` or any file you drop under `web/public/`. |
 | `fallbackAssetId` | a **library** id drawn until the model is ready, or forever if it fails or the url doesn't load |
 
 Use the library for anything it covers. Generate only for the 2–4 objects the story can't do without and the library can't stand in for.
+
+## Adding a library model
+
+Two steps — a file and an entry. No code.
+
+1. Put the model at `web/public/assets/library/<id>.glb` (binary glTF, one file). Requirements:
+   - **Any scale, any origin.** The renderer normalises every model: bounding-box height becomes `size`, origin moves to the bottom centre.
+   - **y up, front toward +z**, so `rotationY` means the same thing for every model.
+   - **Low-poly, flat colours**: vertex colours or plain untextured materials, roughly ≤ 2k triangles. No textures needed (embedded ones load, but they break the style). Look at any existing `.glb` in the folder for the target look.
+2. Add an entry to `web/public/assets/library/library.json`:
+
+   ```json
+   { "id": "toadstool", "file": "toadstool.glb", "tags": ["plant", "forest", "fantasy"], "defaultSize": 0.8, "description": "red-capped mushroom with white spots" }
+   ```
+
+   `id` is what scenes reference; `tags`, `defaultSize` and `description` are what the agent reads to choose it. `npm test` checks the file exists. IDs are never renamed or removed, and `library.json` changes need the other person's review (it feeds A's prompt).
 
 ## Validation (`validateSceneRefs`)
 
@@ -192,3 +210,5 @@ The server sends the **full** scene after every change, not a diff. The renderer
 ```
 
 Drop a new scene at `fixtures/<name>.scene.json` and open `/dev?scene=<name>` to see it. `npm test` validates every fixture.
+
+If you drive the page with browser automation: the tab must be visible. Browsers pause `requestAnimationFrame` in background tabs, so a hidden tab shows a blank page until something focuses it.
