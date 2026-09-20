@@ -73,7 +73,7 @@ A zone is a circular area of the world that means something in the story.
 | `platform` | `cloud` \| `rock` | **required when `elevation > 0`**. `cloud` = a bank of cloud puffs; `rock` = a stone disc. |
 | `storyNote` | string optional | one or two sentences shown when the user clicks the zone |
 
-Rendering: ground zones get a faint ring on the terrain and flatten it. Elevated zones get their platform; objects and scatters assigned to them sit on top. Zones may overlap; keep elevated zones' footprints clear of tall ground objects unless you want them poking through.
+Rendering: ground zones flatten the terrain and are clickable (an invisible ring at the radius; `ZONE.ring.show` turns it visible). Elevated zones get their platform; objects and scatters assigned to them sit on top. Zones may overlap; keep elevated zones' footprints clear of tall ground objects unless you want them poking through.
 
 ## `objects[]`
 

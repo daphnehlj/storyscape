@@ -19,7 +19,7 @@ export function ZonePlatform({ zone, scene, onSelect }: Props) {
     const { ring } = ZONE
     const y = heightAt(cx, cz, scene.terrain, scene.zones) + ring.lift
     return (
-      <mesh position={[cx, y, cz]} rotation-x={-Math.PI / 2} onClick={click}>
+      <mesh position={[cx, y, cz]} rotation-x={-Math.PI / 2} onClick={click} visible={ring.show}>
         <ringGeometry args={[r - ring.width, r, ring.segments]} />
         <meshBasicMaterial color={ring.color} transparent opacity={ring.opacity} depthWrite={false} />
       </mesh>

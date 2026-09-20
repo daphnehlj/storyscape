@@ -62,7 +62,7 @@ Water is one big transparent plane at `terrain.water.level`, coloured by `palett
 
 ### `ZonePlatform.tsx`
 
-Ground zone → a faint ring on the terrain (also the click target). `elevation > 0` with `platform: 'rock'` → a stone cylinder whose top is at `elevation`. `'cloud'` → a bank of `cloud_puff` instances seeded from the zone id, tops just above `elevation` so objects nestle in. Falls back to the rock disc if the library has no cloud model. Platforms cast no shadows: a shape 50 m up would stamp a black blob on the ground.
+Ground zone → an invisible ring at the radius that serves as the click target (`ZONE.ring.show` draws it). `elevation > 0` with `platform: 'rock'` → a stone cylinder whose top is at `elevation`. `'cloud'` → a bank of `cloud_puff` instances seeded from the zone id, tops just above `elevation` so objects nestle in. Falls back to the rock disc if the library has no cloud model. Platforms cast no shadows: a shape 50 m up would stamp a black blob on the ground.
 
 ### `assets.ts` — models
 

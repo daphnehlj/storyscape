@@ -79,7 +79,7 @@ export const WEATHER = {
 }
 
 export const ZONE = {
-  ring: { lift: 0.3, width: 0.6, segments: 48, color: '#ffffff', opacity: 0.15 },
+  ring: { show: false, lift: 0.3, width: 0.6, segments: 48, color: '#ffffff', opacity: 0.15 }, // hidden: still the click target for the zone's storyNote
   rock: { thickness: 6, taper: 0.6, segments: 12, color: '#6b6f7a' },
   cloud: { asset: 'cloud_puff', puffsPerMeter: 0.8, minPuffs: 6, minRadius: 0.16, maxRadius: 0.32, top: 3, spread: 0.85 }, // library id (falls back to the rock disc if absent); radii as fraction of zone radius
 }
