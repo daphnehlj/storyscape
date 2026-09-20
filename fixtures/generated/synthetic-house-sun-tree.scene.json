@@ -1,0 +1,393 @@
+{
+  "version": 1,
+  "id": "o5TNV6pO5ak",
+  "title": "The Purple Friend’s Sunny Field",
+  "bounds": {
+    "size": 200,
+    "skyHeight": 120
+  },
+  "terrain": {
+    "biome": "grassland",
+    "heightVariation": 0.16,
+    "seed": 1940563381
+  },
+  "environment": {
+    "timeOfDay": "day",
+    "weather": "clear",
+    "fogDensity": 0.02,
+    "palette": [
+      "#5B96D8",
+      "#55AD50",
+      "#FFD43B"
+    ],
+    "skybox": {
+      "status": "ready",
+      "url": "/generated/f720126678d95ed8.jpg"
+    }
+  },
+  "zones": [
+    {
+      "id": "zone-1",
+      "name": "Purple Friend Meadow",
+      "description": "Sunlit left meadow with friendly grazing creatures and low meadow-edge planting.",
+      "center": [
+        -70,
+        40
+      ],
+      "radius": 17,
+      "elevation": 0,
+      "storyNote": "The child's purple six-legged friend stands on the left of the drawing."
+    },
+    {
+      "id": "zone-2",
+      "name": "Red House Hill",
+      "description": "A gentle central rise with a welcoming cottage and a bushy garden.",
+      "center": [
+        -24,
+        18
+      ],
+      "radius": 15,
+      "elevation": 0,
+      "storyNote": "The red house sits in the middle, between the friend and the tree."
+    },
+    {
+      "id": "zone-3",
+      "name": "Round-Crown Grove",
+      "description": "The prominent round-crowned tree beside the house opens into a loose oak wood.",
+      "center": [
+        28,
+        20
+      ],
+      "radius": 20,
+      "elevation": 0,
+      "storyNote": "The child's round green tree stands to the right of the house."
+    },
+    {
+      "id": "zone-4",
+      "name": "Blue Pond Bank",
+      "description": "A sunny foreground hollow with a little oval pond, soft bushes and scattered shoreline stones.",
+      "center": [
+        63,
+        73
+      ],
+      "radius": 17,
+      "elevation": 0,
+      "storyNote": "The blue oval pond occupies the lower-right corner of the drawing."
+    },
+    {
+      "id": "zone-5",
+      "name": "Field Beyond the House",
+      "description": "A loose stand and meadow scrub fill the distant field behind the house and link the landscape together.",
+      "center": [
+        -12,
+        -40
+      ],
+      "radius": 25,
+      "elevation": 0,
+      "storyNote": "The child's broad green field continues behind the house as a walkable landscape."
+    }
+  ],
+  "objects": [
+    {
+      "id": "obj-6",
+      "assetId": "cow",
+      "zoneId": "zone-1",
+      "position": [
+        -66,
+        0,
+        40
+      ],
+      "snapToGround": true,
+      "rotationY": 70,
+      "size": 1.8,
+      "label": "Purple Six-Legged Friend",
+      "storyNote": "This friendly animal represents the child's purple round-bodied creature with six slender legs."
+    },
+    {
+      "id": "obj-7",
+      "assetId": "cottage",
+      "zoneId": "zone-2",
+      "position": [
+        -24,
+        0,
+        18
+      ],
+      "snapToGround": true,
+      "rotationY": 0,
+      "size": 6,
+      "label": "Red House",
+      "storyNote": "The child's red house has a broad brown triangular roof, two blue windows, and a centered brown door."
+    },
+    {
+      "id": "obj-8",
+      "assetId": "oak_tree",
+      "zoneId": "zone-3",
+      "position": [
+        26,
+        0,
+        23
+      ],
+      "snapToGround": true,
+      "rotationY": 0,
+      "size": 8,
+      "label": "Round-Crown Tree",
+      "storyNote": "The big round green crown and brown trunk come from the tree beside the house."
+    },
+    {
+      "id": "obj-9",
+      "assetId": "cloud_puff",
+      "zoneId": "zone-4",
+      "position": [
+        63,
+        0,
+        73
+      ],
+      "snapToGround": true,
+      "rotationY": 0,
+      "size": 0.35,
+      "label": "Blue Oval Pond",
+      "storyNote": "This low storybook form represents the flat blue oval pond in the lower-right grass."
+    },
+    {
+      "id": "obj-10",
+      "assetId": "fence",
+      "zoneId": "zone-2",
+      "position": [
+        -33,
+        0,
+        14
+      ],
+      "snapToGround": true,
+      "rotationY": 90,
+      "size": 1.1,
+      "label": "Garden gate-side fence"
+    },
+    {
+      "id": "obj-11",
+      "assetId": "hay_bale",
+      "zoneId": "zone-1",
+      "position": [
+        -61,
+        0,
+        33
+      ],
+      "snapToGround": true,
+      "rotationY": 25,
+      "size": 0.9,
+      "label": "A snack for the friend"
+    }
+  ],
+  "scatters": [
+    {
+      "id": "scatter-12",
+      "assetIds": [
+        "cow"
+      ],
+      "zoneId": "zone-1",
+      "count": 6,
+      "seed": 1940571300,
+      "sizeRange": [
+        0.8,
+        1.5
+      ]
+    },
+    {
+      "id": "scatter-13",
+      "assetIds": [
+        "bush"
+      ],
+      "zoneId": "zone-1",
+      "count": 24,
+      "seed": 1940579219,
+      "sizeRange": [
+        0.25,
+        1.1
+      ]
+    },
+    {
+      "id": "scatter-14",
+      "assetIds": [
+        "rock"
+      ],
+      "zoneId": "zone-1",
+      "count": 22,
+      "seed": 1940587138,
+      "sizeRange": [
+        0.12,
+        0.55
+      ]
+    },
+    {
+      "id": "scatter-15",
+      "assetIds": [
+        "bush"
+      ],
+      "zoneId": "zone-2",
+      "count": 25,
+      "seed": 1940595057,
+      "sizeRange": [
+        0.35,
+        1.8
+      ]
+    },
+    {
+      "id": "scatter-16",
+      "assetIds": [
+        "rock"
+      ],
+      "zoneId": "zone-2",
+      "count": 20,
+      "seed": 1940602976,
+      "sizeRange": [
+        0.1,
+        0.5
+      ]
+    },
+    {
+      "id": "scatter-17",
+      "assetIds": [
+        "oak_tree",
+        "oak_tree",
+        "pine_tree"
+      ],
+      "zoneId": "zone-3",
+      "count": 29,
+      "seed": 1940610895,
+      "sizeRange": [
+        4,
+        12
+      ]
+    },
+    {
+      "id": "scatter-18",
+      "assetIds": [
+        "bush"
+      ],
+      "zoneId": "zone-3",
+      "count": 32,
+      "seed": 1940618814,
+      "sizeRange": [
+        0.5,
+        2.8
+      ]
+    },
+    {
+      "id": "scatter-19",
+      "assetIds": [
+        "rock"
+      ],
+      "zoneId": "zone-3",
+      "count": 23,
+      "seed": 1940626733,
+      "sizeRange": [
+        0.15,
+        1.1
+      ]
+    },
+    {
+      "id": "scatter-20",
+      "assetIds": [
+        "bush"
+      ],
+      "zoneId": "zone-4",
+      "count": 23,
+      "seed": 1940634652,
+      "sizeRange": [
+        0.2,
+        0.9
+      ]
+    },
+    {
+      "id": "scatter-21",
+      "assetIds": [
+        "rock"
+      ],
+      "zoneId": "zone-4",
+      "count": 30,
+      "seed": 1940642571,
+      "sizeRange": [
+        0.12,
+        0.75
+      ]
+    },
+    {
+      "id": "scatter-22",
+      "assetIds": [
+        "oak_tree",
+        "pine_tree"
+      ],
+      "zoneId": "zone-5",
+      "count": 18,
+      "seed": 1940650490,
+      "sizeRange": [
+        3,
+        9
+      ]
+    },
+    {
+      "id": "scatter-23",
+      "assetIds": [
+        "bush"
+      ],
+      "zoneId": "zone-5",
+      "count": 38,
+      "seed": 1940658409,
+      "sizeRange": [
+        0.4,
+        2.5
+      ]
+    },
+    {
+      "id": "scatter-24",
+      "assetIds": [
+        "rock"
+      ],
+      "zoneId": "zone-5",
+      "count": 26,
+      "seed": 1940666328,
+      "sizeRange": [
+        0.15,
+        1.2
+      ]
+    }
+  ],
+  "assets": {
+    "cow": {
+      "id": "cow",
+      "source": "library"
+    },
+    "cottage": {
+      "id": "cottage",
+      "source": "library"
+    },
+    "oak_tree": {
+      "id": "oak_tree",
+      "source": "library"
+    },
+    "cloud_puff": {
+      "id": "cloud_puff",
+      "source": "library"
+    },
+    "fence": {
+      "id": "fence",
+      "source": "library"
+    },
+    "hay_bale": {
+      "id": "hay_bale",
+      "source": "library"
+    },
+    "bush": {
+      "id": "bush",
+      "source": "library"
+    },
+    "rock": {
+      "id": "rock",
+      "source": "library"
+    },
+    "pine_tree": {
+      "id": "pine_tree",
+      "source": "library"
+    }
+  },
+  "sourceImageUrl": "/uploads/o5TNV6pO5ak.png"
+}

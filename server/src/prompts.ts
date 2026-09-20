@@ -46,6 +46,12 @@ Design the world that drawing is a picture of — the real place the child was i
 than they could draw, but unmistakably THEIRS. Every important thing they drew must exist in the world,
 and nothing should contradict the drawing.
 
+A child's drawing is a SKETCH of a place, never an inventory of it. They draw one of a thing to mean
+"there are these here": two trees beside a castle means the castle stands in a wood, one flower means the
+meadow is full of them, a fish means the pond has fish in it. Read every repeated or scatterable thing as
+a population, and say so in the fields below. The child should look at the world and think "yes, that's
+where my picture happens" — which is a bigger, fuller place than the page could hold.
+
 Fields:
 - title: short title for the world, in a child's spirit.
 - mood: a few words, e.g. "sunny and friendly", "spooky but safe".
@@ -59,7 +65,9 @@ Fields:
 - timeOfDay: what the drawing implies (a yellow sun high up = day, an orange sky = dusk, stars = night).
   Prefer "dawn" or "dusk" when the drawing allows; they look best.
 - weather: what the drawing shows; "clear" if there is no weather in it.
-- zones: 1–6 distinct places, following the drawing's layout. Things drawn near each other belong in the
+- zones: 3–6 distinct places, following the drawing's layout. Include the places the drawing implies as
+  well as the ones it shows — the wood those two trees belong to, the meadow around the house — as long as
+  none of them contradict it. A world with one zone feels like an empty stage. Things drawn near each other belong in the
   same zone. A "sky" zone is only for a place that floats in the air (a castle on a cloud, a floating
   island) — never for the sun, the moon or plain clouds, which are weather, not places.
 - heroObjects: up to ${MAX_HERO_OBJECTS} things the child clearly cared most about — usually what they drew biggest or
@@ -69,8 +77,10 @@ Fields:
   that library, so this is what the child's object will actually become. Always name one, even for
   something invented — pick whatever shares the most with it (shape, size, role in the scene, colour),
   and let the description carry the rest.
-- ambientObjects: everyday things that fill the world out, in plain words. This is where the world gets
-  richer than the drawing: a child who drew one tree and a house lives somewhere with a whole wood and a path.
+- ambientObjects: the populations that fill this world out, in plain words, written as quantities rather
+  than single things — "a pine wood, dozens of trees of different heights", "drifts of bushes along the
+  water", "scattered mossy rocks", "a few grazing cows". This is where the world stops being a copy of the
+  page: a child who drew one tree and a house lives somewhere with a whole wood, undergrowth and a path.
 
 Library models available (id, default height, description, tags):
 ${libraryList(library)}`,
@@ -100,6 +110,26 @@ important objects first, then supporting objects, then scatters.
 The child must recognise their drawing in this world. Everything they drew belongs in it, arranged the way
 they arranged it. Then make it a real place: a world they could walk around in, not a flat copy of the page.
 
+DON'T COUNT — POPULATE
+The drawing's counts are not an inventory. Children draw one of a thing to mean there are those things
+here. Two trees beside a castle means the castle stands in a WOOD; one bush means undergrowth; one rock
+means the ground is strewn with them. Building exactly what was drawn, one for one, gives a bare, lonely
+world and is the most common way this goes wrong.
+- Place individually ONLY what the child would point at: the house, the castle, the creature, the one big
+  tree they drew in the middle. Everything else is a population — use scatter.
+- NEVER scatter a character. A creature, animal or person the child drew is one individual with a name and
+  a story: place it once, with a label. A herd of six of the child's imaginary friend is worse than none.
+- Water is terrain, not an object. A pond, river, lake or sea in the drawing means set_terrain with a
+  waterLevel, and a zone placed around it — never a model standing in for water.
+- Every ground zone gets 2–4 scatter calls: the main planting (25–60 trees for a wood, 15–40 for a
+  sparser stand), then undergrowth and ground detail (20–50 bushes and rocks). A zone with nothing
+  scattered in it looks unfinished.
+- Vary the sizes hard. Real trees are not clones: pass a wide sizeRange like [4, 12] for a wood of oaks,
+  [1.5, 4] for bushes. A narrow range (or leaving sizeRange out) is what makes a world look stamped out.
+- Mix species in one scatter — pass several assetIds and the renderer picks per instance, which reads far
+  more naturally than one uniform kind.
+- Fill the land between the places the child drew. Empty ground reads as unfinished, not as space.
+
 READING THE DRAWING'S LAYOUT
 The drawing's elements come with page coordinates: x from 0 (left edge) to 1 (right edge), y from 0 (top)
 to 1 (bottom). Map them onto the ground like this:
@@ -123,6 +153,8 @@ WORLD CONVENTIONS
 - Place each object within its zone's radius of the zone center. Leave space between objects.
 - For many small things of the same kind (trees in a wood, rocks, bushes) use scatter, not dozens of
   place_object calls. This is how the world becomes richer than the drawing.
+- Zone radius 15–35 is the useful range. One enormous zone is wrong: a ground zone flattens the terrain
+  inside it, so a map-sized zone irons the whole landscape flat. Spread several medium zones instead.
 
 HOW TO WORK
 - Call set_terrain and set_environment first. Always pass the brief's palette to set_environment,
@@ -132,7 +164,9 @@ HOW TO WORK
 - You may only use asset ids from the library list or the hero list below.
 - Tool errors tell you what was wrong; fix the call and continue.
 - Call describe_scene once near the end to check your work, then call finish.
-- You have a budget of ${AGENT_MAX_TOOL_CALLS} tool calls. Aim for 20–30. Call finish before running out.
+- You have a budget of ${AGENT_MAX_TOOL_CALLS} tool calls. Aim for 25–35, and spend them on scatters rather than on
+  repeating single objects — one scatter call is worth forty place_object calls. Call finish before
+  running out.
 - Don't write prose between calls; just call tools.
 
 WHAT THE CHILD DREW

@@ -208,7 +208,7 @@ const placeObject = defineTool(
 
 const scatter = defineTool(
   'scatter',
-  'Scatter many small library models randomly inside a zone (trees, rocks, bushes...).',
+  'Scatter a population of models through a zone — a wood, undergrowth, strewn rocks. Pass several assetIds to mix kinds, and a wide sizeRange so they vary.',
   z.object({
     assetIds: z.array(z.string()).min(1),
     zoneId: z.string(),
@@ -217,22 +217,25 @@ const scatter = defineTool(
   }),
   (scene, args, ctx) => {
     findZone(scene, args.zoneId);
+    // Duplicates would silently weight the random pick toward one kind.
+    const assetIds = [...new Set(args.assetIds)];
     let next = scene;
-    for (const assetId of args.assetIds) next = withAsset(next, assetId, ctx);
-    const sizeRange = (args.sizeRange as [number, number] | undefined) ?? defaultSizeRange(args.assetIds, ctx);
+    for (const assetId of assetIds) next = withAsset(next, assetId, ctx);
+    const sizeRange = (args.sizeRange as [number, number] | undefined) ?? defaultSizeRange(assetIds, ctx);
     if (sizeRange[0] <= 0 || sizeRange[0] > sizeRange[1]) {
       throw new ToolError('sizeRange must be [min, max] with 0 < min <= max.');
     }
-    const entry = { id: ctx.nextId('scatter'), assetIds: args.assetIds, zoneId: args.zoneId, count: args.count, seed: ctx.nextSeed(), sizeRange };
+    const entry = { id: ctx.nextId('scatter'), assetIds, zoneId: args.zoneId, count: args.count, seed: ctx.nextSeed(), sizeRange };
     return { scene: { ...next, scatters: [...next.scatters, entry] }, result: `Created ${entry.id}.` };
   },
 );
 
-// ±20% around the average library default height.
+// Wide by default: scattered things are meant to look grown, not stamped out, and
+// a narrow range is the main reason a world reads as fake.
 function defaultSizeRange(assetIds: string[], ctx: ToolContext): [number, number] {
   const sizes = assetIds.map((id) => ctx.library.get(id)?.defaultSize ?? 1);
   const mean = sizes.reduce((a, b) => a + b, 0) / sizes.length;
-  return [mean * 0.8, mean * 1.2];
+  return [mean * 0.6, mean * 1.5];
 }
 
 const remove = defineTool(
