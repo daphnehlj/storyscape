@@ -41,8 +41,18 @@ export interface WorldHandlers {
 export function subscribeToWorld(worldId: string, handlers: WorldHandlers): () => void {
   const source = new EventSource(`/api/worlds/${worldId}/events`);
 
-  const handle = (raw: string) => {
-    const parsed = WorldEventSchema.safeParse(JSON.parse(raw));
+  const handle = (raw: unknown) => {
+    // EventSource fires its own built-in 'error' event, which shares a name with
+    // ours and carries no data — that one is a connection problem, not a payload.
+    if (typeof raw !== 'string') return;
+    let json: unknown;
+    try {
+      json = JSON.parse(raw);
+    } catch {
+      console.warn('ignoring unparseable world event', raw);
+      return;
+    }
+    const parsed = WorldEventSchema.safeParse(json);
     if (!parsed.success) {
       // Tolerate after the wire: a newer server may send events this build
       // doesn't know. Keep the last good scene.
@@ -68,7 +78,7 @@ export function subscribeToWorld(worldId: string, handlers: WorldHandlers): () =
   };
 
   for (const name of ['stage', 'scene', 'log', 'error']) {
-    source.addEventListener(name, (event) => handle((event as MessageEvent<string>).data));
+    source.addEventListener(name, (event) => handle((event as MessageEvent<unknown>).data));
   }
   source.onerror = () => {
     if (source.readyState === EventSource.CLOSED) handlers.onError?.('Lost the connection to the server.');

@@ -34,6 +34,9 @@ export const TIMEOUTS_MS = {
 export const AGENT_MAX_TOOL_CALLS = 40;
 export const MAX_HERO_OBJECTS = 4;
 
+// Stands in until the brief picks colours from the drawing: [sky, ground, accent].
+export const DEFAULT_PALETTE: [string, string, string] = ['#cfe3f7', '#8ec06c', '#f2c14e'];
+
 export const WORLD_SIZE = 200;
 export const SKY_HEIGHT = 120;
 

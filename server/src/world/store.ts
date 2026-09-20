@@ -12,6 +12,9 @@ export interface World {
   idCounter: number;
   seedCounter: number;
   listeners: Set<Listener>;
+  // Replayed on connect: without it, a client that arrives after a failure sees
+  // a finished world and no reason why.
+  history: WorldEvent[];
 }
 
 const worlds = new Map<string, World>();
@@ -25,6 +28,7 @@ export function createWorld(): World {
     idCounter: 0,
     seedCounter: 0,
     listeners: new Set(),
+    history: [],
   };
   worlds.set(id, world);
   return world;
@@ -80,6 +84,11 @@ export function subscribe(world: World, listener: Listener): () => void {
   return () => world.listeners.delete(listener);
 }
 
+// Scenes are not kept: the latest one is world.scene, and replaying every
+// intermediate scene would flood a reconnecting client.
+const REPLAYABLE = new Set(['log', 'error']);
+
 function emit(world: World, event: WorldEvent): void {
+  if (REPLAYABLE.has(event.type)) world.history.push(event);
   for (const listener of world.listeners) listener(event);
 }

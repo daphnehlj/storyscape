@@ -7,7 +7,17 @@ import { DRAWING_FIELD, type WorldEvent } from '@app/shared';
 import { GENERATED_DIR, UPLOADS_DIR } from './config.js';
 import { runWorld } from './runWorld.js';
 import { BadDrawingError, saveDrawing } from './uploads.js';
-import { createWorld, getWorld, subscribe, updateScene } from './world/store.js';
+import { createWorld, getWorld, subscribe, updateScene, type World } from './world/store.js';
+
+// The event stream is the log. Mirror it to the terminal so a run can be followed
+// (and a failure understood) with no browser attached.
+function logToConsole(world: World): void {
+  subscribe(world, (event) => {
+    if (event.type === 'stage') console.log(`[${world.id}] — ${event.stage} —`);
+    else if (event.type === 'log') console.log(`[${world.id}]   ${event.text}`);
+    else if (event.type === 'error') console.error(`[${world.id}] error: ${event.message}`);
+  });
+}
 
 // serveStatic checks its root when the route is registered, before anything has written.
 mkdirSync(GENERATED_DIR, { recursive: true });
@@ -31,6 +41,8 @@ app.post('/api/worlds', async (c) => {
   }
 
   const world = createWorld();
+  logToConsole(world);
+  console.log(`[${world.id}] drawing received (${Math.round(file.size / 1024)}kB ${file.type || 'image'})`);
   try {
     const drawing = await saveDrawing(file, world.id);
     // B shows the child their own drawing beside the world it became.
@@ -62,8 +74,10 @@ app.get('/api/worlds/:id/events', (c) => {
       wake?.();
     };
 
-    // A reconnecting client gets the current state before anything live.
+    // A reconnecting client gets the current state before anything live: the
+    // stage, everything logged so far (including errors), then the latest scene.
     push({ type: 'stage', stage: world.stage });
+    for (const event of world.history) push(event);
     push({ type: 'scene', scene: world.scene });
     const unsubscribe = subscribe(world, push);
 

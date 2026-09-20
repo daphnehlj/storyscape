@@ -42,6 +42,8 @@ export async function runWorld(world: World, drawing: Drawing): Promise<void> {
     setStage(world, 'done');
   } catch (error) {
     const text = error instanceof Error ? error.message : String(error);
+    // Log it too: an SSE-only error is invisible when nobody is connected yet.
+    console.error(`world ${world.id} failed:`, error);
     emitError(world, text);
     // The last valid scene stays on screen; the world just stops growing.
     setStage(world, 'done');

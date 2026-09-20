@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import {
   BiomeSchema,
-  HexColorSchema,
+  PaletteSchema,
   PlatformSchema,
   TimeOfDaySchema,
   WeatherSchema,
@@ -95,16 +95,25 @@ const setTerrain = defineTool(
 
 const setEnvironment = defineTool(
   'set_environment',
-  "Set time of day, weather, fog (0–1) and colour palette. Always pass the brief's palette.",
+  "Set time of day, weather, fog (0–1) and the colour palette. Always pass the brief's palette.",
   z.object({
     timeOfDay: TimeOfDaySchema,
     weather: WeatherSchema,
     fogDensity: z.number().min(0).max(1),
-    palette: z.array(HexColorSchema).min(3).max(5).optional(),
+    palette: z
+      .array(z.string())
+      .length(3)
+      .describe('exactly 3 hex colours in order: [sky/horizon, ground, accent]'),
   }),
   (scene, args) => {
+    const palette = PaletteSchema.safeParse(args.palette);
+    if (!palette.success) throw new ToolError('palette must be 3 hex colours like ["#cfe3f7", "#8ec06c", "#f2c14e"].');
     // skybox is owned by the asset jobs, not the agent.
-    const environment = { ...args, ...(scene.environment.skybox && { skybox: scene.environment.skybox }) };
+    const environment = {
+      ...args,
+      palette: palette.data,
+      ...(scene.environment.skybox && { skybox: scene.environment.skybox }),
+    };
     return { scene: { ...scene, environment }, result: 'Environment set.' };
   },
 );

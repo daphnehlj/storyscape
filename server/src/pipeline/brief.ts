@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { HexColorSchema, TimeOfDaySchema, WeatherSchema, type Library } from '@app/shared';
+import { HexColorSchema, PaletteSchema, TimeOfDaySchema, WeatherSchema, type Library, type Palette } from '@app/shared';
 import { MAX_HERO_OBJECTS } from '../config.js';
 import { completeJson } from '../llm/index.js';
 import { briefPrompt, type KeyObject } from '../prompts.js';
@@ -10,7 +10,9 @@ import type { DrawingReading } from './readDrawing.js';
 export const BriefSchema = z.object({
   title: z.string(),
   mood: z.string(),
-  palette: z.array(HexColorSchema).min(3).max(5),
+  // A 3-item array rather than the contract's tuple: OpenAI strict Structured
+  // Outputs cannot represent tuple-form `items`. Converted to the tuple below.
+  palette: z.array(HexColorSchema).length(3),
   timeOfDay: TimeOfDaySchema,
   weather: WeatherSchema,
   zones: z
@@ -43,6 +45,11 @@ export type HeroObject = Brief['heroObjects'][number];
 export async function buildBrief(reading: DrawingReading, library: Library): Promise<Brief> {
   const brief = await completeJson('mid', BriefSchema, briefPrompt(reading, library));
   return resolveLibraryMatches(brief, library);
+}
+
+// The contract's palette is a fixed-length tuple; the brief's is a validated array.
+export function toPalette(brief: Brief): Palette {
+  return PaletteSchema.parse(brief.palette);
 }
 
 // The model sometimes names a library id that doesn't exist. Replace it with the

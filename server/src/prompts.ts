@@ -49,9 +49,13 @@ and nothing should contradict the drawing.
 Fields:
 - title: short title for the world, in a child's spirit.
 - mood: a few words, e.g. "sunny and friendly", "spooky but safe".
-- palette: 3–5 hex colours (#rrggbb) setting the atmosphere. Start from the drawing's own dominant colours —
-  a child who drew in orange and purple should get an orange and purple world. The renderer derives sky,
-  fog and light colour from these. First colour = dominant ground/land tone.
+- palette: EXACTLY three hex colours (#rrggbb), in this order:
+    1. sky / horizon — the colour the sky and the distant haze take
+    2. ground — the dominant land colour
+    3. accent / zenith — the top of the sky and the colour that picks out highlights
+  Start from the drawing's own dominant colours: a child who drew in orange and purple should get an
+  orange and purple world. The renderer derives sky, fog, light and terrain tint from these three and
+  invents nothing, so they decide how the world feels.
 - timeOfDay: what the drawing implies (a yellow sun high up = day, an orange sky = dusk, stars = night).
   Prefer "dawn" or "dusk" when the drawing allows; they look best.
 - weather: what the drawing shows; "clear" if there is no weather in it.
@@ -121,7 +125,8 @@ WORLD CONVENTIONS
   place_object calls. This is how the world becomes richer than the drawing.
 
 HOW TO WORK
-- Call set_terrain and set_environment first. Always pass the brief's palette to set_environment.
+- Call set_terrain and set_environment first. Always pass the brief's palette to set_environment,
+  unchanged and in the same order.
 - Create every zone from the brief, then place the key objects, then fill in with library objects and scatters.
 - Use storyNote to say what the child drew that a thing came from ("Ana drew this house in the corner").
 - You may only use asset ids from the library list or the hero list below.
