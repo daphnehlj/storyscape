@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
-import { Sparkles } from '@react-three/drei'
 import type { Scene } from '@app/shared'
 import { useLibrary } from './assets.ts'
 import { InstancedModel } from './Scatter.tsx'
+import { Rain, Snow } from './Precipitation.tsx'
 import { mulberry32, type Placement } from './scatter-math.ts'
 import { WEATHER, ZONE } from './presets.ts'
 
@@ -14,8 +14,8 @@ export function Weather({ scene }: { scene: Scene }) {
   return (
     <>
       {overcast && <CloudRing scene={scene} />}
-      {w === 'snow' && <Sparkles count={WEATHER.snow.count} scale={[size, WEATHER.snow.height, size]} position-y={WEATHER.snow.y} size={WEATHER.snow.size} speed={WEATHER.snow.speed} noise={WEATHER.snow.noise} color={WEATHER.snow.color} />}
-      {w === 'rain' && <Sparkles count={WEATHER.rain.count} scale={[size, WEATHER.rain.height, size]} position-y={WEATHER.rain.y} size={WEATHER.rain.size} speed={WEATHER.rain.speed} noise={WEATHER.rain.noise} color={WEATHER.rain.color} opacity={WEATHER.rain.opacity} />}
+      {w === 'snow' && <Snow />}
+      {w === 'rain' && <Rain />}
     </>
   )
 }

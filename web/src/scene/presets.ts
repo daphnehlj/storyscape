@@ -73,9 +73,9 @@ export const FLY = {
 export const WEATHER = {
   // cloudy / rain / snow: a ring of cloud_puff instances at bounds.skyHeight
   clouds: { count: 10, ringFactor: 0.42, sizeFactor: [0.09, 0.16], jitter: 0.12, seed: 7 }, // sizes × bounds.size
-  snow: { count: 2000, height: 80, y: 40, size: 2, speed: 2, noise: 0.6, color: '#ffffff' },
-  // ponytail: rain = fast grey sparkles. Upgrade to a streak particle if it reads badly in the demo.
-  rain: { count: 3000, height: 80, y: 40, size: 1, speed: 12, noise: 0.1, color: '#9fb4c8', opacity: 0.5 },
+  // precipitation lives in a box that follows the camera: radius × height metres, falling and wrapping
+  snow: { count: 2500, radius: 45, height: 50, fallSpeed: 2.5, sway: 0.8, size: 0.35, color: '#ffffff', opacity: 0.9 },
+  rain: { count: 2000, radius: 45, height: 50, fallSpeed: 24, length: 1.4, color: '#c4d3e6', opacity: 0.45 },
 }
 
 export const ZONE = {
