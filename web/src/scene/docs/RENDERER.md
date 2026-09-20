@@ -1,6 +1,6 @@
 # How the renderer works
 
-`web/src/scene/` turns a `Scene` (see `shared/contract.ts`, and `SCENE.md` for how to write one) into a three.js world. ~900 lines across 15 files. This document is the tour: what each file does, how they fit, and the decisions behind them. `README.md` covers mounting `<World>`; this covers what's inside it.
+`web/src/scene/` turns a `Scene` (see `shared/contract.ts`, and `SCENE.md` for how to write one) into a three.js world. ~900 lines across 15 files. This document is the tour: what each file does, how they fit, and the decisions behind them. `../README.md` covers mounting `<World>`; this covers what's inside it.
 
 ## The one rule
 
