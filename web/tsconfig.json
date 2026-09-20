@@ -11,5 +11,14 @@
     "paths": { "@/*": ["./src/*"] }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules",
+    "vite.config.ts",
+    "src/App.tsx",
+    "src/main.tsx",
+    "src/ui/DrawingDialog.tsx",
+    "src/ui/InteractiveBook.tsx",
+    "src/ui/ProgressiveBackdrop.tsx",
+    "src/ui/StoryInput.tsx"
+  ]
 }
