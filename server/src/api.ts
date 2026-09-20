@@ -74,11 +74,12 @@ app.get('/api/worlds/:id/events', (c) => {
       wake?.();
     };
 
-    // A reconnecting client gets the current state before anything live: the
-    // stage, everything logged so far (including errors), then the latest scene.
+    // A reconnecting client gets the current state before anything live. The
+    // scene goes first: it's what the page renders, and a client that stops
+    // reading early should still have the world.
+    push({ type: 'scene', scene: world.scene });
     push({ type: 'stage', stage: world.stage });
     for (const event of world.history) push(event);
-    push({ type: 'scene', scene: world.scene });
     const unsubscribe = subscribe(world, push);
 
     stream.onAbort(() => {

@@ -63,7 +63,10 @@ export function subscribeToWorld(worldId: string, handlers: WorldHandlers): () =
     switch (event.type) {
       case 'stage':
         handlers.onStage?.(event.stage);
-        if (event.stage === 'done') source.close();
+        // Deliberately not closed on 'done': closing aborts the stream, and a
+        // reconnect to a finished world replays 'done' before the scene, so
+        // closing here would drop the very scene we came back for. The caller's
+        // unsubscribe closes it on unmount.
         break;
       case 'scene':
         handlers.onScene?.(event.scene);
