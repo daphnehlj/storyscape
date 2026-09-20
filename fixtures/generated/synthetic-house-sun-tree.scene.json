@@ -1,0 +1,294 @@
+{
+  "version": 1,
+  "id": "xr81d6g8I18",
+  "title": "The Purple Friend's Sunny Field",
+  "bounds": {
+    "size": 200,
+    "skyHeight": 120
+  },
+  "terrain": {
+    "biome": "grassland",
+    "heightVariation": 0.08,
+    "seed": 481999105,
+    "water": {
+      "level": 0.2
+    }
+  },
+  "environment": {
+    "timeOfDay": "day",
+    "weather": "clear",
+    "fogDensity": 0.02,
+    "palette": [
+      "#50AA53",
+      "#5B95D8",
+      "#E3423A",
+      "#FFD33E",
+      "#914ACC"
+    ],
+    "skybox": {
+      "status": "ready",
+      "url": "/generated/6d2946e81623d3c0.jpg"
+    }
+  },
+  "zones": [
+    {
+      "id": "zone-1",
+      "name": "Purple Friend Meadow",
+      "description": "Soft rolling grass on the left, with open room for the purple friend to bounce toward the house.",
+      "center": [
+        -70,
+        40
+      ],
+      "radius": 14,
+      "elevation": 0,
+      "storyNote": "The child drew the many-legged purple friend on the left side of the grassy field."
+    },
+    {
+      "id": "zone-2",
+      "name": "Red House Clearing",
+      "description": "A sunny open clearing for the red house, facing the foreground meadow.",
+      "center": [
+        -24,
+        18
+      ],
+      "radius": 14,
+      "elevation": 0,
+      "storyNote": "The child's red house stands between the purple friend and the round tree."
+    },
+    {
+      "id": "zone-3",
+      "name": "Round Tree Shade",
+      "description": "A dark-green round crown shelters a small mushroom-dotted patch to the right of the house.",
+      "center": [
+        26,
+        24
+      ],
+      "radius": 13,
+      "elevation": 0,
+      "storyNote": "The child placed a round green tree just to the right of the red house."
+    },
+    {
+      "id": "zone-4",
+      "name": "Little Blue Pond",
+      "description": "A small blue oval water-side hollow in the foreground-right meadow, with a footbridge and a boat at its grassy bank.",
+      "center": [
+        62,
+        74
+      ],
+      "radius": 12,
+      "elevation": 0,
+      "storyNote": "The blue oval in the lower-right of the drawing becomes the little pond."
+    }
+  ],
+  "objects": [
+    {
+      "id": "obj-5",
+      "assetId": "villager",
+      "zoneId": "zone-1",
+      "position": [
+        -70,
+        0,
+        40
+      ],
+      "snapToGround": true,
+      "rotationY": 60,
+      "size": 2.4,
+      "label": "Purple Many-Legged Friend",
+      "storyNote": "Represents the child's purple friend with a round head, black eyes, oval body and six springy legs using the brief's villager model."
+    },
+    {
+      "id": "obj-6",
+      "assetId": "cottage",
+      "zoneId": "zone-2",
+      "position": [
+        -24,
+        0,
+        18
+      ],
+      "snapToGround": true,
+      "rotationY": 0,
+      "size": 6,
+      "label": "Red House",
+      "storyNote": "The child's red square home with its peaked brown roof, two blue windows and central door is represented by the cottage."
+    },
+    {
+      "id": "obj-7",
+      "assetId": "oak_tree",
+      "zoneId": "zone-3",
+      "position": [
+        26,
+        0,
+        24
+      ],
+      "snapToGround": true,
+      "rotationY": 0,
+      "size": 8,
+      "label": "Round-Crowned Tree",
+      "storyNote": "The child's straight brown trunk and round dark-green crown become this shady oak."
+    },
+    {
+      "id": "obj-8",
+      "assetId": "fence",
+      "zoneId": "zone-2",
+      "position": [
+        -32,
+        0,
+        14
+      ],
+      "snapToGround": true,
+      "rotationY": 90,
+      "size": 1.1,
+      "label": "Short garden fence"
+    },
+    {
+      "id": "obj-9",
+      "assetId": "fence",
+      "zoneId": "zone-2",
+      "position": [
+        -32,
+        0,
+        18
+      ],
+      "snapToGround": true,
+      "rotationY": 90,
+      "size": 1.1,
+      "label": "Garden fence continuation"
+    },
+    {
+      "id": "obj-10",
+      "assetId": "bridge",
+      "zoneId": "zone-4",
+      "position": [
+        58,
+        0,
+        71
+      ],
+      "snapToGround": true,
+      "rotationY": 35,
+      "size": 1.5,
+      "label": "Pond-edge footbridge",
+      "storyNote": "A little wooden bridge invites a walk beside the child's blue pond."
+    },
+    {
+      "id": "obj-11",
+      "assetId": "boat",
+      "zoneId": "zone-4",
+      "position": [
+        67,
+        0,
+        77
+      ],
+      "snapToGround": true,
+      "rotationY": -25,
+      "size": 1,
+      "label": "Rowboat resting on the grassy bank"
+    }
+  ],
+  "scatters": [
+    {
+      "id": "scatter-12",
+      "assetIds": [
+        "bush"
+      ],
+      "zoneId": "zone-1",
+      "count": 5,
+      "seed": 482007024,
+      "sizeRange": [
+        0.5,
+        1
+      ]
+    },
+    {
+      "id": "scatter-13",
+      "assetIds": [
+        "rock_small"
+      ],
+      "zoneId": "zone-1",
+      "count": 5,
+      "seed": 482014943,
+      "sizeRange": [
+        0.2,
+        0.45
+      ]
+    },
+    {
+      "id": "scatter-14",
+      "assetIds": [
+        "bush"
+      ],
+      "zoneId": "zone-2",
+      "count": 4,
+      "seed": 482022862,
+      "sizeRange": [
+        0.5,
+        0.85
+      ]
+    },
+    {
+      "id": "scatter-15",
+      "assetIds": [
+        "mushroom"
+      ],
+      "zoneId": "zone-3",
+      "count": 14,
+      "seed": 482030781,
+      "sizeRange": [
+        0.15,
+        0.4
+      ]
+    },
+    {
+      "id": "scatter-16",
+      "assetIds": [
+        "rock_small",
+        "bush"
+      ],
+      "zoneId": "zone-4",
+      "count": 7,
+      "seed": 482038700,
+      "sizeRange": [
+        0.25,
+        0.65
+      ]
+    }
+  ],
+  "assets": {
+    "villager": {
+      "id": "villager",
+      "source": "library"
+    },
+    "cottage": {
+      "id": "cottage",
+      "source": "library"
+    },
+    "oak_tree": {
+      "id": "oak_tree",
+      "source": "library"
+    },
+    "fence": {
+      "id": "fence",
+      "source": "library"
+    },
+    "bridge": {
+      "id": "bridge",
+      "source": "library"
+    },
+    "boat": {
+      "id": "boat",
+      "source": "library"
+    },
+    "bush": {
+      "id": "bush",
+      "source": "library"
+    },
+    "rock_small": {
+      "id": "rock_small",
+      "source": "library"
+    },
+    "mushroom": {
+      "id": "mushroom",
+      "source": "library"
+    }
+  },
+  "sourceImageUrl": "/uploads/xr81d6g8I18.png"
+}

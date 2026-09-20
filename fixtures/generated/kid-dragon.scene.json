@@ -1,0 +1,405 @@
+{
+  "version": 1,
+  "id": "rcPlXcgu9PQ",
+  "title": "The Cold Volcano and Cheese Moon",
+  "bounds": {
+    "size": 200,
+    "skyHeight": 120
+  },
+  "terrain": {
+    "biome": "snow",
+    "heightVariation": 0.12,
+    "seed": 667975265
+  },
+  "environment": {
+    "timeOfDay": "dusk",
+    "weather": "clear",
+    "fogDensity": 0.13,
+    "palette": [
+      "#40364F",
+      "#7254A8",
+      "#A9D9E8",
+      "#F4D77A",
+      "#FFF2C2"
+    ],
+    "skybox": {
+      "status": "ready",
+      "url": "/generated/95cdd8c4d723a29e.jpg"
+    }
+  },
+  "zones": [
+    {
+      "id": "zone-1",
+      "name": "Frosty Volcano",
+      "description": "A towering charcoal and lavender cold volcano with icy ledges, pale frost, faint violet steam and a sheltered cave at its foot.",
+      "center": [
+        -51,
+        -33
+      ],
+      "radius": 43,
+      "elevation": 0,
+      "storyNote": "Lily befriended the purple dragon in the shelter of the cold volcano."
+    },
+    {
+      "id": "zone-2",
+      "name": "Cloud-High Flight Path",
+      "description": "Soft cloud stepping-stones sweep upward from the frosty peak toward the golden moon, leaving open sky for the dragon and its rider.",
+      "center": [
+        0,
+        12
+      ],
+      "radius": 22,
+      "elevation": 85,
+      "platform": "cloud",
+      "storyNote": "The purple dragon carries Lily above the clouds toward a moon made of cheese."
+    },
+    {
+      "id": "zone-3",
+      "name": "Cheese Moon",
+      "description": "A golden cratered cheese moon floats beside a quiet rocky picnic overlook high above the snowy world.",
+      "center": [
+        63,
+        47
+      ],
+      "radius": 33,
+      "elevation": 100,
+      "platform": "rock",
+      "storyNote": "A peaceful moon picnic awaits the two friends at the end of their magical flight."
+    }
+  ],
+  "objects": [
+    {
+      "id": "obj-4",
+      "assetId": "hero_2_cold_volcano",
+      "zoneId": "zone-1",
+      "position": [
+        -51,
+        0,
+        -33
+      ],
+      "snapToGround": true,
+      "rotationY": 145,
+      "size": 80,
+      "label": "The Cold Volcano",
+      "storyNote": "Its frosted crater exhales gentle violet steam rather than fire."
+    },
+    {
+      "id": "obj-5",
+      "assetId": "hero_1_purple_dragon",
+      "zoneId": "zone-2",
+      "position": [
+        0,
+        90,
+        12
+      ],
+      "snapToGround": false,
+      "rotationY": 60,
+      "size": 7,
+      "label": "Purple Dragon flying moonward",
+      "storyNote": "Broad purple wings carry Lily safely toward the cheese moon."
+    },
+    {
+      "id": "obj-6",
+      "assetId": "hero_4_cheese_moon",
+      "zoneId": "zone-3",
+      "position": [
+        68,
+        0,
+        53
+      ],
+      "snapToGround": true,
+      "rotationY": 225,
+      "size": 60,
+      "label": "The golden Cheese Moon",
+      "storyNote": "Rounded craters and cheese-carved cliffs glow warmly over the cloud sea."
+    },
+    {
+      "id": "obj-7",
+      "assetId": "villager",
+      "zoneId": "zone-2",
+      "position": [
+        0,
+        94.4,
+        12
+      ],
+      "snapToGround": false,
+      "rotationY": 60,
+      "size": 1.4,
+      "label": "Lily riding between the dragon's wings",
+      "storyNote": "Cloak fluttering, Lily rides on her friend's back rather than standing on the clouds."
+    },
+    {
+      "id": "obj-8",
+      "assetId": "rock_large",
+      "zoneId": "zone-1",
+      "position": [
+        -42,
+        0,
+        -2
+      ],
+      "snapToGround": true,
+      "rotationY": 20,
+      "size": 9,
+      "label": "Left frost-covered cave buttress"
+    },
+    {
+      "id": "obj-9",
+      "assetId": "rock_large",
+      "zoneId": "zone-1",
+      "position": [
+        -29,
+        0,
+        -7
+      ],
+      "snapToGround": true,
+      "rotationY": 140,
+      "size": 10,
+      "label": "Right lavender-stone cave buttress"
+    },
+    {
+      "id": "obj-10",
+      "assetId": "rock_large",
+      "zoneId": "zone-1",
+      "position": [
+        -36,
+        7,
+        -5
+      ],
+      "snapToGround": false,
+      "rotationY": 90,
+      "size": 8,
+      "label": "Sheltered cave stone canopy",
+      "storyNote": "A dark sheltered opening beneath the icy ledges marks the friends' meeting place."
+    },
+    {
+      "id": "obj-11",
+      "assetId": "cloud_puff",
+      "zoneId": "zone-1",
+      "position": [
+        -51,
+        80,
+        -33
+      ],
+      "snapToGround": false,
+      "rotationY": 0,
+      "size": 6,
+      "label": "Gentle cold crater steam"
+    },
+    {
+      "id": "obj-12",
+      "assetId": "cloud_puff",
+      "zoneId": "zone-1",
+      "position": [
+        -46,
+        86,
+        -31
+      ],
+      "snapToGround": false,
+      "rotationY": 0,
+      "size": 4,
+      "label": "Drifting dusk-lit steam"
+    },
+    {
+      "id": "obj-13",
+      "assetId": "cloud_puff",
+      "zoneId": "zone-2",
+      "position": [
+        -17,
+        79,
+        3
+      ],
+      "snapToGround": false,
+      "rotationY": 0,
+      "size": 9,
+      "label": "Cloud at the start of the flight"
+    },
+    {
+      "id": "obj-14",
+      "assetId": "cloud_puff",
+      "zoneId": "zone-2",
+      "position": [
+        -9,
+        82,
+        7
+      ],
+      "snapToGround": false,
+      "rotationY": 0,
+      "size": 6,
+      "label": "Soft cloud beneath the dragon's wake"
+    },
+    {
+      "id": "obj-15",
+      "assetId": "cloud_puff",
+      "zoneId": "zone-2",
+      "position": [
+        11,
+        88,
+        20
+      ],
+      "snapToGround": false,
+      "rotationY": 0,
+      "size": 7,
+      "label": "Moonward cloud stepping-stone"
+    },
+    {
+      "id": "obj-16",
+      "assetId": "cloud_puff",
+      "zoneId": "zone-3",
+      "position": [
+        38,
+        95,
+        31
+      ],
+      "snapToGround": false,
+      "rotationY": 0,
+      "size": 8,
+      "label": "Cloud at the moon landing"
+    },
+    {
+      "id": "obj-17",
+      "assetId": "rock_large",
+      "zoneId": "zone-3",
+      "position": [
+        49,
+        0,
+        27
+      ],
+      "snapToGround": true,
+      "rotationY": 80,
+      "size": 1.2,
+      "label": "Quiet moon picnic stone",
+      "storyNote": "A low stone picnic table overlooks the cloud path and the frosty volcano far below."
+    },
+    {
+      "id": "obj-18",
+      "assetId": "rock_small",
+      "zoneId": "zone-3",
+      "position": [
+        46,
+        0,
+        25
+      ],
+      "snapToGround": true,
+      "rotationY": 0,
+      "size": 0.65,
+      "label": "Lily's moon picnic seat"
+    },
+    {
+      "id": "obj-19",
+      "assetId": "rock_large",
+      "zoneId": "zone-3",
+      "position": [
+        53,
+        0,
+        24
+      ],
+      "snapToGround": true,
+      "rotationY": 50,
+      "size": 1.8,
+      "label": "Dragon's picnic perch",
+      "storyNote": "A broad perch leaves room for the dragon to fold its wings beside Lily."
+    }
+  ],
+  "scatters": [
+    {
+      "id": "scatter-20",
+      "assetIds": [
+        "rock_small",
+        "rock_large"
+      ],
+      "zoneId": "zone-1",
+      "count": 24,
+      "seed": 667983184,
+      "sizeRange": [
+        0.5,
+        2.6
+      ]
+    },
+    {
+      "id": "scatter-21",
+      "assetIds": [
+        "pine_tree"
+      ],
+      "zoneId": "zone-1",
+      "count": 7,
+      "seed": 667991103,
+      "sizeRange": [
+        3,
+        6
+      ]
+    },
+    {
+      "id": "scatter-22",
+      "assetIds": [
+        "cloud_puff"
+      ],
+      "zoneId": "zone-2",
+      "count": 9,
+      "seed": 667999022,
+      "sizeRange": [
+        1.2,
+        3.5
+      ]
+    },
+    {
+      "id": "scatter-23",
+      "assetIds": [
+        "rock_small"
+      ],
+      "zoneId": "zone-3",
+      "count": 12,
+      "seed": 668006941,
+      "sizeRange": [
+        0.3,
+        0.9
+      ]
+    }
+  ],
+  "assets": {
+    "cow": {
+      "id": "cow",
+      "source": "library"
+    },
+    "hero_1_purple_dragon": {
+      "id": "hero_1_purple_dragon",
+      "source": "generated",
+      "prompt": "Purple Dragon: A friendly round-bodied purple dragon with broad wings, small horns and warm glowing eyes.. Low-poly stylized game asset, clean simple shapes, flat soft colours, single object, no base or ground plane.",
+      "status": "failed",
+      "fallbackAssetId": "cow"
+    },
+    "rock_large": {
+      "id": "rock_large",
+      "source": "library"
+    },
+    "hero_2_cold_volcano": {
+      "id": "hero_2_cold_volcano",
+      "source": "generated",
+      "prompt": "Cold Volcano: A steep charcoal volcano capped with frost, its crater releasing faint violet steam instead of fiery smoke.. Low-poly stylized game asset, clean simple shapes, flat soft colours, single object, no base or ground plane.",
+      "status": "failed",
+      "fallbackAssetId": "rock_large"
+    },
+    "hero_4_cheese_moon": {
+      "id": "hero_4_cheese_moon",
+      "source": "generated",
+      "prompt": "Cheese Moon: A floating golden sphere with crater holes and carved cheese wedges scattered across its surface.. Low-poly stylized game asset, clean simple shapes, flat soft colours, single object, no base or ground plane.",
+      "status": "failed",
+      "fallbackAssetId": "rock_large"
+    },
+    "villager": {
+      "id": "villager",
+      "source": "library"
+    },
+    "cloud_puff": {
+      "id": "cloud_puff",
+      "source": "library"
+    },
+    "rock_small": {
+      "id": "rock_small",
+      "source": "library"
+    },
+    "pine_tree": {
+      "id": "pine_tree",
+      "source": "library"
+    }
+  }
+}
