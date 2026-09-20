@@ -23,27 +23,102 @@
   transform-origin: top left;
 }
 
-/* Blurred gradient blob (node 16:220) */
+/* Ellipse 2 (node 21:333), including the Figma filter bleed. */
 .story-input__glow {
   position: absolute;
-  left: 0;
-  top: 0;
-  width: 1440px;
-  height: 100%;
-  display: block;
-  overflow: visible;
+  width: 1806.612px;
+  height: 1148.713px;
+  left: -116.66px;
+  top: 92.61px;
+  pointer-events: none;
 }
 
-/* Prompt + input (node 16:221) */
+.story-input__glow img {
+  position: absolute;
+  left: -100px;
+  top: -100px;
+  display: block;
+  width: 2006.61px;
+  height: 1348.71px;
+  max-width: none;
+}
+
+/* Prompt (node 21:334) */
 .story-input__form {
   position: absolute;
   left: 75px;
-  top: 25.0000%; /* 256px of 1024px */
+  top: 220px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 28px;
   width: 588px;
+}
+
+/* Upload and whiteboard actions (node 21:398). */
+.story-input__actions {
+  position: absolute;
+  left: 75px;
+  top: 286px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.story-input__file-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.story-input__action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 57px;
+  padding: 20px 32px;
+  border: 0;
+  border-radius: 4px;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: -0.28px;
+}
+
+.story-input__action img {
+  display: block;
+  flex: none;
+  width: 16px;
+  height: 17px;
+}
+
+.story-input__action--upload {
+  background: #fff;
+  color: #000;
+}
+
+.story-input__action--whiteboard {
+  background: #000;
+  color: #fff;
+}
+
+.story-input__action--whiteboard img {
+  width: 16px;
+  height: 16px;
+  transform: rotate(180deg) scaleY(-1);
+}
+
+.story-input__action:hover {
+  filter: brightness(0.96);
+}
+
+.story-input__action:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 4px;
 }
 
 .story-input__prompt {

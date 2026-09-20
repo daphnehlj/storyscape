@@ -1,16 +1,20 @@
 import { useEffect, useRef } from 'react'
 import './StoryInput.css'
-import group1 from '../assets/group-1.svg'
-import group3 from '../assets/group-3.svg'
-import group4 from '../assets/group-4.svg'
-import image9 from '../assets/image-9.png'
-import image10 from '../assets/image-10.png'
-import image11 from '../assets/image-11.png'
+import ellipse2 from '../assets/ellipse-2.svg'
+import iconUpload from '../assets/icon-upload.svg'
+import iconPencil from '../assets/icon-pencil.svg'
+import group1 from '../assets/group-1-new.svg'
+import group3 from '../assets/group-3-new.svg'
+import group4 from '../assets/group-4-new.svg'
+import image9 from '../assets/image-9-new.png'
+import image10 from '../assets/image-10-new.png'
+import image11 from '../assets/image-11-new.png'
 
 const FRAME_WIDTH = 1440
 
 export default function StoryInput() {
   const viewportRef = useRef<HTMLDivElement>(null)
+  const uploadInputRef = useRef<HTMLInputElement>(null)
 
   // Scale the 1440-wide Figma frame to the viewport width so it fills edge to edge.
   useEffect(() => {
@@ -28,41 +32,24 @@ export default function StoryInput() {
   return (
     <div className="story-input-viewport" ref={viewportRef}>
       <div className="story-input">
-        {/* Blurred gradient blob (node 16:220) */}
-        <svg
-          className="story-input__glow"
-          viewBox="0 0 1440 1024"
-          preserveAspectRatio="none"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          aria-hidden="true"
-        >
-          <g filter="url(#filter0_f_16_220)">
-            <path
-              d="M1492 136C2068 1368 1266.22 1221 627.5 1221C-324.5 1355.5 -91.5004 785.599 -91.5004 586.5C-91.5004 387.401 233.782 487.5 872.5 487.5C1511.22 487.5 1492 -63.0988 1492 136Z"
-              fill="#F0ECFF"
-              fillOpacity="0.7"
-            />
-          </g>
-          <defs>
-            <filter
-              id="filter0_f_16_220"
-              x="-216.664"
-              y="-7.39453"
-              width="2006.61"
-              height="1348.71"
-              filterUnits="userSpaceOnUse"
-              colorInterpolationFilters="sRGB"
-            >
-              <feFlood floodOpacity="0" result="BackgroundImageFix" />
-              <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
-              <feGaussianBlur stdDeviation="50" result="effect1_foregroundBlur_16_220" />
-            </filter>
-          </defs>
-        </svg>
+        <div className="story-input__glow" aria-hidden="true">
+          <img src={ellipse2} alt="" />
+        </div>
 
         <div className="story-input__form">
           <p className="story-input__prompt">What do you dream of?</p>
+        </div>
+
+        <div className="story-input__actions">
+          <input ref={uploadInputRef} className="story-input__file-input" type="file" accept="image/*" />
+          <button className="story-input__action story-input__action--upload" type="button" onClick={() => uploadInputRef.current?.click()}>
+            <img src={iconUpload} alt="" />
+            <span>Upload Drawing</span>
+          </button>
+          <button className="story-input__action story-input__action--whiteboard" type="button">
+            <img src={iconPencil} alt="" />
+            <span>Whiteboard</span>
+          </button>
         </div>
 
         <div className="story-input__book story-input__book--left">
