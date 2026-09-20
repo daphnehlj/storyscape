@@ -1,0 +1,24 @@
+{
+  "name": "server",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch --env-file-if-exists=.env.local src/api.ts",
+    "start": "tsx --env-file-if-exists=.env.local src/api.ts",
+    "typecheck": "tsc --noEmit",
+    "build-drawing": "tsx --env-file-if-exists=.env.local src/scripts/buildFromDrawing.ts"
+  },
+  "dependencies": {
+    "@app/shared": "^0.0.0",
+    "@hono/node-server": "^2.1.1",
+    "hono": "^4.13.8",
+    "openai": "^7.20.0",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.2",
+    "tsx": "^4.23.13",
+    "typescript": "^7.0.2"
+  }
+}

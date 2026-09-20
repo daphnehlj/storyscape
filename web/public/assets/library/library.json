@@ -1,0 +1,118 @@
+[
+  {
+    "id": "oak_tree",
+    "tags": [
+      "tree",
+      "forest",
+      "nature"
+    ],
+    "defaultSize": 8,
+    "description": "large leafy oak tree",
+    "file": "oak_tree.glb"
+  },
+  {
+    "id": "pine_tree",
+    "tags": [
+      "tree",
+      "forest",
+      "nature"
+    ],
+    "defaultSize": 10,
+    "description": "tall conifer pine tree",
+    "file": "pine_tree.glb"
+  },
+  {
+    "id": "bush",
+    "tags": [
+      "bush",
+      "nature"
+    ],
+    "defaultSize": 1.5,
+    "description": "round green bush",
+    "file": "bush.glb"
+  },
+  {
+    "id": "rock",
+    "tags": [
+      "rock",
+      "nature"
+    ],
+    "defaultSize": 1,
+    "description": "grey boulder",
+    "file": "rock.glb"
+  },
+  {
+    "id": "cloud_puff",
+    "tags": [
+      "sky",
+      "cloud",
+      "nature"
+    ],
+    "defaultSize": 5,
+    "description": "fluffy low-poly cloud",
+    "file": "cloud_puff.glb"
+  },
+  {
+    "id": "beanstalk",
+    "file": "beanstalk.glb",
+    "tags": [
+      "plant",
+      "fantasy",
+      "giant"
+    ],
+    "defaultSize": 60,
+    "description": "enormous twisting green beanstalk with big leaves, reaching the sky"
+  },
+  {
+    "id": "cottage",
+    "file": "cottage.glb",
+    "tags": [
+      "building",
+      "house",
+      "farm"
+    ],
+    "defaultSize": 6,
+    "description": "small cottage with a red tile roof"
+  },
+  {
+    "id": "fence",
+    "file": "fence.glb",
+    "tags": [
+      "farm",
+      "prop"
+    ],
+    "defaultSize": 1.2,
+    "description": "wooden fence segment"
+  },
+  {
+    "id": "cow",
+    "file": "cow.glb",
+    "tags": [
+      "animal",
+      "farm"
+    ],
+    "defaultSize": 1.5,
+    "description": "black and white farm cow"
+  },
+  {
+    "id": "hay_bale",
+    "file": "hay_bale.glb",
+    "tags": [
+      "farm",
+      "prop"
+    ],
+    "defaultSize": 1.2,
+    "description": "bundle of hay"
+  },
+  {
+    "id": "castle",
+    "file": "castle.glb",
+    "tags": [
+      "building",
+      "castle",
+      "fantasy"
+    ],
+    "defaultSize": 25,
+    "description": "stone castle with towers and a keep"
+  }
+]

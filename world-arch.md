@@ -1,4 +1,4 @@
-# Story → 3D World: Architecture & Team Plan
+# Drawing → 3D World: Architecture & Team Plan
 
 This doc explains how the project is built, how we split the work, and how the two halves come back together. If you change the **contract** (section 4), update this doc in the same PR.
 
@@ -6,32 +6,35 @@ This doc explains how the project is built, how we split the work, and how the t
 
 ## 1. What we're building
 
-A user pastes in a story, for example *Jack and the Beanstalk*, and gets a 3D world the story could take place in, rendered in the browser. The world builds up live on screen as an AI agent places things in it.
+A child uploads a photo of a drawing they made — a scribble, a house with a sun in the corner — and gets a 3D world built from it, rendered in the browser. The world builds up live on screen as an AI agent places things in it, laid out the way the child laid out the page.
 
-**Pipeline in one line:** story → (optional) compressed story → world brief → agent builds a scene description → browser renders it.
+**Pipeline in one line:** drawing → reading (what's in the picture) → world brief → agent builds a scene description → browser renders it.
+
+The thing that makes this a product rather than a prompt is the middle: reading an ambiguous drawing into structured elements with positions and confidences, then designing a world that is richer than the drawing but still recognisably the child's.
 
 ## 2. Architecture
 
 ```
-┌──────────────┐
-│  Story text  │  (typed or pasted in the web UI)
-└──────┬───────┘
-       │ POST /api/worlds
+┌────────────────┐
+│ Drawing (image)│  (uploaded in the web UI)
+└──────┬─────────┘
+       │ POST /api/worlds  (multipart/form-data)
        ▼
 ┌───────────────────────── SERVER (Person A) ─────────────────────────┐
 │                                                                     │
-│  Stage 1 (optional): cheap LLM compresses the story                 │
-│     – only runs when the story is over ~8k tokens                   │
-│     – keeps plot skeleton + every detail about places/landscape     │
+│  Stage 1: vision LLM reads the drawing                              │
+│     – moderation on the image first                                 │
+│     – elements with page position, colour, size, confidence         │
 │                          │                                          │
 │                          ▼                                          │
 │  Stage 2: mid-tier LLM → World Brief (light JSON)                   │
 │     – zones, hero objects, ambient objects, mood, palette           │
+│     – palette starts from the drawing's own colours                 │
 │                          │                                          │
 │            ┌─────────────┴──────────────┐                           │
 │            ▼                            ▼                           │
-│  Stage 3: Agent loop           Asset jobs (parallel)                │
-│   (tool calls edit Scene)       – text-to-3D for 2–4 hero objects   │
+│  Stage 3: Agent loop           Skybox job (parallel)                │
+│   (tool calls edit Scene)       – all models come from the library  │
 │            │                    – skybox generation                 │
 │            │                    – cached by prompt                  │
 │            └─────────────┬──────────────┘                           │
@@ -54,33 +57,33 @@ A user pastes in a story, for example *Jack and the Beanstalk*, and gets a 3D wo
 
 1. **The agent never writes Three.js code.** It calls tools like `place_object` or `create_zone`, and each call edits a JSON `Scene`. The renderer only knows how to draw a `Scene`. This keeps the output valid, keeps the visuals consistent, and lets the world stream in live.
 2. **The brief is light JSON with free-text descriptions.** It isn't a rigid schema. Its main job is to let us start the slow 3D generation jobs *before* the agent runs.
-3. **Most models come from a pre-made library; only 2–4 "hero" objects are generated.** Text-to-3D takes 30s–2min per model. Generating everything would make one world take 10+ minutes.
+3. **Every model comes from a pre-made library; nothing is generated.** Text-to-3D takes 30s–2min per model and lands in a different art style, so the closest library model always wins. Worlds build in seconds, cost nothing per object and stay visually consistent.
 4. **The server sends the full Scene every time, not partial updates.** Scenes are a few KB. Resending everything rules out bugs where updates arrive out of order or get applied to stale state.
 5. **Same art style everywhere: low-poly geometry, lighting does the work** (think *Sky: Children of the Light*). Library models are low-poly, every generation prompt asks for that style, and B's renderer sells it with atmosphere and post-processing. Because all atmospheric color derives from `environment.palette`, the palette is the main lever A has over how a world *feels*.
 6. **TypeScript on both sides**, with shared zod schemas in `shared/`. A contract change breaks both builds right away instead of failing quietly at demo time.
 
 ## 3. The split
 
-**Person A = "Brain" (server):** story → `Scene`.
+**Person A = "Brain" (server):** drawing → `Scene`.
 **Person B = "World" (web):** `Scene` → pixels.
 
 > Fill in: **Person A:** ______ **Person B:** ______
 
 | Area | Person A: Brain | Person B: World |
 |---|---|---|
-| Core job | Story → brief → agent → valid `Scene` | Render any valid `Scene` well |
+| Core job | Drawing → reading → brief → agent → valid `Scene` | Render any valid `Scene` well |
 | LLM work | Stage 1 & 2 prompts, agent loop, tool definitions and error handling | — |
-| External APIs | Text-to-3D, skybox generation, caching, serving `.glb` files | — |
+| External APIs | Skybox generation, caching, serving generated images | — |
 | 3D / visuals | — | Terrain, water, platforms, lighting, fog, sky, post-processing, scatter, loading and normalizing models, camera |
 | Asset library | Reads `library.json` and gives the list to the agent | Picks and curates ~40–60 low-poly models, **writes `library.json`** |
-| Server | HTTP API, event stream, storing worlds | — |
-| UI | — | Story input, stage progress, agent log panel, story-note popups |
+| Server | HTTP API, event stream, storing worlds, image upload | — |
+| UI | — | **Drawing upload** (file picker / camera), stage progress, agent log panel, story-note popups |
 | Shared | `shared/contract.ts`, `fixtures/` (both own; changes need the other's review) | same |
 
 ### Person A: detailed scope
 
-- **Stage 1: compression.** Cheapest model. Skipped for short inputs. Output: plain text that keeps every mention of places, terrain, weather, time of day, buildings, notable objects and creatures, plus a one-paragraph plot.
-- **Stage 2: World Brief.** Mid-tier model, JSON output. Internal to A, not part of the contract. Suggested shape:
+- **Stage 1: reading the drawing.** Mid-tier vision model, JSON output (`server/src/pipeline/readDrawing.ts`). The uploaded image is moderated first, then read into `elements`: for each thing on the page a name, description, kind, page coordinates (`x`/`y` as 0–1 fractions, 0,0 = top-left), `relativeSize`, colours and a `confidence`. Plus `summary`, `setting`, `mood` and `dominantColors`. Take the drawing at face value, never tidy it into something more ordinary, and keep anything unidentifiable as `kind: 'unclear'` with a low confidence rather than dropping it. The reading is also what the agent log shows the child ("I can see a house, a sun, a purple creature…").
+- **Stage 2: World Brief.** Mid-tier model, JSON output, built from the reading. Internal to A, not part of the contract. Suggested shape:
   ```json
   {
     "title": "Jack and the Beanstalk",
@@ -99,14 +102,16 @@ A user pastes in a story, for example *Jack and the Beanstalk*, and gets a 3D wo
     "ambientObjects": ["hay bales", "cow", "wooden fence", "cloud puffs"]
   }
   ```
-  `palette` is load-bearing: B derives sky, fog and light color from it. Prompt for 3–5 hex colors that match the story's mood (warm golds for a fairy tale, cold blue-greys for something ominous), and prefer `dawn`/`dusk` for `timeOfDay` when the story allows — they're the best-looking states.
-- **Asset jobs.** Once the brief is ready, start text-to-3D jobs for the `heroObjects` and a skybox job, all in parallel. Cache results by prompt hash. Each hero is added to `Scene.assets` right away with `status: 'pending'` and a `fallbackAssetId`, then updated to `ready` + `url` (or `failed`).
+  `palette` is load-bearing and required: B derives sky, fog, light and terrain colour from it and never invents a colour. It is exactly 3 hex colours in a fixed order — **[sky/horizon, ground, accent/zenith]** — taken from the drawing's own `dominantColors`, so a child who drew in orange and purple gets an orange and purple world. Prefer `dawn`/`dusk` for `timeOfDay` when the drawing allows, since they're the best-looking states.
+- **Layout comes from the page.** The agent maps page coordinates onto the ground: x 0→1 across the world's -100→100, and the page's bottom edge is the near foreground (z +100) while the top is the distance (z -100). Things floating in the top strip are sky zones; the sun and plain clouds are weather, not objects. This is why the child recognises the world as theirs.
+- **Every model comes from the library. There is no text-to-3D.** For each `heroObject` the brief names the closest `library.json` entry, and that is what gets placed — even for something invented, where the closest match plus a good label is the answer. A hallucinated id is corrected against a word/tag scorer (`resolveLibraryMatches`), so an object always resolves to a real model. This makes worlds fast, free and visually consistent; the cost is that a six-legged purple monster arrives as whatever the library has nearest to it, which is why the library's coverage and its `description`/`tags` quality are the main lever on output quality.
+- **Asset jobs.** The skybox is the only generated asset. It starts before the agent runs and settles to `ready` + `url` or `failed`, cached by prompt hash; on failure B's gradient sky stands in.
 - **Agent loop.** A tool-calling model builds the scene with the tools below. After every tool call: apply it to the Scene, validate against the zod schema, and send a `scene` event. An invalid call goes back to the agent as a tool error so it can fix it.
 
   | Tool | Effect on `Scene` |
   |---|---|
   | `set_terrain(biome, heightVariation, water?)` | sets `terrain` |
-  | `set_environment(timeOfDay, weather, fogDensity, palette?)` | sets `environment`; agent should always pass the brief's `palette` |
+  | `set_environment(timeOfDay, weather, fogDensity, palette)` | sets `environment`; `palette` is required — the brief's [sky, ground, accent] |
   | `create_zone(name, description, center, radius, elevation, platform?, storyNote?)` | appends to `zones` |
   | `place_object(assetId, zoneId?, position, size, rotationY, snapToGround, label?, storyNote?)` | appends to `objects` |
   | `scatter(assetIds, zoneId, count, sizeRange)` | appends to `scatters` |
@@ -130,7 +135,7 @@ A user pastes in a story, for example *Jack and the Beanstalk*, and gets a 3D wo
 - **Pending assets:** render `fallbackAssetId` (or a pulsing placeholder) until `status: 'ready'`, then swap in the real model. On `failed`, keep the fallback.
 - **Reconcile by ID:** on each new `scene` event, diff by `id`, keep existing meshes and add or remove only what changed. The world should grow smoothly without flicker.
 - **Camera:** orbit controls, plus an automatic fly-through that visits each zone in order, including the sky zones.
-- **UI:** story textarea + "Build" button, stage indicator (`compress → brief → build → assets → done`), scrolling agent log, click on an object or zone to show its `storyNote`.
+- **UI:** drawing upload (file picker, ideally camera capture on mobile) + "Build" button, stage indicator (`read → brief → build → assets → done`), scrolling agent log, click on an object or zone to show its `storyNote`.
 - **Asset library:** ~40–60 CC0 low-poly models (Quaternius, Kenney, Poly Pizza). Cover trees, rocks, bushes, grass, houses, cottages, castles, towers, fences, wells, bridges, farm animals, clouds, boats, carts, and a few characters. Write `library.json` (see §4.3).
 
 ## 4. The contract
@@ -167,13 +172,14 @@ export interface Scene {
     timeOfDay: 'dawn' | 'day' | 'dusk' | 'night';
     weather: 'clear' | 'cloudy' | 'rain' | 'snow' | 'fog';
     fogDensity: number;               // 0–1
-    palette?: string[];               // hex colors; tints lighting and terrain
+    palette: [string, string, string]; // hex: [sky/horizon, ground, accent]; every colour in the world derives from it
     skybox?: { status: 'pending' | 'ready' | 'failed'; url?: string };
   };
   zones: Zone[];
   objects: SceneObject[];
   scatters: Scatter[];
   assets: Record<string, AssetRef>;
+  sourceImageUrl?: string;            // the child's drawing, for B to show beside the world
 }
 
 export interface Zone {
@@ -244,18 +250,19 @@ A world can start with empty arrays and default terrain and environment, so the 
 
 | Method & path | Request | Response |
 |---|---|---|
-| `POST /api/worlds` | `{ story: string }` | `{ worldId: string }` |
+| `POST /api/worlds` | `multipart/form-data` with a `drawing` image file (PNG/JPEG/WEBP/GIF, ≤20MB) | `{ worldId: string }` |
 | `GET /api/worlds/:id` | — | latest `Scene` |
 | `GET /api/worlds/:id/events` | — | server-sent event stream of `WorldEvent` |
 | `GET /generated/:file` | — | generated `.glb` / skybox image (served by A) |
+| `GET /uploads/:file` | — | the child's original drawing (served by A, referenced by `Scene.sourceImageUrl`) |
 
-The web app talks to the server through a Vite dev proxy (`/api`, `/generated` → server port), so there are no cross-origin (CORS) problems.
+The web app talks to the server through Next.js rewrites in `next.config.ts` (`/api`, `/generated`, `/uploads` → `API_URL`, default `http://localhost:8787`), so there are no cross-origin (CORS) problems. **B: `/uploads` needs adding to the rewrite list.**
 
 ### 4.5 Events
 
 ```ts
 export type WorldEvent =
-  | { type: 'stage'; stage: 'compress' | 'brief' | 'build' | 'assets' | 'done' }
+  | { type: 'stage'; stage: 'read' | 'brief' | 'build' | 'assets' | 'done' }
   | { type: 'scene'; scene: Scene }   // always the FULL scene
   | { type: 'log'; text: string }     // agent commentary for the log panel
   | { type: 'error'; message: string };
@@ -277,21 +284,23 @@ export type WorldEvent =
 shared/
   contract.ts          zod schemas + inferred types + validateSceneRefs
 fixtures/
+  drawings/            test drawings (the pipeline's input)
   jack.scene.json      hand-written complete Jack & the Beanstalk scene
   mock-server.ts       replays the fixture as an event stream (for B)
 server/                Person A
-  src/pipeline/        compress.ts, brief.ts
+  src/pipeline/        readDrawing.ts, brief.ts
   src/agent/           loop.ts, tools.ts, prompts.ts
-  src/assets/          text-to-3D + skybox clients, cache
+  src/assets/          skybox client, cache
   src/api.ts           HTTP + event stream
 web/                   Person B
   public/assets/library/   *.glb + library.json
+  src/app/             Next.js App Router entry (layout, page)
   src/scene/           Terrain, Environment, Effects, ZonePlatform, SceneObject, Scatter
   src/ui/              StoryInput, StageBar, AgentLog, StoryNote
-ARCHITECTURE.md        this file
+world-arch.md          this file
 ```
 
-Suggested stack: **server:** Node + TypeScript (Hono or Express), **web:** Vite + React + React Three Fiber + drei + @react-three/postprocessing, **shared:** zod. Use a pnpm workspace so `server` and `web` both import `shared`.
+Stack: **server:** Node + TypeScript + Hono, **web:** Next.js (App Router) + React Three Fiber + drei + @react-three/postprocessing, **shared:** zod. npm workspaces; `server` and `web` both import `@app/shared`.
 
 ## 6. Working in parallel
 
@@ -299,12 +308,12 @@ The key is `fixtures/jack.scene.json`. Once it exists, neither of us waits on th
 
 **Person B works against the fixture:**
 - `mock-server.ts` serves the same API as the real server and sends the fixture **piece by piece**: terrain, then environment, then each zone, then objects and scatters one at a time, about 300ms apart. The hero asset starts `pending` and flips to `ready` after ~5s. This covers smooth incremental updates, placeholders and asset swaps before the real backend exists.
-- Switching from mock to real server is a single env var: `VITE_API_URL`.
+- Switching from mock to real server is a single env var: `API_URL` in `web/.env.local` (mock on `:3001`, real server on `:8787`).
 
 **Person A works against the schema:**
 - "Done" for any pipeline change = the output passes `SceneSchema` + `validateSceneRefs`.
 - A can save any generated Scene to `fixtures/` and load it in B's renderer to see it, even before the event stream is wired up.
-- Keep a few test stories (`fixtures/stories/*.txt`): Jack and the Beanstalk, Little Red Riding Hood, The Three Little Pigs, and one long story to exercise stage 1.
+- Keep a few test drawings in `fixtures/drawings/`: a classic house-sun-tree, something with a floating/sky element, and at least one genuine unreadable scribble — that last one is what exercises the reading stage.
 
 ## 7. Timeline & merge checkpoints
 
@@ -314,12 +323,12 @@ Times are hackathon hours from kickoff. Adjust as needed.
 |---|---|---|---|
 | **H0–2** | **Together:** agree on `shared/contract.ts`, hand-write `jack.scene.json`, set up the workspace | | Contract frozen at `version: 1` |
 | H2–8 | Stage 2 brief + agent loop with tools; outputs valid Scenes to files | Renderer draws the fixture: terrain, environment, zones, library objects, scatter; post-processing on at tame settings | **CP1 (~H8):** A's output files render correctly in B's renderer |
-| H8–14 | HTTP API + event stream; stage 1; prompt tuning on test stories | Mock-server streaming, updating by ID, UI (input, stage bar, log) | **CP2 (~H14):** real end-to-end: type story → watch world build live |
-| H14–22 | Text-to-3D + skybox jobs, caching, fallbacks | Pending → ready swaps, skybox, camera fly-through, story notes | **CP3 (~H22):** generated hero models + sky appear live |
-| H22–30 | Prompt quality across all test stories, speed, error handling | Visual polish: tune bloom, lighting, fog, clouds, water, platforms; performance | **CP4:** full run on all test stories, bugs listed and assigned |
-| H30–end | **Together:** fix bugs, warm the asset cache for demo stories, rehearse demo, record a backup video | | Demo-ready |
+| H8–14 | HTTP API + event stream; drawing upload; prompt tuning on test drawings | Mock-server streaming, updating by ID, UI (upload, stage bar, log) | **CP2 (~H14):** real end-to-end: upload a drawing → watch world build live |
+| H14–22 | Skybox job, caching, fallbacks | Skybox swap, camera fly-through, story notes | **CP3 (~H22):** the generated sky appears live |
+| H22–30 | Prompt quality across all test drawings, speed, error handling | Visual polish: tune bloom, lighting, fog, clouds, water, platforms; performance | **CP4:** full run on all test drawings, bugs listed and assigned |
+| H30–end | **Together:** fix bugs, warm the asset cache for demo drawings, rehearse demo, record a backup video | | Demo-ready |
 
-**At each checkpoint:** both merge to `main`, run the full flow on at least two stories, then write down anything that doesn't fit the contract. Fix it by changing the contract (with review), not by working around it in one half.
+**At each checkpoint:** both merge to `main`, run the full flow on at least two drawings, then write down anything that doesn't fit the contract. Fix it by changing the contract (with review), not by working around it in one half.
 
 ## 8. Rules for changing the contract
 
@@ -332,9 +341,9 @@ Times are hackathon hours from kickoff. Adjust as needed.
 
 | Risk | Mitigation |
 |---|---|
-| Text-to-3D is slow or fails | Only 2–4 hero objects; library fallbacks; cache by prompt; pre-generate assets for demo stories |
-| Generated models are wrong size or orientation | B normalizes by bounding box; `size` is always target height |
-| Mixed art styles look bad | Low-poly library only; style keywords in every generation prompt |
+| The library has nothing like what the child drew | The closest model is used with a label and story note naming what it really is; keep the library broad, and keep `tags`/`description` accurate since matching runs on them |
+| Library models are wrong size or orientation | B normalizes by bounding box; `size` is always target height |
+| Mixed art styles look bad | Low-poly library only, and nothing is generated, so the style can't drift |
 | Post-processing and shadows tank the framerate | Half-res effect composer, shadow map ≤ 2048, instanced scatter; check 60fps on a full fixture before H22 |
 | LLM places things badly | Agent works in zones + relative positions; `snapToGround`; `describe_scene` for self-checking |
 | Agent sends invalid tool calls | zod validation after each call; errors returned as tool results; call cap |
@@ -343,9 +352,9 @@ Times are hackathon hours from kickoff. Adjust as needed.
 
 ## 10. Open questions
 
-- [ ] **Agent model:** which model runs the agent loop? It needs reliable tool calling. Hide it behind an interface so we can swap it.
-- [ ] **Models for stages 1 & 2:** which cheap and mid-tier models?
-- [ ] **Text-to-3D provider:** Meshy, Tripo or Rodin? Pick by speed, price, and whether they offer free hackathon credits.
-- [ ] **Skybox provider:** Blockade Labs Skybox AI, or generate an equirectangular image with an image model?
+- [x] **Agent model:** `gpt-6-astra` via the OpenAI Responses API, behind `server/src/llm/` (`complete`, `completeJson`, `callWithTools`). Swapping it is one line in `server/src/config.ts`.
+- [x] **Models for stages 1 & 2:** mid = `gpt-5.6-sol` for both reading the drawing (vision) and the world brief. `gpt-5.6-luna` stays configured as the `cheap` tier but nothing uses it since the compression stage is gone. Same config object.
+- [x] **Text-to-3D provider:** none. Worlds are built entirely from the curated library; the closest library model always wins. (Tripo was wired up and then removed — speed, cost and art-style consistency all favoured the library.)
+- [x] **Skybox provider:** OpenAI `gpt-image-2.5-flare` at 2048x1024 — one vendor and one key instead of two. If the seams show, switch to Blockade Labs; B's gradient sky is the fallback either way.
 - [ ] **Demo mode:** a fly-through to watch only, or a walkable world? Walkable adds collision and player controls, which falls to Person B.
 - [ ] **Sponsor APIs** we want to target for prizes.

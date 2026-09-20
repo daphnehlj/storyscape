@@ -1,0 +1,218 @@
+{
+  "version": 1,
+  "id": "jrH9B8_KaoU",
+  "title": "The Brown House and Green Pine",
+  "bounds": {
+    "size": 200,
+    "skyHeight": 120
+  },
+  "terrain": {
+    "biome": "grassland",
+    "heightVariation": 0.02,
+    "seed": 2147125103
+  },
+  "environment": {
+    "timeOfDay": "dusk",
+    "weather": "clear",
+    "fogDensity": 0.02,
+    "palette": [
+      "#A77D5C",
+      "#62BE70",
+      "#E2C49F"
+    ],
+    "skybox": {
+      "status": "ready",
+      "url": "/generated/2700464b3998cb68.jpg"
+    }
+  },
+  "zones": [
+    {
+      "id": "zone-1",
+      "name": "Little Brown Homestead",
+      "description": "An open grassy clearing on the left, with a steep-roofed home and a welcoming doorway facing the foreground; open lawn leads right toward the pine.",
+      "center": [
+        -54,
+        40
+      ],
+      "radius": 20,
+      "elevation": 0,
+      "storyNote": "The child drew the brown house and its small outlined door on the lower left."
+    },
+    {
+      "id": "zone-2",
+      "name": "Evergreen Edge",
+      "description": "A tall evergreen on the right overlooks an open grassy approach, with just a few young pines behind it.",
+      "center": [
+        10,
+        30
+      ],
+      "radius": 20,
+      "elevation": 0,
+      "storyNote": "The child drew a tall green pine to the right of the brown house."
+    }
+  ],
+  "objects": [
+    {
+      "id": "obj-3",
+      "assetId": "cottage",
+      "zoneId": "zone-1",
+      "position": [
+        -54,
+        0,
+        40
+      ],
+      "snapToGround": true,
+      "rotationY": 0,
+      "size": 7,
+      "label": "Tall-Peaked Brown House",
+      "storyNote": "The cottage represents the child's brown upright walls, tall triangular roof, long roof beam, and small door set low in the middle."
+    },
+    {
+      "id": "obj-4",
+      "assetId": "pine_tree",
+      "zoneId": "zone-2",
+      "position": [
+        10,
+        0,
+        30
+      ],
+      "snapToGround": true,
+      "rotationY": 0,
+      "size": 11,
+      "label": "Two-Tier Pine Tree",
+      "storyNote": "This tall evergreen recalls the child's two green triangular foliage tiers and long straight brown trunk."
+    },
+    {
+      "id": "obj-5",
+      "assetId": "fence",
+      "zoneId": "zone-1",
+      "position": [
+        -60,
+        0,
+        30
+      ],
+      "snapToGround": true,
+      "rotationY": 0,
+      "size": 1.1,
+      "label": "Back garden fence"
+    },
+    {
+      "id": "obj-6",
+      "assetId": "fence",
+      "zoneId": "zone-1",
+      "position": [
+        -56,
+        0,
+        30
+      ],
+      "snapToGround": true,
+      "rotationY": 0,
+      "size": 1.1,
+      "label": "Back garden fence"
+    },
+    {
+      "id": "obj-7",
+      "assetId": "fence",
+      "zoneId": "zone-1",
+      "position": [
+        -52,
+        0,
+        30
+      ],
+      "snapToGround": true,
+      "rotationY": 0,
+      "size": 1.1,
+      "label": "Back garden fence"
+    }
+  ],
+  "scatters": [
+    {
+      "id": "scatter-8",
+      "assetIds": [
+        "pine_tree"
+      ],
+      "zoneId": "zone-2",
+      "count": 3,
+      "seed": 2147133022,
+      "sizeRange": [
+        2.2,
+        3.5
+      ]
+    },
+    {
+      "id": "scatter-9",
+      "assetIds": [
+        "bush"
+      ],
+      "zoneId": "zone-1",
+      "count": 4,
+      "seed": 2147140941,
+      "sizeRange": [
+        0.45,
+        0.85
+      ]
+    },
+    {
+      "id": "scatter-10",
+      "assetIds": [
+        "bush"
+      ],
+      "zoneId": "zone-2",
+      "count": 3,
+      "seed": 2147148860,
+      "sizeRange": [
+        0.4,
+        0.75
+      ]
+    },
+    {
+      "id": "scatter-11",
+      "assetIds": [
+        "rock"
+      ],
+      "zoneId": "zone-1",
+      "count": 3,
+      "seed": 2147156779,
+      "sizeRange": [
+        0.2,
+        0.4
+      ]
+    },
+    {
+      "id": "scatter-12",
+      "assetIds": [
+        "rock"
+      ],
+      "zoneId": "zone-2",
+      "count": 3,
+      "seed": 2147164698,
+      "sizeRange": [
+        0.2,
+        0.45
+      ]
+    }
+  ],
+  "assets": {
+    "cottage": {
+      "id": "cottage",
+      "source": "library"
+    },
+    "pine_tree": {
+      "id": "pine_tree",
+      "source": "library"
+    },
+    "fence": {
+      "id": "fence",
+      "source": "library"
+    },
+    "bush": {
+      "id": "bush",
+      "source": "library"
+    },
+    "rock": {
+      "id": "rock",
+      "source": "library"
+    }
+  },
+  "sourceImageUrl": "/uploads/jrH9B8_KaoU.png"
+}

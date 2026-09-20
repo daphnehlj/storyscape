@@ -1,4 +1,22 @@
 {
-  "name": "storyscape",
-  "private": true
+  "name": "htn2026",
+  "private": true,
+  "workspaces": [
+    "shared",
+    "server",
+    "web"
+  ],
+  "scripts": {
+    "dev:web": "npm run dev -w web",
+    "dev:server": "npm run dev -w server",
+    "build": "npm run build --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "validate": "tsx fixtures/validate.ts",
+    "build-drawing": "npm run build-drawing -w server --",
+    "test": "node --test 'shared/*.test.ts' 'web/src/**/*.test.ts'"
+  },
+  "devDependencies": {
+    "typescript": "^7.0.2",
+    "tsx": "^4.23.13"
+  }
 }

@@ -1,16 +1,24 @@
 {
+  "extends": "../tsconfig.base.json",
   "compilerOptions": {
-    "target": "ES2022",
-    "lib": ["ES2022", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "jsx": "react-jsx",
-    "strict": true,
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
     "noEmit": true,
-    "skipLibCheck": true,
-    "isolatedModules": true,
-    "resolveJsonModule": true,
-    "types": ["vite/client"]
+    "allowImportingTsExtensions": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [{ "name": "next" }],
+    "paths": { "@/*": ["./src/*"] }
   },
-  "include": ["src"]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": [
+    "node_modules",
+    "vite.config.ts",
+    "src/App.tsx",
+    "src/main.tsx",
+    "src/ui/DrawingDialog.tsx",
+    "src/ui/InteractiveBook.tsx",
+    "src/ui/ProgressiveBackdrop.tsx",
+    "src/ui/StoryInput.tsx"
+  ]
 }

@@ -1,0 +1,178 @@
+.root {
+  position: fixed;
+  inset: 0;
+  background: #0d1218;
+  font-family: ui-rounded, 'SF Pro Rounded', 'Nunito', system-ui, sans-serif;
+}
+
+.waiting {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  color: #93a1b4;
+}
+
+/* The canvas owns the page; panels float over it and let clicks through. */
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px;
+  pointer-events: none;
+}
+
+.card {
+  pointer-events: auto;
+  max-width: 340px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: rgba(16, 22, 30, 0.72);
+  backdrop-filter: blur(10px);
+  color: #e8edf4;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+.logCard {
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100dvh - 28px);
+}
+
+.logCard:has(.chevron) {
+  padding: 12px 16px;
+}
+
+.title {
+  margin: 0 0 10px;
+  font-size: 19px;
+}
+
+.stages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stage {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #8e9bad;
+  font-size: 12px;
+}
+
+.stageActive {
+  background: #4a7fd4;
+  color: #fff;
+}
+
+.stageDone {
+  background: rgba(74, 127, 212, 0.28);
+  color: #bcd4f5;
+}
+
+.counts {
+  margin: 10px 0 0;
+  color: #9aa7ba;
+  font-size: 13px;
+}
+
+.heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #8e9bad;
+  cursor: pointer;
+}
+
+.heading:hover {
+  color: #cbd6e4;
+}
+
+/* Points down when the log is open, right when it's tucked away. */
+.chevron,
+.chevronOpen {
+  font-size: 14px;
+  line-height: 1;
+  transition: transform 120ms ease;
+}
+
+.chevron {
+  transform: rotate(-90deg);
+}
+
+.chevronOpen {
+  transform: translateY(-2px);
+}
+
+.log {
+  flex: 1;
+  min-height: 0;
+  margin: 8px 0 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: #cbd6e4;
+}
+
+.logLine {
+  padding: 3px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.drawing {
+  width: 100%;
+  margin-top: 10px;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.note {
+  position: absolute;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  max-width: min(560px, calc(100vw - 32px));
+  padding: 12px 18px;
+  border: 0;
+  border-radius: 14px;
+  background: rgba(16, 22, 30, 0.85);
+  color: #e8edf4;
+  font: inherit;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.error {
+  position: absolute;
+  left: 50%;
+  top: 14px;
+  transform: translateX(-50%);
+  margin: 0;
+  padding: 10px 16px;
+  border-radius: 12px;
+  background: #b3382f;
+  color: #fff;
+  font-size: 13px;
+}
