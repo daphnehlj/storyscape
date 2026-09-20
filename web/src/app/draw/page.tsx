@@ -1,27 +1,44 @@
 'use client';
 
+import { useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Whiteboard from '@/ui/whiteboard/Whiteboard';
 import type { BoardExport } from '@/ui/whiteboard/types';
-
-function download(blob: Blob, filename: string): void {
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = filename;
-  link.click();
-  URL.revokeObjectURL(url);
-}
+import { createWorld } from '@/api/worlds';
+import styles from './draw.module.css';
 
 /**
- * Nothing is wired to the server yet, so "Done" downloads both halves of the
- * handoff — this is the seam the drawing → 3D stage plugs into.
+ * "Done" sends the board's PNG to the server and follows the world it becomes.
+ * Only the image crosses the wire — the pipeline reads the picture, so the board
+ * JSON stays here.
  */
 export default function DrawPage() {
-  const handleSubmit = ({ png, json }: BoardExport): void => {
-    const stamp = new Date().toISOString().replace(/[:.]/g, '-');
-    download(png, `drawing-${stamp}.png`);
-    download(new Blob([JSON.stringify(json, null, 2)], { type: 'application/json' }), `drawing-${stamp}.json`);
+  const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
+  // One drawing must not become two worlds if Done is tapped twice.
+  const uploading = useRef(false);
+
+  const handleSubmit = async ({ png }: BoardExport): Promise<void> => {
+    if (uploading.current) return;
+    uploading.current = true;
+    setError(null);
+    try {
+      const worldId = await createWorld(png);
+      router.push(`/world/${worldId}`);
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : String(cause));
+      uploading.current = false;
+    }
   };
 
-  return <Whiteboard onSubmit={handleSubmit} />;
+  return (
+    <>
+      <Whiteboard onSubmit={handleSubmit} />
+      {error ? (
+        <p role="alert" className={styles.error}>
+          {error}
+        </p>
+      ) : null}
+    </>
+  );
 }

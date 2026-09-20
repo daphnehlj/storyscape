@@ -1,0 +1,14 @@
+/* Sits above the board so a failed upload is visible without moving the drawing. */
+.error {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  margin: 0;
+  padding: 12px 18px;
+  border-radius: 14px;
+  background: #b3382f;
+  color: #fff;
+  font-family: ui-rounded, 'SF Pro Rounded', 'Nunito', system-ui, sans-serif;
+  box-shadow: 0 10px 30px rgba(35, 45, 70, 0.24);
+}

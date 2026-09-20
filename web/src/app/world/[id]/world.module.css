@@ -1,0 +1,113 @@
+.root {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
+  gap: 16px;
+  height: 100dvh;
+  padding: 16px;
+  box-sizing: border-box;
+  background: #eaeef5;
+  font-family: ui-rounded, 'SF Pro Rounded', 'Nunito', system-ui, sans-serif;
+  color: #303844;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding: 18px;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 10px 30px rgba(35, 45, 70, 0.14);
+}
+
+.title {
+  margin: 0 0 4px;
+  font-size: 22px;
+}
+
+.counts {
+  margin: 0;
+  color: #6a7487;
+  font-size: 14px;
+}
+
+.stages {
+  display: flex;
+  gap: 8px;
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+  flex-wrap: wrap;
+}
+
+.stage {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: #eef1f7;
+  color: #8b93a3;
+  font-size: 13px;
+}
+
+.stageActive {
+  background: #4a7fd4;
+  color: #fff;
+}
+
+.stageDone {
+  background: #d7e5f8;
+  color: #3a5f9e;
+}
+
+/* Where B's <WorldCanvas scene={scene} /> goes once the renderer lands. */
+.viewport {
+  flex: 1;
+  min-height: 0;
+  margin-top: 14px;
+  display: grid;
+  place-items: center;
+  border-radius: 16px;
+  background: #f5f7fb;
+  color: #8b93a3;
+  text-align: center;
+}
+
+.drawing {
+  max-width: 100%;
+  max-height: 260px;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.log {
+  flex: 1;
+  min-height: 0;
+  margin: 12px 0 0;
+  padding: 0 0 0 4px;
+  overflow-y: auto;
+  list-style: none;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #4a5465;
+}
+
+.logLine {
+  padding: 3px 0;
+  border-bottom: 1px solid #f0f2f7;
+}
+
+.error {
+  margin: 10px 0 0;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #fbe9e7;
+  color: #a3342b;
+  font-size: 13px;
+}
+
+.heading {
+  margin: 0;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #8b93a3;
+}
