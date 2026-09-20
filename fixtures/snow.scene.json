@@ -1,0 +1,252 @@
+{
+  "version": 1,
+  "id": "snow",
+  "title": "The Long Winter",
+  "bounds": {
+    "size": 220,
+    "skyHeight": 100
+  },
+  "terrain": {
+    "biome": "snow",
+    "heightVariation": 0.5,
+    "seed": 12
+  },
+  "environment": {
+    "timeOfDay": "dusk",
+    "weather": "snow",
+    "fogDensity": 0.35,
+    "palette": [
+      "#e6d3e8",
+      "#eef3f8",
+      "#8fa3d6"
+    ]
+  },
+  "zones": [
+    {
+      "id": "z_village",
+      "name": "Snowbound village",
+      "description": "three cottages and a fenced yard under deep snow",
+      "center": [
+        10,
+        35
+      ],
+      "radius": 38,
+      "elevation": 0,
+      "storyNote": "The village has been snowed in for forty days. The children are bored of soup."
+    },
+    {
+      "id": "z_forest",
+      "name": "Silent pines",
+      "description": "a dense pine wood on the hill behind the village",
+      "center": [
+        -55,
+        -45
+      ],
+      "radius": 40,
+      "elevation": 0,
+      "storyNote": "Nobody goes into the pines after dark. Something hums in there."
+    }
+  ],
+  "objects": [
+    {
+      "id": "o_house_1",
+      "assetId": "cottage",
+      "zoneId": "z_village",
+      "position": [
+        0,
+        0,
+        30
+      ],
+      "snapToGround": true,
+      "rotationY": 15,
+      "size": 6,
+      "label": "Mara's house",
+      "storyNote": "Mara lives here with her grandmother and a very old cat."
+    },
+    {
+      "id": "o_house_2",
+      "assetId": "cottage",
+      "zoneId": "z_village",
+      "position": [
+        22,
+        0,
+        45
+      ],
+      "snapToGround": true,
+      "rotationY": -40,
+      "size": 5.5
+    },
+    {
+      "id": "o_house_3",
+      "assetId": "cottage",
+      "zoneId": "z_village",
+      "position": [
+        -14,
+        0,
+        50
+      ],
+      "snapToGround": true,
+      "rotationY": 70,
+      "size": 5
+    },
+    {
+      "id": "o_fence_1",
+      "assetId": "fence",
+      "zoneId": "z_village",
+      "position": [
+        6,
+        0,
+        40
+      ],
+      "snapToGround": true,
+      "rotationY": 0,
+      "size": 1.2
+    },
+    {
+      "id": "o_fence_2",
+      "assetId": "fence",
+      "zoneId": "z_village",
+      "position": [
+        9.5,
+        0,
+        40
+      ],
+      "snapToGround": true,
+      "rotationY": 0,
+      "size": 1.2
+    },
+    {
+      "id": "o_fence_3",
+      "assetId": "fence",
+      "zoneId": "z_village",
+      "position": [
+        13,
+        0,
+        40
+      ],
+      "snapToGround": true,
+      "rotationY": 0,
+      "size": 1.2
+    },
+    {
+      "id": "o_hay",
+      "assetId": "hay_bale",
+      "zoneId": "z_village",
+      "position": [
+        16,
+        0,
+        36
+      ],
+      "snapToGround": true,
+      "rotationY": 20,
+      "size": 1.2
+    },
+    {
+      "id": "o_cow",
+      "assetId": "cow",
+      "zoneId": "z_village",
+      "position": [
+        11,
+        0,
+        44
+      ],
+      "snapToGround": true,
+      "rotationY": 160,
+      "size": 1.6,
+      "label": "Bell",
+      "storyNote": "The only cow left. She refuses to go outside."
+    }
+  ],
+  "scatters": [
+    {
+      "id": "s_pines",
+      "assetIds": [
+        "pine_tree",
+        "pine_tree",
+        "pine_tree",
+        "oak_tree"
+      ],
+      "zoneId": "z_forest",
+      "count": 60,
+      "seed": 31,
+      "sizeRange": [
+        8,
+        14
+      ]
+    },
+    {
+      "id": "s_forest_rocks",
+      "assetIds": [
+        "rock"
+      ],
+      "zoneId": "z_forest",
+      "count": 14,
+      "seed": 32,
+      "sizeRange": [
+        1,
+        2.5
+      ]
+    },
+    {
+      "id": "s_village_trees",
+      "assetIds": [
+        "pine_tree"
+      ],
+      "zoneId": "z_village",
+      "count": 9,
+      "seed": 33,
+      "sizeRange": [
+        6,
+        10
+      ]
+    },
+    {
+      "id": "s_village_bushes",
+      "assetIds": [
+        "bush",
+        "rock"
+      ],
+      "zoneId": "z_village",
+      "count": 16,
+      "seed": 34,
+      "sizeRange": [
+        0.8,
+        1.6
+      ]
+    }
+  ],
+  "assets": {
+    "cottage": {
+      "id": "cottage",
+      "source": "library"
+    },
+    "fence": {
+      "id": "fence",
+      "source": "library"
+    },
+    "hay_bale": {
+      "id": "hay_bale",
+      "source": "library"
+    },
+    "cow": {
+      "id": "cow",
+      "source": "library"
+    },
+    "pine_tree": {
+      "id": "pine_tree",
+      "source": "library"
+    },
+    "oak_tree": {
+      "id": "oak_tree",
+      "source": "library"
+    },
+    "rock": {
+      "id": "rock",
+      "source": "library"
+    },
+    "bush": {
+      "id": "bush",
+      "source": "library"
+    }
+  }
+}
