@@ -1,0 +1,259 @@
+.root {
+  --tool-size: 56px;
+  --swatch-size: 44px;
+  --bar-gap: 10px;
+  --bar-inset: 28px;
+  /* How much of the bar still pokes out once it's tucked away. */
+  --sliver: 34px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100dvh;
+  padding: 16px;
+  box-sizing: border-box;
+  background: #eaeef5;
+  overflow: hidden;
+  overscroll-behavior: none;
+  font-family: ui-rounded, 'SF Pro Rounded', 'Nunito', system-ui, sans-serif;
+  color: #303844;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #ffffff;
+  box-shadow: 0 10px 30px rgba(35, 45, 70, 0.14);
+  touch-action: none;
+  cursor: crosshair;
+}
+
+.canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.topBar {
+  position: absolute;
+  top: var(--bar-inset);
+  right: var(--bar-inset);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 2;
+}
+
+.bottomBar {
+  position: absolute;
+  left: 50%;
+  bottom: var(--bar-inset);
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  max-width: calc(100% - 2 * var(--bar-inset));
+  border-radius: 28px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 8px 26px rgba(35, 45, 70, 0.18);
+  z-index: 2;
+  transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* Drop the bar clear of the bottom edge so nothing but the handle is left. It
+   has to travel the full inset too, otherwise the top row of controls still
+   pokes out below the handle. Squaring the bottom corners makes the leftover
+   sliver read as a tab pulled up from the edge rather than a clipped pill. */
+.bottomBar.collapsed {
+  transform: translate(-50%, calc(100% + var(--bar-inset) - var(--sliver)));
+  border-radius: 28px 28px 0 0;
+}
+
+.handle {
+  display: grid;
+  place-items: center;
+  flex: none;
+  height: var(--sliver);
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #9aa4b4;
+  cursor: pointer;
+}
+
+.handle:hover {
+  color: #5d6a7d;
+}
+
+.handleIcon {
+  display: block;
+  width: 26px;
+  height: 26px;
+  transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.collapsed .handleIcon {
+  transform: rotate(180deg);
+}
+
+.barBody {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--bar-gap);
+  padding: 2px 14px 12px;
+}
+
+.group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.divider {
+  width: 1px;
+  align-self: stretch;
+  margin: 4px 4px;
+  background: #dfe4ec;
+}
+
+.button {
+  display: grid;
+  place-items: center;
+  width: var(--tool-size);
+  height: var(--tool-size);
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 16px;
+  background: #f2f5fa;
+  color: #3c4656;
+  cursor: pointer;
+  transition: transform 0.08s ease, background 0.12s ease;
+}
+
+.button > span {
+  display: block;
+  width: 58%;
+  height: 58%;
+}
+
+.button:hover:not(:disabled) {
+  background: #e6ecf6;
+}
+
+.button:active:not(:disabled) {
+  transform: scale(0.93);
+}
+
+.button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.button.active {
+  background: #2f6dd0;
+  border-color: #2f6dd0;
+  color: #ffffff;
+}
+
+.swatch {
+  width: var(--swatch-size);
+  height: var(--swatch-size);
+  padding: 0;
+  border: 3px solid #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(48, 56, 68, 0.18);
+  cursor: pointer;
+  transition: transform 0.08s ease;
+}
+
+.swatch:active {
+  transform: scale(0.9);
+}
+
+.swatch.active {
+  box-shadow: 0 0 0 3px #2f6dd0;
+}
+
+.sizeButton {
+  display: grid;
+  place-items: center;
+  width: var(--tool-size);
+  height: var(--tool-size);
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 16px;
+  background: #f2f5fa;
+  cursor: pointer;
+}
+
+.sizeButton.active {
+  border-color: #2f6dd0;
+  background: #ffffff;
+}
+
+.sizeDot {
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.done {
+  height: var(--tool-size);
+  padding: 0 22px;
+  border: none;
+  border-radius: 999px;
+  background: #2fab6a;
+  color: #ffffff;
+  font: inherit;
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.done:active {
+  transform: scale(0.96);
+}
+
+.done:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* Phones and small tablets: the same bar, scaled so every control still fits. */
+@media (max-width: 720px) {
+  .root {
+    --tool-size: 44px;
+    --swatch-size: 32px;
+    --bar-gap: 6px;
+    --bar-inset: 12px;
+    padding: 10px;
+  }
+
+  /* Shrink-to-fit makes the pill far narrower than the screen and stacks the
+     controls into a tall column; take the full width and wrap into fewer rows. */
+  .bottomBar {
+    width: calc(100% - 2 * var(--bar-inset));
+    box-sizing: border-box;
+    border-radius: 24px;
+  }
+
+  .button {
+    border-radius: 13px;
+  }
+
+  .done {
+    padding: 0 16px;
+    font-size: 15px;
+  }
+}
