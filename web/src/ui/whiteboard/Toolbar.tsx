@@ -2,6 +2,7 @@
 
 import type { ReactElement } from 'react';
 import {
+  ChevronIcon,
   EllipseIcon,
   EraserIcon,
   FillIcon,
@@ -42,6 +43,8 @@ export type ToolbarProps = {
   canUndo: boolean;
   canRedo: boolean;
   canExport: boolean;
+  collapsed: boolean;
+  onToggleCollapsed: () => void;
   onToolChange: (tool: ToolId) => void;
   onColorChange: (colorId: string) => void;
   onSizeChange: (sizeId: string) => void;
@@ -53,6 +56,7 @@ export type ToolbarProps = {
 
 export default function Toolbar(props: ToolbarProps): ReactElement {
   const activeColor = PALETTE.find((c) => c.id === props.colorId) ?? PALETTE[0];
+  const handleLabel = props.collapsed ? 'Show the crayons' : 'Hide the crayons';
 
   return (
     <>
@@ -93,67 +97,88 @@ export default function Toolbar(props: ToolbarProps): ReactElement {
             <TrashIcon />
           </span>
         </button>
-        <button type="button" className={styles.done} onClick={props.onDone} disabled={!props.canExport}>
+        <button
+          type="button"
+          className={styles.done}
+          onClick={props.onDone}
+          disabled={!props.canExport}
+        >
           Done
         </button>
       </div>
 
-      <div className={styles.bottomBar}>
-        <div className={styles.group}>
-          {TOOLS.map(({ id, name, Icon }) => (
-            <button
-              key={id}
-              type="button"
-              className={cx(styles.button, props.tool === id && styles.active)}
-              onClick={() => props.onToolChange(id)}
-              aria-label={name}
-              aria-pressed={props.tool === id}
-              title={name}
-            >
-              <span>
-                <Icon />
-              </span>
-            </button>
-          ))}
-        </div>
+      <div className={cx(styles.bottomBar, props.collapsed && styles.collapsed)}>
+        <button
+          type="button"
+          className={styles.handle}
+          onClick={props.onToggleCollapsed}
+          aria-expanded={!props.collapsed}
+          aria-label={handleLabel}
+          title={handleLabel}
+        >
+          <span className={styles.handleIcon}>
+            <ChevronIcon />
+          </span>
+        </button>
 
-        <div className={styles.divider} />
+        {/* inert so the tucked-away controls drop out of tab order */}
+        <div className={styles.barBody} inert={props.collapsed}>
+          <div className={styles.group}>
+            {TOOLS.map(({ id, name, Icon }) => (
+              <button
+                key={id}
+                type="button"
+                className={cx(styles.button, props.tool === id && styles.active)}
+                onClick={() => props.onToolChange(id)}
+                aria-label={name}
+                aria-pressed={props.tool === id}
+                title={name}
+              >
+                <span>
+                  <Icon />
+                </span>
+              </button>
+            ))}
+          </div>
 
-        <div className={styles.group}>
-          {PALETTE.map((color) => (
-            <button
-              key={color.id}
-              type="button"
-              className={cx(styles.swatch, props.colorId === color.id && styles.active)}
-              style={{ background: color.hex }}
-              onClick={() => props.onColorChange(color.id)}
-              aria-label={color.name}
-              aria-pressed={props.colorId === color.id}
-              title={color.name}
-            />
-          ))}
-        </div>
+          <div className={styles.divider} />
 
-        <div className={styles.divider} />
-
-        <div className={styles.group}>
-          {BRUSH_SIZES.map((brush) => (
-            <button
-              key={brush.id}
-              type="button"
-              className={cx(styles.sizeButton, props.sizeId === brush.id && styles.active)}
-              onClick={() => props.onSizeChange(brush.id)}
-              aria-label={brush.name}
-              aria-pressed={props.sizeId === brush.id}
-              title={brush.name}
-              style={{ color: activeColor.hex }}
-            >
-              <span
-                className={styles.sizeDot}
-                style={{ width: dotPx(brush.size), height: dotPx(brush.size) }}
+          <div className={styles.group}>
+            {PALETTE.map((color) => (
+              <button
+                key={color.id}
+                type="button"
+                className={cx(styles.swatch, props.colorId === color.id && styles.active)}
+                style={{ background: color.hex }}
+                onClick={() => props.onColorChange(color.id)}
+                aria-label={color.name}
+                aria-pressed={props.colorId === color.id}
+                title={color.name}
               />
-            </button>
-          ))}
+            ))}
+          </div>
+
+          <div className={styles.divider} />
+
+          <div className={styles.group}>
+            {BRUSH_SIZES.map((brush) => (
+              <button
+                key={brush.id}
+                type="button"
+                className={cx(styles.sizeButton, props.sizeId === brush.id && styles.active)}
+                onClick={() => props.onSizeChange(brush.id)}
+                aria-label={brush.name}
+                aria-pressed={props.sizeId === brush.id}
+                title={brush.name}
+                style={{ color: activeColor.hex }}
+              >
+                <span
+                  className={styles.sizeDot}
+                  style={{ width: dotPx(brush.size), height: dotPx(brush.size) }}
+                />
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </>

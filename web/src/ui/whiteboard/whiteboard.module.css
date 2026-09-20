@@ -3,6 +3,8 @@
   --swatch-size: 44px;
   --bar-gap: 10px;
   --bar-inset: 28px;
+  /* How much of the bar still pokes out once it's tucked away. */
+  --sliver: 34px;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -11,6 +13,7 @@
   padding: 16px;
   box-sizing: border-box;
   background: #eaeef5;
+  overflow: hidden;
   overscroll-behavior: none;
   font-family: ui-rounded, 'SF Pro Rounded', 'Nunito', system-ui, sans-serif;
   color: #303844;
@@ -54,16 +57,60 @@
   bottom: var(--bar-inset);
   transform: translateX(-50%);
   display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  max-width: calc(100% - 2 * var(--bar-inset));
+  border-radius: 28px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 8px 26px rgba(35, 45, 70, 0.18);
+  z-index: 2;
+  transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* Drop the bar clear of the bottom edge so nothing but the handle is left. It
+   has to travel the full inset too, otherwise the top row of controls still
+   pokes out below the handle. Squaring the bottom corners makes the leftover
+   sliver read as a tab pulled up from the edge rather than a clipped pill. */
+.bottomBar.collapsed {
+  transform: translate(-50%, calc(100% + var(--bar-inset) - var(--sliver)));
+  border-radius: 28px 28px 0 0;
+}
+
+.handle {
+  display: grid;
+  place-items: center;
+  flex: none;
+  height: var(--sliver);
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #9aa4b4;
+  cursor: pointer;
+}
+
+.handle:hover {
+  color: #5d6a7d;
+}
+
+.handleIcon {
+  display: block;
+  width: 26px;
+  height: 26px;
+  transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.collapsed .handleIcon {
+  transform: rotate(180deg);
+}
+
+.barBody {
+  display: flex;
   align-items: center;
   flex-wrap: wrap;
   justify-content: center;
   gap: var(--bar-gap);
-  max-width: calc(100% - 2 * var(--bar-inset));
-  padding: 10px 14px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.96);
-  box-shadow: 0 8px 26px rgba(35, 45, 70, 0.18);
-  z-index: 2;
+  padding: 2px 14px 12px;
 }
 
 .group {
@@ -198,7 +245,7 @@
   .bottomBar {
     width: calc(100% - 2 * var(--bar-inset));
     box-sizing: border-box;
-    border-radius: 26px;
+    border-radius: 24px;
   }
 
   .button {

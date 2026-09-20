@@ -64,6 +64,7 @@ export default function Whiteboard({ onSubmit }: WhiteboardProps): ReactElement 
   const [tool, setTool] = useState<ToolId>(DEFAULTS.toolId);
   const [colorId, setColorId] = useState<string>(DEFAULTS.colorId);
   const [sizeId, setSizeId] = useState<string>(DEFAULTS.sizeId);
+  const [toolsCollapsed, setToolsCollapsed] = useState(false);
 
   const board = useBoard();
   const { state, addMark, undo, redo, clear } = board;
@@ -335,6 +336,8 @@ export default function Whiteboard({ onSubmit }: WhiteboardProps): ReactElement 
         onToolChange={setTool}
         onColorChange={setColorId}
         onSizeChange={setSizeId}
+        collapsed={toolsCollapsed}
+        onToggleCollapsed={() => setToolsCollapsed((open) => !open)}
         onUndo={undo}
         onRedo={redo}
         onClear={handleClear}

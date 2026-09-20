@@ -73,3 +73,5 @@ export const TrashIcon = () =>
       <path d="M6.5 6.5 7.4 19a1.5 1.5 0 0 0 1.5 1.4h6.2a1.5 1.5 0 0 0 1.5-1.4l.9-12.5" />
     </>,
   );
+
+export const ChevronIcon = () => svg(<path d="m6 9.5 6 6 6-6" />);
