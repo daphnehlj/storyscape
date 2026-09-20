@@ -68,7 +68,7 @@ export default function StoryInput() {
     <main className="story-input-viewport">
       <ProgressiveBackdrop />
       <section className="story-input__form" aria-labelledby="story-heading">
-        <h1 className="story-input__prompt" id="story-heading">Breathe your imagination to life</h1>
+        <h1 className="story-input__prompt" id="story-heading">Breathe your imagination to life.</h1>
         <div className="story-input__actions">
           <input ref={uploadInputRef} hidden type="file" accept="image/png,image/jpeg,image/webp" aria-label="Choose a drawing" disabled={opening}
             onChange={(event) => {

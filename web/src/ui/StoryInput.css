@@ -13,8 +13,8 @@
 }
 
 .story-input__backdrop { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
-.story-input__form { position: absolute; top: clamp(220px, 30svh, 360px); left: 0; right: 0; z-index: 5; width: min(1280px, calc(100% - 112px)); margin-inline: auto; }
-.story-input__prompt { margin: 0; font-size: 24px; font-weight: 400; line-height: normal; color: white; text-wrap: balance; }
+.story-input__form { position: absolute; top: clamp(180px, 24svh, 280px); left: 0; right: 0; z-index: 5; width: min(1280px, calc(100% - 112px)); margin-inline: auto; }
+.story-input__prompt { margin: 0; font-size: 24px; font-weight: 350; line-height: normal; color: white; text-wrap: balance; }
 .story-input__actions { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 24px; }
 .story-input__action {
   display: inline-flex;
@@ -41,7 +41,7 @@
 .story-input__error { font-size: 14px; line-height: 1.5; color: #69271f; margin: 16px 0 0; }
 
 /* Only the illustration scales. Controls retain readable, predictable sizes. */
-.book-gallery { --art-scale: 1; position: absolute; right: 0; bottom: -180px; left: 0; width: min(1600px, 100%); aspect-ratio: 1440 / 800; margin: 0 auto; }
+.book-gallery { --art-scale: 1; position: absolute; right: 0; bottom: -230px; left: 0; width: min(1600px, 100%); aspect-ratio: 1440 / 800; margin: 0 auto; }
 .book-gallery__frame { position: absolute; inset: 0 auto auto 0; width: 1440px; height: 800px; transform: scale(var(--art-scale)); transform-origin: top left; }
 .storybook { position: absolute; width: 812px; height: 769.755px; pointer-events: none; z-index: 1; }
 .storybook--family { left: -48px; top: 27px; }
