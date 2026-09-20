@@ -1,25 +1,118 @@
 [
-  { "id": "oak_tree", "file": "oak_tree.glb", "tags": ["tree", "forest", "nature"], "defaultSize": 8, "description": "large leafy oak tree" },
-  { "id": "pine_tree", "file": "pine_tree.glb", "tags": ["tree", "forest", "snow", "nature"], "defaultSize": 10, "description": "tall conifer pine tree" },
-  { "id": "dead_tree", "file": "dead_tree.glb", "tags": ["tree", "spooky", "swamp"], "defaultSize": 6, "description": "bare twisted leafless tree" },
-  { "id": "palm_tree", "file": "palm_tree.glb", "tags": ["tree", "beach", "desert"], "defaultSize": 7, "description": "tropical palm tree" },
-  { "id": "bush", "file": "bush.glb", "tags": ["bush", "plant", "nature"], "defaultSize": 1.2, "description": "round leafy bush" },
-  { "id": "rock_small", "file": "rock_small.glb", "tags": ["rock", "stone", "nature"], "defaultSize": 0.6, "description": "small grey rock" },
-  { "id": "rock_large", "file": "rock_large.glb", "tags": ["rock", "stone", "cliff", "nature"], "defaultSize": 4, "description": "large boulder" },
-  { "id": "cottage", "file": "cottage.glb", "tags": ["house", "building", "village", "farm"], "defaultSize": 6, "description": "small thatched-roof cottage" },
-  { "id": "house", "file": "house.glb", "tags": ["house", "building", "village", "town"], "defaultSize": 8, "description": "two-storey timber village house" },
-  { "id": "castle", "file": "castle.glb", "tags": ["castle", "building", "royal", "stone"], "defaultSize": 25, "description": "stone castle with towers" },
-  { "id": "tower", "file": "tower.glb", "tags": ["tower", "building", "stone"], "defaultSize": 15, "description": "tall round stone tower" },
-  { "id": "barn", "file": "barn.glb", "tags": ["barn", "building", "farm"], "defaultSize": 7, "description": "red wooden barn" },
-  { "id": "fence", "file": "fence.glb", "tags": ["fence", "farm", "wood"], "defaultSize": 1.2, "description": "wooden fence section" },
-  { "id": "well", "file": "well.glb", "tags": ["well", "village", "farm", "stone"], "defaultSize": 2.5, "description": "stone water well with roof" },
-  { "id": "bridge", "file": "bridge.glb", "tags": ["bridge", "wood", "river"], "defaultSize": 3, "description": "small wooden footbridge" },
-  { "id": "cow", "file": "cow.glb", "tags": ["animal", "farm", "cow"], "defaultSize": 1.5, "description": "black and white cow" },
-  { "id": "sheep", "file": "sheep.glb", "tags": ["animal", "farm", "sheep"], "defaultSize": 1, "description": "fluffy white sheep" },
-  { "id": "hay_bale", "file": "hay_bale.glb", "tags": ["farm", "hay"], "defaultSize": 1.2, "description": "round hay bale" },
-  { "id": "cart", "file": "cart.glb", "tags": ["cart", "wood", "farm", "village"], "defaultSize": 1.8, "description": "wooden hand cart" },
-  { "id": "boat", "file": "boat.glb", "tags": ["boat", "water", "beach"], "defaultSize": 2, "description": "small wooden rowing boat" },
-  { "id": "cloud_puff", "file": "cloud_puff.glb", "tags": ["cloud", "sky"], "defaultSize": 6, "description": "soft low-poly cloud puff" },
-  { "id": "mushroom", "file": "mushroom.glb", "tags": ["mushroom", "forest", "fairy"], "defaultSize": 0.5, "description": "red-capped toadstool" },
-  { "id": "villager", "file": "villager.glb", "tags": ["character", "person", "village"], "defaultSize": 1.7, "description": "simple villager figure" }
+  {
+    "id": "oak_tree",
+    "tags": [
+      "tree",
+      "forest",
+      "nature"
+    ],
+    "defaultSize": 8,
+    "description": "large leafy oak tree",
+    "file": "oak_tree.glb"
+  },
+  {
+    "id": "pine_tree",
+    "tags": [
+      "tree",
+      "forest",
+      "nature"
+    ],
+    "defaultSize": 10,
+    "description": "tall conifer pine tree",
+    "file": "pine_tree.glb"
+  },
+  {
+    "id": "bush",
+    "tags": [
+      "bush",
+      "nature"
+    ],
+    "defaultSize": 1.5,
+    "description": "round green bush",
+    "file": "bush.glb"
+  },
+  {
+    "id": "rock",
+    "tags": [
+      "rock",
+      "nature"
+    ],
+    "defaultSize": 1,
+    "description": "grey boulder",
+    "file": "rock.glb"
+  },
+  {
+    "id": "cloud_puff",
+    "tags": [
+      "sky",
+      "cloud",
+      "nature"
+    ],
+    "defaultSize": 5,
+    "description": "fluffy low-poly cloud",
+    "file": "cloud_puff.glb"
+  },
+  {
+    "id": "beanstalk",
+    "file": "beanstalk.glb",
+    "tags": [
+      "plant",
+      "fantasy",
+      "giant"
+    ],
+    "defaultSize": 60,
+    "description": "enormous twisting green beanstalk with big leaves, reaching the sky"
+  },
+  {
+    "id": "cottage",
+    "file": "cottage.glb",
+    "tags": [
+      "building",
+      "house",
+      "farm"
+    ],
+    "defaultSize": 6,
+    "description": "small cottage with a red tile roof"
+  },
+  {
+    "id": "fence",
+    "file": "fence.glb",
+    "tags": [
+      "farm",
+      "prop"
+    ],
+    "defaultSize": 1.2,
+    "description": "wooden fence segment"
+  },
+  {
+    "id": "cow",
+    "file": "cow.glb",
+    "tags": [
+      "animal",
+      "farm"
+    ],
+    "defaultSize": 1.5,
+    "description": "black and white farm cow"
+  },
+  {
+    "id": "hay_bale",
+    "file": "hay_bale.glb",
+    "tags": [
+      "farm",
+      "prop"
+    ],
+    "defaultSize": 1.2,
+    "description": "bundle of hay"
+  },
+  {
+    "id": "castle",
+    "file": "castle.glb",
+    "tags": [
+      "building",
+      "castle",
+      "fantasy"
+    ],
+    "defaultSize": 25,
+    "description": "stone castle with towers and a keep"
+  }
 ]

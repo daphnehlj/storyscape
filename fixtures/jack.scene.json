@@ -2,39 +2,464 @@
   "version": 1,
   "id": "jack",
   "title": "Jack and the Beanstalk",
-  "bounds": { "size": 200, "skyHeight": 120 },
-  "terrain": { "biome": "grassland", "heightVariation": 0.25, "seed": 1337 },
+  "bounds": {
+    "size": 200,
+    "skyHeight": 110
+  },
+  "terrain": {
+    "biome": "grassland",
+    "heightVariation": 0.3,
+    "seed": 3,
+    "water": {
+      "level": -3
+    }
+  },
   "environment": {
-    "timeOfDay": "dawn",
+    "timeOfDay": "day",
     "weather": "clear",
-    "fogDensity": 0.3,
-    "palette": ["#7a9a4a", "#d4a73c", "#c9d6e8", "#e8b89a"],
-    "skybox": { "status": "pending" }
+    "fogDensity": 0.25,
+    "palette": [
+      "#d6ecff",
+      "#8ed072",
+      "#6ea8f5"
+    ],
+    "skybox": {
+      "status": "pending"
+    }
   },
   "zones": [
-    { "id": "zone-1", "name": "Jack's farm", "description": "poor cottage, dry field, broken fence", "center": [-30, 20], "radius": 25, "elevation": 0, "storyNote": "Jack lives here with his mother and their old cow." },
-    { "id": "zone-2", "name": "Cloud kingdom", "description": "giant's castle on a bank of clouds", "center": [20, -30], "radius": 30, "elevation": 80, "platform": "cloud", "storyNote": "At the top of the beanstalk lives a giant." }
+    {
+      "id": "z_farm",
+      "name": "Jack's farm",
+      "description": "a poor cottage, a paddock with a broken fence, a few hay bales, an old orchard",
+      "center": [
+        -15,
+        30
+      ],
+      "radius": 40,
+      "elevation": 0,
+      "storyNote": "Jack and his mother live here. They are so poor they must sell Milky-White, their only cow."
+    },
+    {
+      "id": "z_woods",
+      "name": "Whispering woods",
+      "description": "dense dark forest of pines and old oaks on the hills",
+      "center": [
+        -62,
+        -32
+      ],
+      "radius": 32,
+      "elevation": 0,
+      "storyNote": "The road to market runs past these woods. Here Jack meets the strange old man with the magic beans."
+    },
+    {
+      "id": "z_market",
+      "name": "Market village",
+      "description": "a couple of cottages and a hay cart where the market is held",
+      "center": [
+        58,
+        32
+      ],
+      "radius": 22,
+      "elevation": 0,
+      "storyNote": "Jack never reaches the market. He trades the cow for five beans on the way."
+    },
+    {
+      "id": "z_sky",
+      "name": "Cloud kingdom",
+      "description": "the giant's grey castle on a bank of clouds, high above the farm",
+      "center": [
+        25,
+        -45
+      ],
+      "radius": 38,
+      "elevation": 54,
+      "platform": "cloud",
+      "storyNote": "Fee-fi-fo-fum! At the top of the beanstalk lives the giant, with his hen that lays golden eggs and his singing harp."
+    }
   ],
   "objects": [
-    { "id": "obj-1", "assetId": "cottage", "zoneId": "zone-1", "position": [-35, 0, 25], "snapToGround": true, "rotationY": 30, "size": 6, "label": "Jack's cottage" },
-    { "id": "obj-2", "assetId": "cow", "zoneId": "zone-1", "position": [-25, 0, 15], "snapToGround": true, "rotationY": 120, "size": 1.5, "label": "Milky-White", "storyNote": "Jack trades her for five magic beans." },
-    { "id": "obj-3", "assetId": "fence", "zoneId": "zone-1", "position": [-20, 0, 30], "snapToGround": true, "rotationY": 0, "size": 1.2 },
-    { "id": "obj-4", "assetId": "beanstalk", "position": [-5, 0, 0], "snapToGround": true, "rotationY": 0, "size": 80, "label": "The beanstalk" },
-    { "id": "obj-5", "assetId": "castle", "zoneId": "zone-2", "position": [20, 80, -35], "snapToGround": true, "rotationY": 180, "size": 30, "label": "Giant's castle" }
+    {
+      "id": "o_cottage",
+      "assetId": "cottage",
+      "zoneId": "z_farm",
+      "position": [
+        -22,
+        0,
+        36
+      ],
+      "snapToGround": true,
+      "rotationY": 25,
+      "size": 6,
+      "label": "Jack's cottage",
+      "storyNote": "Jack's mother throws the beans out of this window in a rage. By morning, the beanstalk has grown."
+    },
+    {
+      "id": "o_cow",
+      "assetId": "cow",
+      "zoneId": "z_farm",
+      "position": [
+        -8,
+        0,
+        44
+      ],
+      "snapToGround": true,
+      "rotationY": 210,
+      "size": 1.6,
+      "label": "Milky-White",
+      "storyNote": "The family cow. She has stopped giving milk, so Jack must sell her."
+    },
+    {
+      "id": "o_fence_1",
+      "assetId": "fence",
+      "zoneId": "z_farm",
+      "position": [
+        -14,
+        0,
+        49
+      ],
+      "snapToGround": true,
+      "rotationY": 0,
+      "size": 1.2
+    },
+    {
+      "id": "o_fence_2",
+      "assetId": "fence",
+      "zoneId": "z_farm",
+      "position": [
+        -12.6,
+        0,
+        49
+      ],
+      "snapToGround": true,
+      "rotationY": 0,
+      "size": 1.2
+    },
+    {
+      "id": "o_fence_3",
+      "assetId": "fence",
+      "zoneId": "z_farm",
+      "position": [
+        -11.2,
+        0,
+        49
+      ],
+      "snapToGround": true,
+      "rotationY": 0,
+      "size": 1.2
+    },
+    {
+      "id": "o_fence_4",
+      "assetId": "fence",
+      "zoneId": "z_farm",
+      "position": [
+        -9.8,
+        0,
+        49
+      ],
+      "snapToGround": true,
+      "rotationY": 0,
+      "size": 1.2
+    },
+    {
+      "id": "o_fence_5",
+      "assetId": "fence",
+      "zoneId": "z_farm",
+      "position": [
+        -7,
+        0,
+        49
+      ],
+      "snapToGround": true,
+      "rotationY": 12,
+      "size": 1.2,
+      "label": "Broken fence",
+      "storyNote": "The fence has been falling down for years. There is no money to fix it."
+    },
+    {
+      "id": "o_fence_6",
+      "assetId": "fence",
+      "zoneId": "z_farm",
+      "position": [
+        -3.5,
+        0,
+        47.5
+      ],
+      "snapToGround": true,
+      "rotationY": 90,
+      "size": 1.2
+    },
+    {
+      "id": "o_fence_7",
+      "assetId": "fence",
+      "zoneId": "z_farm",
+      "position": [
+        -3.5,
+        0,
+        46.1
+      ],
+      "snapToGround": true,
+      "rotationY": 90,
+      "size": 1.2
+    },
+    {
+      "id": "o_hay_1",
+      "assetId": "hay_bale",
+      "zoneId": "z_farm",
+      "position": [
+        -30,
+        0,
+        28
+      ],
+      "snapToGround": true,
+      "rotationY": 15,
+      "size": 1.3
+    },
+    {
+      "id": "o_hay_2",
+      "assetId": "hay_bale",
+      "zoneId": "z_farm",
+      "position": [
+        -28,
+        0,
+        25.5
+      ],
+      "snapToGround": true,
+      "rotationY": 70,
+      "size": 1.2
+    },
+    {
+      "id": "o_hay_3",
+      "assetId": "hay_bale",
+      "zoneId": "z_farm",
+      "position": [
+        -31.5,
+        0,
+        25
+      ],
+      "snapToGround": true,
+      "rotationY": 130,
+      "size": 1.1
+    },
+    {
+      "id": "o_beanstalk",
+      "assetId": "beanstalk",
+      "position": [
+        6,
+        0,
+        -14
+      ],
+      "snapToGround": true,
+      "rotationY": 0,
+      "size": 60,
+      "label": "The beanstalk",
+      "storyNote": "It grew overnight, twisting up and up until it disappeared into the clouds."
+    },
+    {
+      "id": "o_giant_castle",
+      "assetId": "giant_castle",
+      "zoneId": "z_sky",
+      "position": [
+        25,
+        0,
+        -48
+      ],
+      "snapToGround": true,
+      "rotationY": 200,
+      "size": 24,
+      "label": "Giant's castle",
+      "storyNote": "The giant's home. Jack sneaks in three times: for the gold, for the hen, and for the harp."
+    },
+    {
+      "id": "o_market_house_1",
+      "assetId": "cottage",
+      "zoneId": "z_market",
+      "position": [
+        52,
+        0,
+        27
+      ],
+      "snapToGround": true,
+      "rotationY": -35,
+      "size": 5.5
+    },
+    {
+      "id": "o_market_house_2",
+      "assetId": "cottage",
+      "zoneId": "z_market",
+      "position": [
+        64,
+        0,
+        38
+      ],
+      "snapToGround": true,
+      "rotationY": 40,
+      "size": 5,
+      "label": "Market village",
+      "storyNote": "Where the cow was supposed to be sold."
+    },
+    {
+      "id": "o_market_hay",
+      "assetId": "hay_bale",
+      "zoneId": "z_market",
+      "position": [
+        58,
+        0,
+        22
+      ],
+      "snapToGround": true,
+      "rotationY": 0,
+      "size": 1.2
+    }
   ],
   "scatters": [
-    { "id": "scatter-1", "assetIds": ["hay_bale", "bush"], "zoneId": "zone-1", "count": 12, "seed": 7, "sizeRange": [0.8, 1.4] },
-    { "id": "scatter-2", "assetIds": ["cloud_puff"], "zoneId": "zone-2", "count": 8, "seed": 11, "sizeRange": [4, 8] }
+    {
+      "id": "s_farm_orchard",
+      "assetIds": [
+        "oak_tree"
+      ],
+      "zoneId": "z_farm",
+      "count": 12,
+      "seed": 21,
+      "sizeRange": [
+        6,
+        9
+      ]
+    },
+    {
+      "id": "s_farm_bushes",
+      "assetIds": [
+        "bush"
+      ],
+      "zoneId": "z_farm",
+      "count": 24,
+      "seed": 22,
+      "sizeRange": [
+        1.2,
+        2.2
+      ]
+    },
+    {
+      "id": "s_farm_rocks",
+      "assetIds": [
+        "rock"
+      ],
+      "zoneId": "z_farm",
+      "count": 10,
+      "seed": 23,
+      "sizeRange": [
+        0.6,
+        1.4
+      ]
+    },
+    {
+      "id": "s_woods_trees",
+      "assetIds": [
+        "pine_tree",
+        "pine_tree",
+        "oak_tree"
+      ],
+      "zoneId": "z_woods",
+      "count": 55,
+      "seed": 24,
+      "sizeRange": [
+        8,
+        13
+      ]
+    },
+    {
+      "id": "s_woods_rocks",
+      "assetIds": [
+        "rock",
+        "bush"
+      ],
+      "zoneId": "z_woods",
+      "count": 20,
+      "seed": 25,
+      "sizeRange": [
+        0.8,
+        2
+      ]
+    },
+    {
+      "id": "s_market_trees",
+      "assetIds": [
+        "oak_tree",
+        "bush"
+      ],
+      "zoneId": "z_market",
+      "count": 10,
+      "seed": 26,
+      "sizeRange": [
+        3,
+        7
+      ]
+    },
+    {
+      "id": "s_sky_puffs",
+      "assetIds": [
+        "cloud_puff"
+      ],
+      "zoneId": "z_sky",
+      "count": 18,
+      "seed": 27,
+      "sizeRange": [
+        4,
+        9
+      ]
+    }
   ],
   "assets": {
-    "cottage": { "id": "cottage", "source": "library" },
-    "cow": { "id": "cow", "source": "library" },
-    "fence": { "id": "fence", "source": "library" },
-    "castle": { "id": "castle", "source": "library" },
-    "hay_bale": { "id": "hay_bale", "source": "library" },
-    "bush": { "id": "bush", "source": "library" },
-    "cloud_puff": { "id": "cloud_puff", "source": "library" },
-    "oak_tree": { "id": "oak_tree", "source": "library" },
-    "beanstalk": { "id": "beanstalk", "source": "generated", "prompt": "enormous twisting green beanstalk vine with huge leaves, low-poly stylized", "status": "pending", "fallbackAssetId": "oak_tree" }
+    "oak_tree": {
+      "id": "oak_tree",
+      "source": "library"
+    },
+    "pine_tree": {
+      "id": "pine_tree",
+      "source": "library"
+    },
+    "bush": {
+      "id": "bush",
+      "source": "library"
+    },
+    "rock": {
+      "id": "rock",
+      "source": "library"
+    },
+    "cottage": {
+      "id": "cottage",
+      "source": "library"
+    },
+    "fence": {
+      "id": "fence",
+      "source": "library"
+    },
+    "cow": {
+      "id": "cow",
+      "source": "library"
+    },
+    "hay_bale": {
+      "id": "hay_bale",
+      "source": "library"
+    },
+    "castle": {
+      "id": "castle",
+      "source": "library"
+    },
+    "cloud_puff": {
+      "id": "cloud_puff",
+      "source": "library"
+    },
+    "giant_castle": {
+      "id": "giant_castle",
+      "source": "generated",
+      "prompt": "huge grey stone castle on clouds, stylized low-poly",
+      "status": "pending",
+      "fallbackAssetId": "castle"
+    },
+    "beanstalk": {
+      "id": "beanstalk",
+      "source": "library"
+    }
   }
 }

@@ -102,7 +102,7 @@ The thing that makes this a product rather than a prompt is the middle: reading 
     "ambientObjects": ["hay bales", "cow", "wooden fence", "cloud puffs"]
   }
   ```
-  `palette` is load-bearing: B derives sky, fog and light color from it. It starts from the drawing's own `dominantColors` — a child who drew in orange and purple gets an orange and purple world — and prefers `dawn`/`dusk` for `timeOfDay` when the drawing allows, since they're the best-looking states.
+  `palette` is load-bearing and required: B derives sky, fog, light and terrain colour from it and never invents a colour. It is exactly 3 hex colours in a fixed order — **[sky/horizon, ground, accent/zenith]** — taken from the drawing's own `dominantColors`, so a child who drew in orange and purple gets an orange and purple world. Prefer `dawn`/`dusk` for `timeOfDay` when the drawing allows, since they're the best-looking states.
 - **Layout comes from the page.** The agent maps page coordinates onto the ground: x 0→1 across the world's -100→100, and the page's bottom edge is the near foreground (z +100) while the top is the distance (z -100). Things floating in the top strip are sky zones; the sun and plain clouds are weather, not objects. This is why the child recognises the world as theirs.
 - **Every model comes from the library. There is no text-to-3D.** For each `heroObject` the brief names the closest `library.json` entry, and that is what gets placed — even for something invented, where the closest match plus a good label is the answer. A hallucinated id is corrected against a word/tag scorer (`resolveLibraryMatches`), so an object always resolves to a real model. This makes worlds fast, free and visually consistent; the cost is that a six-legged purple monster arrives as whatever the library has nearest to it, which is why the library's coverage and its `description`/`tags` quality are the main lever on output quality.
 - **Asset jobs.** The skybox is the only generated asset. It starts before the agent runs and settles to `ready` + `url` or `failed`, cached by prompt hash; on failure B's gradient sky stands in.
@@ -111,7 +111,7 @@ The thing that makes this a product rather than a prompt is the middle: reading 
   | Tool | Effect on `Scene` |
   |---|---|
   | `set_terrain(biome, heightVariation, water?)` | sets `terrain` |
-  | `set_environment(timeOfDay, weather, fogDensity, palette?)` | sets `environment`; agent should always pass the brief's `palette` |
+  | `set_environment(timeOfDay, weather, fogDensity, palette)` | sets `environment`; `palette` is required — the brief's [sky, ground, accent] |
   | `create_zone(name, description, center, radius, elevation, platform?, storyNote?)` | appends to `zones` |
   | `place_object(assetId, zoneId?, position, size, rotationY, snapToGround, label?, storyNote?)` | appends to `objects` |
   | `scatter(assetIds, zoneId, count, sizeRange)` | appends to `scatters` |
@@ -172,7 +172,7 @@ export interface Scene {
     timeOfDay: 'dawn' | 'day' | 'dusk' | 'night';
     weather: 'clear' | 'cloudy' | 'rain' | 'snow' | 'fog';
     fogDensity: number;               // 0–1
-    palette?: string[];               // hex colors; tints lighting and terrain
+    palette: [string, string, string]; // hex: [sky/horizon, ground, accent]; every colour in the world derives from it
     skybox?: { status: 'pending' | 'ready' | 'failed'; url?: string };
   };
   zones: Zone[];
