@@ -1,3 +1,5 @@
+import StoryInput from '@/ui/StoryInput';
+
 export default function Home() {
-  return <main>storyscape</main>;
+  return <StoryInput />;
 }

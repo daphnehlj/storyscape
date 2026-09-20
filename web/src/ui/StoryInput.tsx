@@ -1,13 +1,18 @@
+'use client'
+
 import { useEffect, useRef, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { DRAWING_MAX_BYTES, DRAWING_MIME_TYPES } from '@app/shared'
+import { createWorld } from '@/api/worlds'
 import './StoryInput.css'
-import iconUpload from '../assets/icon-upload.svg'
-import iconPencil from '../assets/icon-pencil.svg'
-import group1 from '../assets/group-1-new.svg'
-import group3 from '../assets/group-3-new.svg'
-import group4 from '../assets/group-4-new.svg'
-import image9 from '../assets/image-9-new.png'
-import image10 from '../assets/image-10-new.png'
-import image11 from '../assets/image-11-new.png'
+const iconUpload = '/landing/icon-upload.svg'
+const iconPencil = '/landing/icon-pencil.svg'
+const group1 = '/landing/group-1-new.svg'
+const group3 = '/landing/group-3-new.svg'
+const group4 = '/landing/group-4-new.svg'
+const image9 = '/landing/image-9-new.png'
+const image10 = '/landing/image-10-new.png'
+const image11 = '/landing/image-11-new.png'
 import { InteractiveBook } from './InteractiveBook'
 import { ProgressiveBackdrop } from './ProgressiveBackdrop'
 import { DrawingDialog, type DrawingPreview } from './DrawingDialog'
@@ -19,11 +24,11 @@ const BOOKS = [
 ] as const
 
 export default function StoryInput() {
+  const router = useRouter()
   const galleryRef = useRef<HTMLDivElement>(null)
   const uploadInputRef = useRef<HTMLInputElement>(null)
   const uploadOperation = useRef(0)
   const [preview, setPreview] = useState<DrawingPreview | null>(null)
-  const [whiteboardOpen, setWhiteboardOpen] = useState(false)
   const [error, setError] = useState('')
   const [opening, setOpening] = useState(false)
 
@@ -41,26 +46,28 @@ export default function StoryInput() {
     if (preview?.src.startsWith('blob:')) URL.revokeObjectURL(preview.src)
   }, [preview])
 
-  async function openDrawing(file: File) {
+  // Same path as pressing Done on /draw: the image goes to the server and we
+  // follow the world it becomes.
+  async function buildWorldFrom(file: File) {
     const operation = ++uploadOperation.current
     setError('')
-    if (!['image/png', 'image/jpeg', 'image/webp'].includes(file.type) || !file.size || file.size > 10 * 1024 * 1024) {
-      setError('Choose a PNG, JPG, or WebP drawing smaller than 10 MB.')
+    if (!DRAWING_MIME_TYPES.includes(file.type as (typeof DRAWING_MIME_TYPES)[number]) || !file.size) {
+      setError('Choose a PNG, JPG, WebP, or GIF drawing.')
+      return
+    }
+    if (file.size > DRAWING_MAX_BYTES) {
+      setError(`Choose a drawing smaller than ${DRAWING_MAX_BYTES / 1024 / 1024} MB.`)
       return
     }
     setOpening(true)
-    const src = URL.createObjectURL(file)
     try {
-      const image = new Image()
-      image.src = src
-      await image.decode()
-      if (operation !== uploadOperation.current) { URL.revokeObjectURL(src); return }
-      setPreview({ src, title: file.name })
-    } catch {
-      URL.revokeObjectURL(src)
-      if (operation === uploadOperation.current) setError('This picture could not open. Try another drawing.')
-    } finally {
-      if (operation === uploadOperation.current) setOpening(false)
+      const worldId = await createWorld(file)
+      if (operation !== uploadOperation.current) return
+      router.push(`/world/${worldId}`)
+    } catch (cause) {
+      if (operation !== uploadOperation.current) return
+      setError(cause instanceof Error ? cause.message : 'That drawing could not be sent. Try again.')
+      setOpening(false)
     }
   }
 
@@ -73,13 +80,13 @@ export default function StoryInput() {
           <input ref={uploadInputRef} hidden type="file" accept="image/png,image/jpeg,image/webp" aria-label="Choose a drawing" disabled={opening}
             onChange={(event) => {
               const file = event.currentTarget.files?.[0]
-              if (file) void openDrawing(file)
+              if (file) void buildWorldFrom(file)
               event.currentTarget.value = ''
             }} />
           <button className="story-input__action story-input__action--upload" type="button" disabled={opening} onClick={() => uploadInputRef.current?.click()}>
-            <img src={iconUpload} alt="" /><span>{opening ? 'Opening...' : 'Upload Drawing'}</span>
+            <img src={iconUpload} alt="" /><span>{opening ? 'Sending...' : 'Upload Drawing'}</span>
           </button>
-          <button className="story-input__action story-input__action--whiteboard" type="button" onClick={() => setWhiteboardOpen(true)}>
+          <button className="story-input__action story-input__action--whiteboard" type="button" onClick={() => router.push('/draw')}>
             <img src={iconPencil} alt="" /><span>Whiteboard</span>
           </button>
         </div>
@@ -90,9 +97,7 @@ export default function StoryInput() {
           {BOOKS.map((book) => <InteractiveBook key={book.id} {...book} onOpen={() => setPreview({ src: book.drawing, title: book.title })} />)}
         </div>
       </div>
-      {(preview || whiteboardOpen) && <DrawingDialog preview={preview}
-        onClose={() => { setPreview(null); setWhiteboardOpen(false) }}
-        onUseDrawing={(src) => { setPreview({ src, title: 'My drawing' }); setWhiteboardOpen(false) }} />}
+      {preview && <DrawingDialog preview={preview} onClose={() => setPreview(null)} />}
     </main>
   )
 }
