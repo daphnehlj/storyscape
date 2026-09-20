@@ -1,0 +1,185 @@
+{
+  "version": 1,
+  "id": "fog",
+  "title": "The Castle in the Mist",
+  "bounds": {
+    "size": 260,
+    "skyHeight": 100
+  },
+  "terrain": {
+    "biome": "swamp",
+    "heightVariation": 0.2,
+    "seed": 99,
+    "water": {
+      "level": -1
+    }
+  },
+  "environment": {
+    "timeOfDay": "dusk",
+    "weather": "fog",
+    "fogDensity": 0.75,
+    "palette": [
+      "#b9b3a6",
+      "#6f8a4a",
+      "#5c6b6e"
+    ]
+  },
+  "zones": [
+    {
+      "id": "z_marsh",
+      "name": "The marsh",
+      "description": "reeds, black pools and a crooked hut",
+      "center": [
+        20,
+        50
+      ],
+      "radius": 40,
+      "elevation": 0,
+      "storyNote": "The ferryman's hut. He only rows when the fog is thick enough to hide the way."
+    },
+    {
+      "id": "z_castle",
+      "name": "Castle Grey",
+      "description": "a castle on a crag, only its towers above the mist",
+      "center": [
+        -40,
+        -60
+      ],
+      "radius": 44,
+      "elevation": 34,
+      "platform": "rock",
+      "storyNote": "They say the castle is empty. The lights in the windows say otherwise."
+    }
+  ],
+  "objects": [
+    {
+      "id": "o_hut",
+      "assetId": "cottage",
+      "zoneId": "z_marsh",
+      "position": [
+        26,
+        0,
+        46
+      ],
+      "snapToGround": true,
+      "rotationY": -60,
+      "size": 5,
+      "label": "Ferryman's hut"
+    },
+    {
+      "id": "o_fence_1",
+      "assetId": "fence",
+      "zoneId": "z_marsh",
+      "position": [
+        16,
+        0,
+        58
+      ],
+      "snapToGround": true,
+      "rotationY": 30,
+      "size": 1.2
+    },
+    {
+      "id": "o_fence_2",
+      "assetId": "fence",
+      "zoneId": "z_marsh",
+      "position": [
+        13,
+        0,
+        60
+      ],
+      "snapToGround": true,
+      "rotationY": 40,
+      "size": 1.1
+    },
+    {
+      "id": "o_castle",
+      "assetId": "castle",
+      "zoneId": "z_castle",
+      "position": [
+        -40,
+        0,
+        -60
+      ],
+      "snapToGround": true,
+      "rotationY": 20,
+      "size": 26,
+      "label": "Castle Grey",
+      "storyNote": "Only the towers show above the fog. Count them: there are seven, then six, then seven again."
+    }
+  ],
+  "scatters": [
+    {
+      "id": "s_marsh_reeds",
+      "assetIds": [
+        "bush",
+        "bush",
+        "rock"
+      ],
+      "zoneId": "z_marsh",
+      "count": 40,
+      "seed": 61,
+      "sizeRange": [
+        0.8,
+        2.2
+      ]
+    },
+    {
+      "id": "s_marsh_trees",
+      "assetIds": [
+        "oak_tree"
+      ],
+      "zoneId": "z_marsh",
+      "count": 12,
+      "seed": 62,
+      "sizeRange": [
+        5,
+        9
+      ]
+    },
+    {
+      "id": "s_crag",
+      "assetIds": [
+        "rock",
+        "pine_tree"
+      ],
+      "zoneId": "z_castle",
+      "count": 22,
+      "seed": 63,
+      "sizeRange": [
+        1.5,
+        6
+      ]
+    }
+  ],
+  "assets": {
+    "cottage": {
+      "id": "cottage",
+      "source": "library"
+    },
+    "fence": {
+      "id": "fence",
+      "source": "library"
+    },
+    "castle": {
+      "id": "castle",
+      "source": "library"
+    },
+    "bush": {
+      "id": "bush",
+      "source": "library"
+    },
+    "rock": {
+      "id": "rock",
+      "source": "library"
+    },
+    "oak_tree": {
+      "id": "oak_tree",
+      "source": "library"
+    },
+    "pine_tree": {
+      "id": "pine_tree",
+      "source": "library"
+    }
+  }
+}
