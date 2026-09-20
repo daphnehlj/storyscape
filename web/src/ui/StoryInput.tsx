@@ -63,16 +63,6 @@ export default function StoryInput() {
 
         <div className="story-input__form">
           <p className="story-input__prompt">What do you dream of?</p>
-          <div className="story-input__row">
-            <input
-              className="story-input__field"
-              type="text"
-              placeholder="Start typing here..."
-            />
-            <button className="story-input__button" type="button">
-              Generate
-            </button>
-          </div>
         </div>
 
         <div className="story-input__book story-input__book--left">
