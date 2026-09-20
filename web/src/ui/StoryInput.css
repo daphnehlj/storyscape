@@ -1,0 +1,247 @@
+.story-input-viewport {
+  --scale: 1;
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  background: #74b3ff;
+}
+
+/*
+ * The 1440x1024 Figma frame. Sizes and x-positions scale with the viewport
+ * width; y-positions are percentages of the frame height, which is mapped to
+ * the viewport height. At 1440x1024 this is exactly the Figma frame.
+ */
+.story-input {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1440px;
+  height: calc(100% / var(--scale));
+  /* Layers extend past the frame in Figma; let them fill the window instead of clipping. */
+  overflow: visible;
+  transform: scale(var(--scale));
+  transform-origin: top left;
+}
+
+/* Blurred gradient blob (node 16:220) */
+.story-input__glow {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1440px;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+/* Prompt + input (node 16:221) */
+.story-input__form {
+  position: absolute;
+  left: 75px;
+  top: 25.0000%; /* 256px of 1024px */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 28px;
+  width: 588px;
+}
+
+.story-input__prompt {
+  margin: 0;
+  width: 100%;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: normal;
+  letter-spacing: -0.48px;
+  color: #fff;
+  overflow-wrap: break-word;
+}
+
+.story-input__row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+}
+
+.story-input__field {
+  flex: 0 0 auto;
+  width: 441px;
+  padding: 16px 28px;
+  border: 0;
+  border-radius: 100px;
+  background: #fff;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: normal;
+  letter-spacing: -0.32px;
+  color: #000;
+  outline: none;
+}
+
+.story-input__field::placeholder {
+  color: #d9d9d9;
+  opacity: 1;
+}
+
+.story-input__button {
+  flex: 0 0 auto;
+  padding: 16px 28px;
+  border: 0;
+  border-radius: 200px;
+  background: #000;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: normal;
+  letter-spacing: -0.32px;
+  text-align: center;
+  white-space: nowrap;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* Rotated book covers (nodes 16:233, 16:243, 16:238) */
+.story-input__book {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.story-input__book-inner {
+  position: relative;
+  flex: none;
+}
+
+.story-input__book-inner img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+}
+
+.story-input__book--left {
+  left: -48px;
+  top: 36.3281%; /* 372px of 1024px */
+  width: 812px;
+  height: 769.755px;
+}
+
+.story-input__book--left .story-input__book-inner {
+  width: 642.126px;
+  height: 561.102px;
+  transform: rotate(-23.37deg);
+}
+
+.story-input__book--right {
+  left: 746px;
+  top: 33.6914%; /* 345px of 1024px */
+  width: 812px;
+  height: 769.755px;
+}
+
+.story-input__book--right .story-input__book-inner {
+  width: 642.126px;
+  height: 561.102px;
+  transform: rotate(-23.37deg);
+}
+
+.story-input__book--center {
+  left: 415px;
+  top: 49.5117%; /* 507px of 1024px */
+  width: 698.351px;
+  height: 636.487px;
+}
+
+.story-input__book--center .story-input__book-inner {
+  width: 657.485px;
+  height: 590.628px;
+  transform: rotate(-4.13deg);
+}
+
+/* Rotated drawings (nodes 16:237, 16:258, 16:242) */
+.story-input__drawing {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.story-input__drawing-inner {
+  position: relative;
+  flex: none;
+}
+
+.story-input__drawing-inner img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.story-input__drawing--family {
+  left: 104.39px;
+  top: 59.0342%; /* 604.51px of 1024px */
+  width: 529.07px;
+  height: 349.786px;
+}
+
+.story-input__drawing--family .story-input__drawing-inner {
+  width: 485.723px;
+  height: 242.861px;
+  transform: rotate(-13.53deg);
+}
+
+.story-input__drawing--park {
+  left: 959.05px;
+  top: 54.5547%; /* 558.64px of 1024px */
+  width: 405.091px;
+  height: 343.391px;
+}
+
+.story-input__drawing--park .story-input__drawing-inner {
+  width: 362.468px;
+  height: 287.249px;
+  transform: rotate(-9.55deg);
+}
+
+.story-input__drawing-crop {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.story-input__drawing-crop img {
+  inset: auto;
+  left: 0;
+  top: -0.04%;
+  width: 112.18%;
+  height: 100.08%;
+  object-fit: fill;
+}
+
+.story-input__drawing--house {
+  left: 523.34px;
+  top: 57.7061%; /* 590.91px of 1024px */
+  width: 480.559px;
+  height: 470.023px;
+}
+
+.story-input__drawing--house .story-input__drawing-inner {
+  width: 397.528px;
+  height: 382.865px;
+  transform: rotate(14.46deg);
+}
+
+.story-input__drawing--house img {
+  object-position: bottom;
+}
