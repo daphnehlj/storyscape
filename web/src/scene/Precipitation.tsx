@@ -1,67 +1,65 @@
 import { useFrame } from '@react-three/fiber'
-import { useMemo, useRef } from 'react'
-import { BufferAttribute, BufferGeometry, Group } from 'three'
+import { useMemo } from 'react'
+import { BufferAttribute, BufferGeometry, Vector3 } from 'three'
 import { mulberry32 } from './scatter-math.ts'
 import { WEATHER } from './presets.ts'
 
 /**
- * Falling particles in a box centred on the camera, so precipitation is always in view whatever the world size.
- * Positions are in the box's local space; the group is moved to the camera every frame. Nothing allocates per frame.
+ * Falling particles in world space. Each particle keeps its own world position; when it leaves the
+ * radius×height region around the camera it wraps to the opposite side, so the field is effectively
+ * endless but never moves with the camera. Nothing allocates per frame.
  */
 export function Snow() {
   const { count, radius, height, fallSpeed, sway, size, color, opacity } = WEATHER.snow
-  const group = useRef<Group>(null!)
-  const geometry = useMemo(() => box(count, radius, height, 1), [count, radius, height])
+  const geometry = useMemo(() => field(count, radius, height, 1), [count, radius, height])
   useFrame(({ camera, clock }, dt) => {
-    group.current.position.copy(camera.position)
-    const pos = geometry.attributes.position as BufferAttribute
-    const a = pos.array as Float32Array
+    const a = (geometry.attributes.position as BufferAttribute).array as Float32Array
     const t = clock.elapsedTime
     for (let i = 0; i < count; i++) {
       a[i * 3 + 1] -= fallSpeed * dt
       a[i * 3] += Math.sin(t + i) * sway * dt
-      if (a[i * 3 + 1] < -height / 2) a[i * 3 + 1] += height
+      wrap(a, i * 3, camera.position, radius, height)
     }
-    pos.needsUpdate = true
+    geometry.attributes.position.needsUpdate = true
   })
   return (
-    <group ref={group}>
-      <points geometry={geometry}>
-        <pointsMaterial size={size} color={color} transparent opacity={opacity} depthWrite={false} sizeAttenuation />
-      </points>
-    </group>
+    <points geometry={geometry} frustumCulled={false}>
+      <pointsMaterial size={size} color={color} transparent opacity={opacity} depthWrite={false} sizeAttenuation />
+    </points>
   )
 }
 
 export function Rain() {
   const { count, radius, height, fallSpeed, length, color, opacity } = WEATHER.rain
-  const group = useRef<Group>(null!)
   // two vertices per drop: top and bottom of a vertical streak
-  const geometry = useMemo(() => box(count, radius, height, 2, length), [count, radius, height, length])
+  const geometry = useMemo(() => field(count, radius, height, 2, length), [count, radius, height, length])
   useFrame(({ camera }, dt) => {
-    group.current.position.copy(camera.position)
-    const pos = geometry.attributes.position as BufferAttribute
-    const a = pos.array as Float32Array
+    const a = (geometry.attributes.position as BufferAttribute).array as Float32Array
     const step = fallSpeed * dt
     for (let i = 0; i < count; i++) {
-      const top = i * 6 + 1, bottom = i * 6 + 4
-      a[top] -= step
-      a[bottom] -= step
-      if (a[bottom] < -height / 2) { a[top] += height; a[bottom] += height }
+      const top = i * 6, bottom = i * 6 + 3
+      a[top + 1] -= step
+      wrap(a, top, camera.position, radius, height)
+      a[bottom] = a[top]; a[bottom + 1] = a[top + 1] - length; a[bottom + 2] = a[top + 2]
     }
-    pos.needsUpdate = true
+    geometry.attributes.position.needsUpdate = true
   })
   return (
-    <group ref={group}>
-      <lineSegments geometry={geometry}>
-        <lineBasicMaterial color={color} transparent opacity={opacity} depthWrite={false} />
-      </lineSegments>
-    </group>
+    <lineSegments geometry={geometry} frustumCulled={false}>
+      <lineBasicMaterial color={color} transparent opacity={opacity} depthWrite={false} />
+    </lineSegments>
   )
 }
 
-/** `count` particles uniformly in a radius×height×radius box around the origin; `verts` per particle stacked `length` apart. */
-function box(count: number, radius: number, height: number, verts: 1 | 2, length = 0): BufferGeometry {
+/** Keep the particle at `o` inside the box around `c` by shifting it a whole box width — it stays world-fixed otherwise. */
+function wrap(a: Float32Array, o: number, c: Vector3, radius: number, height: number) {
+  if (a[o] < c.x - radius) a[o] += radius * 2; else if (a[o] > c.x + radius) a[o] -= radius * 2
+  if (a[o + 2] < c.z - radius) a[o + 2] += radius * 2; else if (a[o + 2] > c.z + radius) a[o + 2] -= radius * 2
+  if (a[o + 1] < c.y - height / 2) a[o + 1] += height; else if (a[o + 1] > c.y + height / 2) a[o + 1] -= height
+}
+
+/** `count` particles uniformly in a radius×height×radius box around the origin (wrap() moves them to the camera on the first frame). */
+function field(count: number, radius: number, height: number, verts: 1 | 2, length = 0): BufferGeometry {
   const rand = mulberry32(count)
   const a = new Float32Array(count * verts * 3)
   for (let i = 0; i < count; i++) {
@@ -71,6 +69,5 @@ function box(count: number, radius: number, height: number, verts: 1 | 2, length
   }
   const g = new BufferGeometry()
   g.setAttribute('position', new BufferAttribute(a, 3))
-  g.computeBoundingSphere() // the box surrounds the camera, so this sphere is always in the frustum
   return g
 }
